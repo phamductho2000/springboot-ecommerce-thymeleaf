@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+<head>
+    <meta charset="utf-8"/>
+    <title>Xem đơn hàng</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta
+            content="A fully featured admin theme which can be used to build CRM, CMS, etc."
+            name="description"
+    />
+    <meta content="Coderthemes" name="author"/>
+    <th:block layout:fragment="css">
+        <link th:href="@{/admin/assets/css/vendor/dataTables.bootstrap5.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{/admin/assets/css/vendor/responsive.bootstrap5.css}" rel="stylesheet" type="text/css"/>
+    </th:block>
+</head>
+
+<body
+        class="loading"
+        data-layout-color="light"
+        data-layout="detached"
+        data-rightbar-onstart="true"
+>
+<div class="content" layout:fragment="content">
+
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                        <li class="breadcrumb-item active">Products</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Products</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <ul class="nav nav-tabs nav-bordered mb-3">
+                        <li class="nav-item">
+                            <a href="#vertical-left-tabs-order" data-bs-toggle="tab" aria-expanded="false"
+                               class="nav-link active">
+                                Thông tin cá nhân
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#vertical-left-tabs-address" data-bs-toggle="tab" aria-expanded="true"
+                               class="nav-link">
+                                Địa chỉ giao hàng
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#vertical-left-tabs-products" data-bs-toggle="tab" aria-expanded="true"
+                               class="nav-link">
+                                Đơn hàng
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane show active" id="vertical-left-tabs-order">
+                            <table class="table table-bordered">
+                                <tbody>
+                                <tr>
+                                    <td>Họ và tên:</td>
+                                    <td th:text="${customer.name}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Email:</td>
+                                    <td th:text="${customer.email}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Số điện thoại:</td>
+                                    <td th:text="${customer.phone}"> nguyên</td>
+                                </tr>
+                                <tr>
+                                    <td>Tên đăng nhập:</td>
+                                    <td th:text="${customer.username}"> nguyên</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="tab-pane" id="vertical-left-tabs-address">
+                            <table class="table table-bordered">
+                                <tbody>
+                                <tr th:each="address : ${addresses}">
+                                    <td th:text="${address.customerName+','+ address.customerPhone}">Họ Tên:</td>
+                                    <td th:text="${address.deliveryAddress+','+address.wardsName+','+address.districtName+','+address.provinceName}">nguyên</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="tab-pane" id="vertical-left-tabs-products">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Mã đơn hàng</th>
+                                    <th scope="col">Trạng thái</th>
+                                    <th scope="col">Tổng</th>
+                                    <th scope="col">Ngày đặt hàng</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="order : ${orders}">
+                                    <th scope="row" th:text="${order.id}"></th>
+                                    <td>
+                                        <span th:if="${order.status == 0}" class="badge bg-danger">Đã hủy</span>
+                                        <span th:if="${order.status == 1}" class="badge bg-dark">Chờ xử lý</span>
+                                        <span th:if="${order.status == 2}" class="badge bg-info">Đã tiếp nhận</span>
+                                        <span th:if="${order.status == 3}" class="badge bg-warning">Đang giao</span>
+                                        <span th:if="${order.status == 4}" class="badge bg-primary">Đã giao</span>
+                                        <span th:if="${order.status == 5}" class="badge bg-success">Hoàn tất</span>
+                                    </td>
+                                    <td th:text="${#numbers.formatCurrency(order.total)}">
+                                        Tổng
+                                    </td>
+                                    <td th:text="${#dates.format(order.createdAt, 'dd-MM-yyyy HH:mm:ss')}">
+                                        Created at
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+        </div> <!-- end col -->
+    </div>
+    <!-- end row -->
+
+</div> <!-- End Content -->
+<th:block layout:fragment="script"></th:block>
+</body>
+</html>

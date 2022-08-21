@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{client/layout.html}">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <title>
+        Danh sách sản phẩm
+    </title>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- Start Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-6 col-12">
+                    <div class="breadcrumbs-content">
+                        <h1 class="page-title">Tìm thấy [[${listProducts.size()}]] sản phẩm</h1>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12">
+                    <ul class="breadcrumb-nav">
+                        <li>
+                            <a href="user/index.html"><i class="lni lni-home"></i> Home</a>
+                        </li>
+                        <li><a href="user/index.html">Shop</a></li>
+                        <li>Products</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Breadcrumbs -->
+
+    <!-- Start Item Details -->
+    <section class="product-grids section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-12">
+                    <div class="product-grids-head">
+                        <div class="tab-content" id="nav-tabContent">
+                            <div
+                                    class="tab-pane fade show active"
+                                    id="nav-grid"
+                                    role="tabpanel"
+                                    aria-labelledby="nav-grid-tab"
+                            >
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-6 col-12" th:each="product : ${listProducts}">
+                                        <div class="single-product">
+                                            <div class="product-image">
+                                                <input class="product-id" type="hidden" th:value="${product.id}">
+                                                <img th:if="${product.images.size() > 0}"
+                                                        th:src="@{${product.images[0].url}}"
+                                                        alt="#"
+                                                />
+                                                <div th:if="${product.status == 1}" class="button btn-add-to-cart">
+                                                    <button class="btn"><i class="lni lni-cart"></i>
+                                                        Thêm
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="product-info">
+                                                <h4 class="title" style="height: 40px;overflow: hidden">
+                                                    <a th:href="@{/san-pham/{id}(id=${product.id})}"
+                                                       th:text="${product.name}">product name</a>
+                                                </h4>
+                                                <div class="price">
+                                                    <span th:text="${#numbers.formatCurrency(product.price)}">product price</span>
+                                                </div>
+                                                <div>
+                                                    <span th:if="${product.status == 1}" class="p-qty" style="color: #2cc067">
+                                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                                        Còn hàng  </span>
+                                                    <span th:unless="${product.status == 1}" style="color: #0074da;" class="qty">
+                                                        <i class="fas fa-phone fa-flip-horizontal"></i>
+                                                        Liên hệ</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+<!--                                <div class="row" th:if="${listProducts.totalPages > 0}">-->
+<!--                                    <div class="col-12">-->
+<!--                                        <div class="pagination left">-->
+<!--                                            <ul class="pagination-list">-->
+<!--                                                <th:block th:each="pageNumber : ${pageNumbers}">-->
+<!--                                                    <li th:class="${#strings.equals(pageNumber.toString(), param.get('page'))} ? active">-->
+<!--                                                        <a th:href="@{${urlBuilder.replaceQueryParam('page', pageNumber).build().toUriString()}}"-->
+<!--                                                           th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"-->
+<!--                                                           th:text="${pageNumber}"></a>-->
+<!--                                                    </li>-->
+<!--                                                </th:block>-->
+<!--                                                <li>-->
+<!--                                                    <a href="javascript:void(0)">-->
+<!--                                                        <i class="lni lni-chevron-right"></i>-->
+<!--                                                    </a>-->
+<!--                                                </li>-->
+<!--                                            </ul>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Item Details -->
+
+    <!-- Review Modal -->
+    <!-- End Review Modal -->
+    <div class="position-fixed bottom-0 start-0 p-3" style="z-index: 11">
+        <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Đã thêm vào giỏ hàng</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <!--            <div class="toast-body">-->
+            <!--                Hello, world! This is a toast message.-->
+            <!--            </div>-->
+        </div>
+    </div>
+</div>
+<!-- ========================= JS here ========================= -->
+<th:block layout:fragment="script">
+</th:block>
+
+</body>
+</html>

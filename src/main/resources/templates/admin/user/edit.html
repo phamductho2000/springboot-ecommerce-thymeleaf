@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+<head>
+    <meta charset="utf-8"/>
+    <title>Quản lý tài khoản</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta
+            content="A fully featured admin theme which can be used to build CRM, CMS, etc."
+            name="description"
+    />
+    <meta content="Coderthemes" name="author"/>
+    <th:block layout:fragment="css">
+        <link th:href="@{/admin/assets/css/vendor/dataTables.bootstrap5.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{/admin/assets/css/vendor/responsive.bootstrap5.css}" rel="stylesheet" type="text/css"/>
+    </th:block>
+</head>
+
+<body
+        class="loading"
+        data-layout-color="light"
+        data-layout="detached"
+        data-rightbar-onstart="true"
+>
+<div class="content" layout:fragment="content">
+
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                        <li class="breadcrumb-item active">Products</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Sửa tài khoản</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+    <form id="user-edit-form" th:action="@{/admin/user/update}" th:object="${user}" method="post" novalidate>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-body">
+                            <p class="text-muted font-14 mb-3" style="text-align: end;">
+                                <button type="submit" class="btn btn-primary">Lưu lại</button>
+                            </p>
+                            <div class="tab-content">
+                                <div class="tab-pane show active">
+                                    <input type="hidden" th:field="*{id}" th:value="${user.id}">
+                                    <input type="hidden" th:field="*{createdAt}" th:value="${user.createdAt}">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group mb-3 row required">
+                                                <label for="input-username" class="control-label col-sm-2 col-form-label">Tên đăng nhập</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" id="input-username" th:field="*{username}" th:value="${user.username}"
+                                                           class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 row">
+                                                <label for="input-role" class="col-sm-2 col-form-label">Thuộc nhóm:</label>
+                                                <div class="col-sm-10">
+                                                    <select th:field="*{roleId}" class="form-select" id="input-role">
+                                                        <option th:each="role : ${roles}" th:value="${role.id}"
+                                                                th:text="${role.name}"></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mb-3 row required">
+                                                <label for="input-fullname" class="control-label col-sm-2 col-form-label">Họ và tên</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" id="input-fullname" th:field="*{name}" th:value="${user.name}"
+                                                           class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 row">
+                                                <label for="input-email" class="col-sm-2 col-form-label">E-Mail</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" id="input-email" th:field="*{email}" th:value="${user.email}"
+                                                           class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 row">
+                                                <label for="input-phone" class="col-sm-2 col-form-label">Số điện thoại</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" id="input-phone" th:field="*{phone}" th:value="${user.phone}"
+                                                           class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="form-group mb-3 row required">
+                                                <label for="input-password" class="control-label col-sm-2 col-form-label">Mật khẩu</label>
+                                                <div class="col-sm-10">
+                                                    <input type="password" id="input-password" th:field="*{password}"
+                                                           class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="form-group mb-3 row required">
+                                                <label for="input-valid-password" class="control-label col-sm-2 col-form-label">Xác nhận</label>
+                                                <div class="col-sm-10">
+                                                    <input type="password" id="input-valid-password" name="re-password"
+                                                           class="form-control">
+                                                </div>
+                                            </div>
+<!--                                            <div class="mb-3 row">-->
+<!--                                                <label for="input-status" class="col-sm-2 col-form-label">Trạng thái</label>-->
+<!--                                                <div class="col-sm-10">-->
+<!--                                                    <select th:field="*{status}" class="form-select" id="input-status">-->
+<!--                                                        <option value="true">Hoạt động</option>-->
+<!--                                                        <option value="false">Không hoạt động</option>-->
+<!--                                                    </select>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+                                        </div> <!-- end col-->
+                                    </div>
+                                    <!-- end row-->
+                                </div> <!-- end preview-->
+                            </div> <!-- end tab-content-->
+                        </div>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div> <!-- end col -->
+        </div>
+    </form>
+    <!-- end row -->
+</div> <!-- End Content -->
+<th:block layout:fragment="script">
+    <script type="text/javascript" th:src="@{/admin/assets/js/pages/user/validate-user.js}"></script>
+
+</th:block>
+</body>
+</html>

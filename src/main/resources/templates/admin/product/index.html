@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+<head>
+    <meta charset="utf-8"/>
+    <title>Quản lý sản phẩm</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta
+            content="A fully featured admin theme which can be used to build CRM, CMS, etc."
+            name="description"
+    />
+    <meta content="Coderthemes" name="author"/>
+    <th:block layout:fragment="css">
+        <link th:href="@{/admin/assets/css/vendor/dataTables.bootstrap5.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{/admin/assets/css/vendor/responsive.bootstrap5.css}" rel="stylesheet" type="text/css"/>
+    </th:block>
+</head>
+
+<body
+        class="loading"
+        data-layout-color="light"
+        data-layout="detached"
+        data-rightbar-onstart="true"
+>
+<div class="content" layout:fragment="content">
+
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                        <li class="breadcrumb-item active">Products</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Products</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="alert alert-success alert-dismissible bg-success text-white border-0 fade show" role="alert" th:if="${message}">
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <strong>Success - </strong> [[${message}]]
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-5">
+                            <a th:href="@{/admin/product/add}" class="btn btn-danger mb-2"><i
+                                    class="mdi mdi-plus-circle me-2"></i>Thêm mới </a>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="text-sm-end">
+                                <button type="button" class="btn btn-success mb-2 me-1"><i
+                                        class="mdi mdi-cog-outline"></i></button>
+                                <button type="button" class="btn btn-light mb-2 me-1">Import</button>
+                                <button type="button" class="btn btn-light mb-2">Export</button>
+                            </div>
+                        </div><!-- end col-->
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-centered w-100 dt-responsive nowrap" id="products-datatable">
+                            <thead class="table-light">
+                            <tr>
+                                <th class="all" style="width: 20px;">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="customCheck1">
+                                        <label class="form-check-label" for="customCheck1">&nbsp;</label>
+                                    </div>
+                                </th>
+                                <th class="all">Sản phẩm</th>
+                                <th>Danh mục</th>
+                                <th>Đơn giá</th>
+                                <th>Số lượng</th>
+                                <th>Trạng thái</th>
+                                <th>Ngày thêm</th>
+                                <th style="width: 85px;">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="product, iStat : ${listProducts}">
+                                <td>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input"
+                                               th:id="'customCheck'+${iStat.index + 1}">
+                                        <label class="form-check-label"
+                                               th:for="'customCheck'+${iStat.index + 1}">&nbsp;</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <img th:if="${product.images.size() > 0}" th:src="@{${product.images[0].url}}" alt="contact-img"
+                                         title="contact-img" class="rounded me-3" height="48"/>
+                                    <p class="m-0 d-inline-block align-middle font-16">
+                                        <a href="apps-ecommerce-products-details.html" class="text-body"
+                                           th:text="${product.name}">Product name</a>
+<!--                                        <br/>-->
+<!--                                        <span class="text-warning mdi mdi-star"></span>-->
+<!--                                        <span class="text-warning mdi mdi-star"></span>-->
+<!--                                        <span class="text-warning mdi mdi-star"></span>-->
+<!--                                        <span class="text-warning mdi mdi-star"></span>-->
+<!--                                        <span class="text-warning mdi mdi-star"></span>-->
+                                    </p>
+                                </td>
+                                <td>
+                                    <span th:each="cate : ${product.categories}" th:text="${cate.name}+', '"></span>
+                                </td>
+                                <td th:text="${#numbers.formatCurrency(product.price)}">
+                                    Price
+                                </td>
+                                <td th:text="${product.quantity}">
+                                    Quantity
+                                </td>
+                                <td>
+                                    <span th:if="${product.status == 1}" class="badge bg-success">Còn hàng</span>
+                                    <span th:unless="${product.status == 1}" class="badge bg-danger">Hết hàng</span>
+                                </td>
+                                <td th:text="${#dates.format(product.createdAt, 'dd-MM-yyyy')}">
+                                    Created at
+                                </td>
+                                <td class="table-action">
+                                    <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-eye"></i></a>
+                                    <a th:href="@{'/admin/product/edit/'+${product.id}}" class="action-icon"> <i
+                                            class="mdi mdi-square-edit-outline"></i></a>
+                                    <a th:href="@{'/admin/product/remove/'+${product.id}}" class="action-icon"> <i
+                                            class="mdi mdi-delete"></i></a>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+        </div> <!-- end col -->
+    </div>
+    <!-- end row -->
+
+</div> <!-- End Content -->
+<th:block layout:fragment="script">
+    <!-- third party js -->
+    <script type="text/javascript" th:src="@{/admin/assets/js/vendor/jquery.dataTables.min.js}"></script>
+    <script type="text/javascript" th:src="@{/admin/assets/js/vendor/dataTables.bootstrap5.js}"></script>
+    <script type="text/javascript" th:src="@{/admin/assets/js/vendor/dataTables.responsive.min.js}"></script>
+    <script type="text/javascript" th:src="@{/admin/assets/js/vendor/responsive.bootstrap5.min.js}"></script>
+    <script type="text/javascript" th:src="@{/admin/assets/js/vendor/dataTables.checkboxes.min.js}"></script>
+    <!-- third party js ends -->
+
+    <!-- demo app -->
+    <script type="text/javascript" th:src="@{/admin/assets/js/pages/product/products.js}"></script>
+    <!-- end demo js-->
+</th:block>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Sửa địa chỉ giao hàng</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-3" style="background-color: #F8FAFC">
+            <div style="padding: 20px;background: #fff;border-radius: 12px;box-shadow: 0px 0px 12px rgb(0 0 0 / 6%);">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="single-form form-default">
+                            <label class="form-label">Họ và tên</label>
+                            <div class="col-md-12 form-input form">
+                                <input type="text" class="form-control" placeholder="Họ và tên"
+                                       id="customer_name" th:value="${address.customerName}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mt-3 mb-3">
+                        <div class="single-form form-default">
+                            <label class="form-label">Địa chỉ email</label>
+                            <input class="form-control" type="text" placeholder="Nhập email" th:value="${address.customerName}"/>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mt-3 mb-3">
+                        <div class="single-form form-default">
+                            <label class="form-label">Số điện thoại</label>
+                            <input type="text" class="form-control" placeholder="Nhập số điện thoại"
+                                   id="customer_phone" th:value="${address.customerPhone}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="single-form form-default">
+                            <label class="form-label">Tỉnh / Thành phố</label>
+                            <div class="select-items">
+                                <select class="form-select" name="calc_shipping_provinces"
+                                        id="calc_shipping_provinces"
+                                        required="">
+<!--                                    <option selected>Tỉnh / Thành phố</option>-->
+                                    <option th:value="${address.provinceId}" th:text="${address.provinceName}" selected></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="single-form form-default">
+                            <label class="form-label">Quận / Huyện</label>
+                            <div class="select-items">
+                                <select class="form-select" name="calc_shipping_district"
+                                        id="calc_shipping_district"
+                                        required="">
+<!--                                    <option value="">Quận / Huyện</option>-->
+                                    <option th:value="${address.districtId}" th:text="${address.districtName}" selected></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="single-form form-default">
+                            <label class="form-label">Phường / Xã</label>
+                            <div class="select-items">
+                                <select class="form-select" id="calc_shipping_wards" required="">
+<!--                                    <option value="">Phường / Xã</option>-->
+                                    <option th:value="${address.wardsCode}" th:text="${address.wardsName}" selected></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="single-form form-default">
+                            <label class="form-label">Địa chỉ</label>
+                            <div class="col-md-12 form-input form">
+                                <input id="delivery_adddress" type="text" class="form-control"
+                                       placeholder="Số nhà, tên đường" th:value="${address.deliveryAddress}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            <button type="button" id="btn_save_address" class="btn btn-primary">Lưu</button>
+            <button type="button" id="btn_delete_address" class="btn btn-primary">Xóa</button>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    $.ajax({
+        url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province',
+        headers: {
+            'Token': 'cf8dbcb8-cd38-11ec-a4f1-1ab3296c576f',
+            'Content-Type': 'application/json'
+        },
+        type: 'GET',
+        success: function (response) {
+            $('#calc_shipping_provinces').append('<option selected>Tỉnh / Thành phố</option>')
+            response.data.forEach(function (obj) {
+                $('#calc_shipping_provinces').append(new Option(obj.NameExtension[1], obj.ProvinceID));
+            })
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    })
+</script>
+</html>

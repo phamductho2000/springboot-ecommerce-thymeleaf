@@ -1,0 +1,36 @@
+server:
+  port: 8084
+
+spring:
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_ecommerce
+    username: root
+    password: tho2022000@
+
+  main:
+    allow-bean-definition-overriding: true
+
+  jpa:
+    hibernate.ddl-auto: none
+      #spring.jpa.hibernate.ddl-auto = update
+
+    #spring.jpa.properties.hibernate.dialect =
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        enable_lazy_load_no_trans: true
+    show-sql: true
+
+  jms.pub-sub-domain: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 1042118789268-e043t1l9o5e718pv71feg5qih0s0jcbs.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - email
+              - profile

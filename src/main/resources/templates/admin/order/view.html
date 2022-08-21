@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+<head>
+    <meta charset="utf-8"/>
+    <title>Xem đơn hàng</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta
+            content="A fully featured admin theme which can be used to build CRM, CMS, etc."
+            name="description"
+    />
+    <meta content="Coderthemes" name="author"/>
+    <th:block layout:fragment="css">
+        <link th:href="@{/admin/assets/css/vendor/dataTables.bootstrap5.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{/admin/assets/css/vendor/responsive.bootstrap5.css}" rel="stylesheet" type="text/css"/>
+    </th:block>
+</head>
+
+<body
+        class="loading"
+        data-layout-color="light"
+        data-layout="detached"
+        data-rightbar-onstart="true"
+>
+<div class="content" layout:fragment="content">
+
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                        <li class="breadcrumb-item active">Products</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Products</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <ul class="nav nav-tabs nav-bordered mb-3">
+                        <li class="nav-item">
+                            <a href="#vertical-left-tabs-order" data-bs-toggle="tab" aria-expanded="false"
+                               class="nav-link active">
+                                Đơn hàng
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#vertical-left-tabs-address" data-bs-toggle="tab" aria-expanded="true"
+                               class="nav-link">
+                                Địa chỉ giao hàng
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#vertical-left-tabs-products" data-bs-toggle="tab" aria-expanded="true"
+                               class="nav-link">
+                                Sản phẩm
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane show active" id="vertical-left-tabs-order">
+                            <table class="table table-bordered">
+                                <tbody>
+                                <tr>
+                                    <td>Mã Đơn hàng:</td>
+                                    <td th:text="${'#'+order.id}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Địa chỉ Website cửa hàng:</td>
+                                    <td><a href="https://hiepphathpc.com/" target="_blank">https://hiepphathpc.com/</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Khách hàng:</td>
+                                    <td th:text="${order.user.name}"> nguyên</td>
+                                </tr>
+                                <tr>
+                                    <td>E-Mail:</td>
+                                    <td th:text="${order.user.email}">hotiendat@yahoo.com</td>
+                                </tr>
+                                <tr>
+                                    <td>Điện thoại:</td>
+                                    <td th:text="${order.user.phone}">0964562448</td>
+                                </tr>
+                                <tr>
+                                    <td>Tổng:</td>
+                                    <td th:text="${#numbers.formatCurrency(order.total)}">154.000 VNĐ</td>
+                                </tr>
+                                <tr>
+                                    <td>Trạng thái Đơn hàng:</td>
+                                    <td id="order-status">Đang xử lý</td>
+                                </tr>
+                                <tr>
+                                    <td>Ngày Đặt hàng:</td>
+                                    <td th:text="${#dates.format(order.createdAt, 'dd-MM-yyyy HH:mm:ss')}">30/10/2021</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="tab-pane" id="vertical-left-tabs-address">
+                            <table class="table table-bordered">
+                                <tbody>
+                                <tr>
+                                    <td>Họ Tên:</td>
+                                    <td th:text="${order.deliveryAddress.customerName}">nguyên</td>
+                                </tr>
+                                <tr>
+                                    <td>Số điện thoại:</td>
+                                    <td th:text="${order.deliveryAddress.customerName}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Quận / Huyện:</td>
+                                    <td th:text="${order.deliveryAddress.districtName}">Quận 11</td>
+                                </tr>
+                                <tr>
+                                    <td>Phường / Xã:</td>
+                                    <td th:text="${order.deliveryAddress.wardsName}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Tỉnh / Thành phố:</td>
+                                    <td th:text="${order.deliveryAddress.provinceName}">TP.Hồ Chí Minh</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="tab-pane" id="vertical-left-tabs-products">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <td class="text-left">Sản phẩm</td>
+                                    <td class="text-left">Dòng sản phẩm</td>
+                                    <td class="text-right">Số lượng</td>
+                                    <td class="text-right">Đơn giá</td>
+                                    <td class="text-right">Tổng</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="detail : ${order.detailOrders}">
+                                    <td class="text-left"><a
+                                            href="https://asiav.com.vn/admin/index" th:text="${detail.product.name}">Khẩu
+                                        trang bảo hộ phòng dịch N95 MaYan</a>
+                                    </td>
+                                    <td class="text-left">BH-9501</td>
+                                    <td class="text-end" th:text="${detail.quantity}">10</td>
+                                    <td class="text-end" th:text="${#numbers.formatCurrency(detail.price)}">13.200 VNĐ</td>
+                                    <td class="text-end" th:text="${#numbers.formatCurrency(detail.total)}">132.000 VNĐ</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-end">Thành tiền:</td>
+                                    <td class="text-end" th:text="${#numbers.formatCurrency(order.total - order.feeShip)}">120.000 VNĐ</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-end">Phí vận chuyển:</td>
+                                    <td class="text-end" th:text="${#numbers.formatCurrency(order.feeShip)}">12.000 VNĐ</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-end">Tổng cộng :</td>
+                                    <td class="text-end" th:text="${#numbers.formatCurrency(order.total)}">154.000 VNĐ</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+        </div> <!-- end col -->
+    </div>
+    <!-- end row -->
+
+</div> <!-- End Content -->
+<th:block layout:fragment="script"></th:block>
+</body>
+</html>

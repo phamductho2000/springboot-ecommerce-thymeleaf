@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+<head>
+    <meta charset="utf-8"/>
+    <title>Thêm sản phẩm</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta
+            content="A fully featured admin theme which can be used to build CRM, CMS, etc."
+            name="description"
+    />
+    <meta content="Coderthemes" name="author"/>
+    <th:block layout:fragment="css">
+        <link th:href="@{/admin/assets/css/vendor/dataTables.bootstrap5.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{/admin/assets/css/vendor/responsive.bootstrap5.css}" rel="stylesheet" type="text/css"/>
+        <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">    </th:block>
+</head>
+
+<body
+        class="loading"
+        data-layout-color="light"
+        data-layout="detached"
+        data-rightbar-onstart="true"
+>
+<div class="content" layout:fragment="content">
+
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                        <li class="breadcrumb-item active">Products</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Thêm mới</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+    <form th:action="@{/admin/product/add}" id="product-form" th:object="${product}" method="post">
+        <div class="row">
+            <input type="hidden" id="countAttr" value="-1">
+            <input type="hidden" id="countCate" value="-1">
+            <input type="hidden" id="countImg" value="-1">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-body">
+                            <p class="text-muted font-14 mb-3" style="text-align: end;">
+                                <button type="submit" class="btn btn-primary">Lưu lại</button>
+                            </p>
+
+                            <ul class="nav nav-tabs nav-bordered mb-3">
+                                <li class="nav-item">
+                                    <a href="#vertical-left-tabs-preview" data-bs-toggle="tab" aria-expanded="false"
+                                       class="nav-link active">
+                                        Thông tin cơ bản
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#vertical-left-tabs-code" data-bs-toggle="tab" aria-expanded="true"
+                                       class="nav-link">
+                                        Thuộc tính sản phẩm
+                                    </a>
+                                </li>
+                            </ul> <!-- end nav-->
+                            <div class="tab-content">
+                                <div class="tab-pane show active" id="vertical-left-tabs-preview">
+                                    <div class="row">
+                                        <div class="col-sm-9">
+                                            <div class="mb-3">
+                                                <label for="name" class="form-label">Tên sản phẩm</label>
+                                                <input type="text" id="name" th:field="*{name}"
+                                                       class="form-control">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="select-categories" class="form-label">Danh mục</label>
+                                                <select class="form-select" name="category" id="select-categories">
+                                                    <option selected value="0">Chọn danh mục</option>
+                                                    <option th:each="cate : ${listCategories}" th:value="${cate.id}"
+                                                            th:text="${cate.name}"></option>
+                                                </select>
+                                                <div class="mt-3 d-flex" id="tag-categories">
+
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="example-textarea" class="form-label">Mô tả ngắn</label>
+                                                <textarea class="form-control" id="example-textarea"
+                                                          th:field="*{shortDes}" rows="5"></textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="example-textarea" class="form-label">Mô tả sản phẩm</label>
+                                                <textarea id="summernote" th:field="*{detailDes}"></textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <button type="button" id="show-upload-images" class="btn btn-primary mb-3">
+                                                    Thêm mới ảnh sản phẩm
+                                                </button>
+                                                <div class="d-flex justify-content-start" id="render-upload-image">
+
+                                                </div>
+                                                <div class="modal fade " id="modal-show-upload-images" tabindex="-1"
+                                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Ảnh đã tải lên</h5>
+                                                                <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="row mx-n1 g-0" id="upload-images">
+
+                                                                </div> <!-- end row-->
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">Đóng
+                                                                </button>
+                                                                <button type="button" id="add-image" class="btn btn-primary">
+                                                                    Thêm ảnh
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> <!-- end col-->
+
+                                        <div class="col-sm-3 mb-2 mb-sm-0">
+                                            <div class="mb-3">
+                                                <label for="ori-price-input" class="form-label">Giá nhập</label>
+                                                <input type="text" class="form-control" id="ori-price-input" onblur="handleOnblurPrice(this)">
+                                                <input type="number" hidden class="mark-input" th:field="*{originalPrice}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="price-input" class="form-label">Giá bán</label>
+                                                <input type="text" id="price-input" class="form-control" onblur="handleOnblurPrice(this)">
+                                                <input type="number" hidden class="mark-input" th:field="*{price}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="quantity" class="form-label">Số lượng</label>
+                                                <input type="number" id="quantity" class="form-control" th:field="*{quantity}">
+                                            </div>
+                                            <input type="number" hidden="true" class="form-control"
+                                                   th:field="*{status}" value="1">
+                                        </div> <!-- end col-->
+                                    </div>
+                                    <!-- end row-->
+                                </div> <!-- end preview-->
+
+                                <div class="tab-pane" id="vertical-left-tabs-code">
+                                    <div class="mb-3 text-end">
+                                        <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#standard-modal"><i
+                                                class="mdi mdi-plus-circle me-2"></i>Thêm thuộc tính mới
+                                        </button>
+                                    </div>
+                                    <div id="content-add-attribute"></div>
+                                    <div class="mb-3">
+                                        <button type="button" class="btn btn-outline-info" id="add-attribute"><i
+                                                class="mdi mdi-plus-circle me-2"></i>Thêm thuộc tính
+                                        </button>
+                                    </div>
+                                    <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog"
+                                         aria-labelledby="standard-modalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="standard-modalLabel">Thêm thuộc
+                                                        tính</h4>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-hidden="true"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="mb-3">
+                                                        <label for="input-attr-name" class="form-label">Tên thuộc
+                                                            tính</label>
+                                                        <input type="text" id="input-attr-name" class="form-control">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="input-attr-value" class="form-label">Giá trị</label>
+                                                        <input type="text" id="input-attr-value" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" id="btn-close-modal" class="btn btn-light"
+                                                            data-bs-dismiss="modal">Đóng
+                                                    </button>
+                                                    <button type="button" id="btn-save-attr-and-value" class="btn btn-primary">Lưu lại</button>
+                                                </div>
+                                            </div><!-- /.modal-content -->
+                                        </div><!-- /.modal-dialog -->
+                                    </div><!-- /.modal -->
+                                </div>
+                            </div> <!-- end tab-content-->
+                        </div>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div> <!-- end col -->
+        </div>
+    </form>
+    <!-- end row -->
+</div> <!-- End Content -->
+<th:block layout:fragment="script">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+    <script type="text/javascript" th:src="@{/admin/assets/js/pages/product/add-product.js}"></script>
+    <script type="text/javascript" th:src="@{/admin/assets/js/pages/product/validate-product.js}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            "use strict";
+
+            $('#summernote').summernote({
+                height: 400,
+            });
+
+            $('#btn-save-attr-and-value').click(function () {
+                $.ajax({
+                    url: '/admin/attribute/add-attr-and-value',
+                    type: 'POST',
+                    data: {
+                        "attr": $('#input-attr-name').val(),
+                        "value": $('#input-attr-value').val()
+                    },
+                    success: function (response) {
+                       $('#btn-close-modal').trigger('click');
+                       $.toast('Thêm thuộc tính mới thành công')
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            })
+
+            $("#add-attribute").click(function (e) {
+                $.ajax({
+                    url: '/admin/product/attribute',
+                    type: 'GET',
+                    success: function (response) {
+                        let count = $('#countAttr').val();
+                        count++;
+                        $('#countAttr').val(count);
+                        $("#content-add-attribute").append(response);
+                        $("#select-attr-product").attr('name', `attributes[${count}].attr.id`);
+                        $("#select-attr-product").attr('id', 'select-attr-product' + count);
+                        $("#select-attr-value-product").attr('name', `attributes[${count}].attrValue.id`);
+                        $("#select-attr-value-product").attr('id', 'select-attr-value-product' + count);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            })
+
+            $(document).on('change', '#select-categories', function () {
+                let count = $('#countCate').val();
+                count++;
+                $('#countCate').val(count);
+                let formatName = $("#select-categories option:selected").text().split('>')
+                let name = formatName[formatName.length - 1];
+                $('#tag-categories').append(
+                    `
+                    <div class="tag-cate-item">
+                        <a class='btn btn-info btn-sm mb-1 me-1'>
+                            ${name}
+                            <i class="fa-solid fa-xmark btn-remove-tag-cate"></i>
+                        </a>
+                        <input type='hidden' name='categories[${count}].id' value=' ${$("#select-categories option:selected").val()}'>
+                    </div>`
+                )
+                $.getScript('/admin/assets/js/pages/product/add-product.js')
+            })
+
+            $('#show-upload-images').click(function () {
+                $.ajax({
+                    url: '/admin/upload/getAllFromDb',
+                    type: 'GET',
+                    success: function (images) {
+                        $('#upload-images').empty();
+                        images.forEach(function (image, index) {
+                            $('#upload-images').append(
+                                `<div class='card me-2 item-image' id="image-list${index}" style='width: 10rem'>
+                                    <img src='${image.url}' class='card-img-top' alt='...'>
+                                    <div class="card-body">
+                                        <h5 class='card-title'>${image.name}</h5>
+                                    <input type='hidden' value='${image.id}'>
+                                    </div>
+                                 </div>`
+                            )
+                            $(`#image-list${index}`).click(function () {
+                                $('.item-image').removeClass('border border-primary');
+                                $(this).addClass('border border-primary');
+                            })
+                        })
+                        var myModal = new bootstrap.Modal(document.getElementById('modal-show-upload-images'));
+                        myModal.show();
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            })
+
+            $('#add-image').click(function () {
+                $('.item-image').each(function (index, item) {
+                    if ($(item).hasClass('border border-primary')) {
+                        let count = $('#countImg').val();
+                        count++;
+                        $('#countImg').val(count);
+                        alert("Thêm thành công");
+                        $('#render-upload-image').append(
+                            `
+                                <div class='img-container'>
+                                    <img src='${$(item).find('img').attr('src')}'
+                                        width='150' height='150' class='hover-image img-thumbnail me-2' alt='...'>
+                                         <div class='hover-middle'>
+                                            <button type="button" class='btn btn-danger btn-remove-img'>Xóa</button>
+                                         </div>
+                                    <input type='hidden' name='images[${count}].id' value='${$(item).find('input').val()}'>
+                                </div>
+                                `
+                        )
+                    }
+                })
+                $.getScript('/admin/assets/js/pages/product/add-product.js')
+            })
+
+        });
+    </script>
+</th:block>
+</body>
+</html>

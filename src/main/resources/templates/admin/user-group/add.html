@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+<head>
+    <meta charset="utf-8"/>
+    <title>Thêm tài khoản</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta
+            content="A fully featured admin theme which can be used to build CRM, CMS, etc."
+            name="description"
+    />
+    <meta content="Coderthemes" name="author"/>
+    <th:block layout:fragment="css">
+        <link th:href="@{/admin/assets/css/vendor/dataTables.bootstrap5.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{/admin/assets/css/vendor/responsive.bootstrap5.css}" rel="stylesheet" type="text/css"/>
+    </th:block>
+</head>
+
+<body
+        class="loading"
+        data-layout-color="light"
+        data-layout="detached"
+        data-rightbar-onstart="true"
+>
+<div class="content" layout:fragment="content">
+
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                        <li class="breadcrumb-item active">Products</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Thêm mới nhóm tài khoản</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+    <form th:action="@{/admin/user-group/add}" method="post" th:object="${role}" novalidate>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-body">
+                            <p class="text-muted font-14 mb-3" style="text-align: end;">
+                                <button type="submit" class="btn btn-primary">Lưu lại</button>
+                            </p>
+                            <div class="tab-content">
+                                <div class="tab-pane show active">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group mb-3 row required">
+                                                <label for="input-username"
+                                                       class="control-label col-sm-2 col-form-label">Tên nhóm</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" id="input-username" th:field="*{name}" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 row">
+                                                <label class="col-sm-2 col-form-label">Phân
+                                                    quyền:</label>
+                                                <div class="col-sm-10">
+
+                                                    <div class="tab-content">
+
+                                                        <div class="accordion" id="accordionExample">
+
+                                                            <div class="card mb-2" th:each="p, iStat : ${permissions}">
+                                                                <div class="card-header" id="headingOne">
+                                                                    <h5 class="m-0">
+                                                                        <a class="custom-accordion-title d-block pt-2 pb-2"
+                                                                           data-bs-toggle="collapse" th:href="'#collapse'+${iStat.index+1}"
+                                                                           aria-expanded="false"
+                                                                           th:aria-controls="'#collapse'+${iStat.index+1}"
+                                                                           th:text="${p.name}">
+                                                                        </a>
+                                                                    </h5>
+                                                                </div>
+
+                                                                <div th:id="'collapse'+${iStat.index+1}" class="collapse"
+                                                                     aria-labelledby="headingOne"
+                                                                     data-bs-parent="#accordionExample">
+                                                                    <div class="card-body">
+                                                                        <div class="row">
+                                                                            <div class="form-check col-md-6 mt-2" th:each="item, iStat : ${p.pers}">
+<!--                                                                                <input type="checkbox" th:field="*{permissions[__${item.id-1}__].id}" class="form-check-input" th:value="${item.id}" th:id="'check'+${iStat.index+1}">-->
+                                                                                <input type="checkbox" name="perIds" class="form-check-input" th:value="${item.id}" th:id="'check'+${iStat.index+1}">
+                                                                                <label class="form-check-label" th:for="'check'+${iStat.index+1}" th:text="${item.name}">Check this custom checkbox</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> <!-- end col-->
+                                </div>
+                                <!-- end row-->
+                            </div> <!-- end preview-->
+                        </div> <!-- end tab-content-->
+                    </div>
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+        </div> <!-- end col -->
+</div>
+</form>
+<!-- end row -->
+</div> <!-- End Content -->
+<th:block layout:fragment="script">
+
+</th:block>
+</body>
+</html>

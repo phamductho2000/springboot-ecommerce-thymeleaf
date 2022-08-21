@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <title>
+        Single Product - ShopGrids Bootstrap 5 eCommerce HTML Template.
+    </title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/assets/images/favicon.svg}"/>
+    <!-- ========================= CSS here ========================= -->
+    <link rel="stylesheet" th:href="@{/client/assets/css/splide.min.css}"/>
+    <link rel="stylesheet" th:href="@{/client/assets/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/client/assets/css/LineIcons.3.0.css}"/>
+    <link rel="stylesheet" th:href="@{/client/assets/css/tiny-slider.css}"/>
+    <link rel="stylesheet" th:href="@{/client/assets/css/glightbox.min.css}"/>
+<!--    <link rel="stylesheet" th:href="@{/client/assets/css/price_range_style.css}"/>-->
+    <link th:href="@{/client/assets/css/icons.min.css}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/client/assets/css/main.css}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" type="text/css" media="all" />
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.0.1/dist/css/themes/splide-skyblue.min.css"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <!--[if lte IE 9]>
+    <p class="browserupgrade">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="https://browsehappy.com/">upgrade your browser</a> to improve
+        your experience and security.
+    </p>
+    <![endif]-->
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-inner">
+            <div class="preloader-icon">
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    <header th:replace="~{client/fragments/header::header}"></header>
+
+    <div layout:fragment="content">
+        Content
+    </div>
+
+    <footer th:replace="~{client/fragments/footer::footer}"></footer>
+
+    <!-- ========================= scroll-top ========================= -->
+    <a href="#" class="scroll-top">
+        <i class="lni lni-chevron-up"></i>
+    </a>
+    <!-- ========================= JS here ========================= -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
+    <script th:src="@{/client/assets/js/main.js}"></script>
+    <script th:src="@{/client/assets/js/bootstrap.min.js}"></script>
+    <script th:src="@{/client/assets/js/splide.min.js}"></script>
+<!--    <script th:src="@{/client/assets/js/bootstrap.bundle.min.js}"></script>-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>-->
+    <script th:src="@{/client/assets/js/tiny-slider.js}"></script>
+    <script th:src="@{/client/assets/js/glightbox.min.js}"></script>
+    <script th:src="@{/client/assets/js/user.js}"></script>
+    <script th:src="@{/client/assets/js/bootstrap-input-spinner.js}"></script>
+<!--    <script-->
+<!--            type="text/javascript"-->
+<!--            src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.0.1/dist/js/splide.min.js">-->
+<!--    </script>-->
+<!--    <script th:src="@{/client/assets/js/cart.js}"></script>-->
+    <th:block layout:fragment="script"></th:block>
+</body>
+</html>

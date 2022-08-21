@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+<head>
+    <meta charset="utf-8"/>
+    <title>Quản lý hóa đơn</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta
+            content="A fully featured admin theme which can be used to build CRM, CMS, etc."
+            name="description"
+    />
+    <meta content="Coderthemes" name="author"/>
+    <th:block layout:fragment="css">
+        <link th:href="@{/admin/assets/css/vendor/dataTables.bootstrap5.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{/admin/assets/css/vendor/responsive.bootstrap5.css}" rel="stylesheet" type="text/css"/>
+    </th:block>
+</head>
+
+<body
+        class="loading"
+        data-layout-color="light"
+        data-layout="detached"
+        data-rightbar-onstart="true"
+>
+<div class="content" layout:fragment="content">
+
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                        <li class="breadcrumb-item active">Products</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Thêm mới</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+    <div class="row" th:if="${order.status == 1}">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title mb-3"> Thêm mới hóa đơn</h4>
+                    <input type="hidden" id="countItem" value="-1">
+                    <input type="hidden" id="totalCart" value="0">
+                    <input type="hidden" id="feeShip" value="0">
+                    <input type="hidden" id="totalPriceOrder" value="0">
+                    <input type="hidden" id="checkedAddress" value="0">
+                    <input type="hidden" id="orderId" th:value="${order.id}">
+
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" style="pointer-events: none;" role="presentation">
+                            <button class="nav-link active" id="cus-tab" data-bs-toggle="tab" data-bs-target="#cus"
+                                    type="button" role="tab" aria-controls="home" aria-selected="true">Chi tiết khách
+                                hàng
+                            </button>
+                        </li>
+                        <li class="nav-item" style="pointer-events: none;" role="presentation">
+                            <button class="nav-link" id="address-tab" data-bs-toggle="tab" data-bs-target="#address"
+                                    type="button" role="tab" aria-controls="profile" aria-selected="false">Địa chỉ giao
+                                hàng
+                            </button>
+                        </li>
+                        <li class="nav-item" style="pointer-events: none;" role="presentation">
+                            <button class="nav-link" id="detail-tab" data-bs-toggle="tab" data-bs-target="#detail"
+                                    type="button" role="tab" aria-controls="messages" aria-selected="false">Sản phẩm
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="cus" role="tabpanel" aria-labelledby="home-tab">
+                            <form id="customerForm" method="post" action="#" class="form-horizontal">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="row mb-3 mt-3">
+                                            <label class="col-md-3 col-form-label">Khách hàng</label>
+                                            <div class="col-md-9">
+                                                <select class="form-select" id="customerId" name="customerId">
+                                                    <option th:each="user : ${users}" th:value="${user.id}"
+                                                            th:text="${user.name}">Phạm Đức Thọ
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-md-3 col-form-label" for="fullname">Họ và tên</label>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control" id="fullname"
+                                                       name="userName3" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-md-3 col-form-label" for="email">Email</label>
+                                            <div class="col-md-9">
+                                                <input type="text" id="email" name="password3"
+                                                       class="form-control" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-md-3 col-form-label" for="phone">Số điện thoại</label>
+                                            <div class="col-md-9">
+                                                <input type="text" id="phone" name="confirm3"
+                                                       class="form-control" readonly>
+                                            </div>
+                                        </div>
+                                    </div> <!-- end col -->
+                                </div> <!-- end row -->
+                            </form>
+
+                        </div>
+                        <div class="tab-pane" id="address" role="tabpanel" aria-labelledby="profile-tab">
+                            <div id="content-addresses" style="padding: 20px">
+
+                            </div>
+
+                        </div>
+                        <div class="tab-pane" id="detail" role="tabpanel" aria-labelledby="messages-tab">
+                            <form action="#" id="detailForm">
+                                <table id="table-detail-order" class="table table-centered mb-0">
+                                    <thead>
+                                    <tr>
+                                        <th>Sản phẩm</th>
+                                        <th>Số lượng</th>
+                                        <th>Đơn giá</th>
+                                        <th>Tổng</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                                <div class="text-end mt-2">
+                                    <h5 style="display: inline">Tổng: </h5>
+                                    <h5 style="display: inline" id="total-cart">3.000.000đ</h5>
+                                </div>
+                                <div class="text-end mt-2">
+                                    <h5 style="display: inline">Phí vận chuyển: </h5>
+                                    <h5 style="display: inline" id="fee-ship">3.000.000đ</h5>
+                                </div>
+                                <div class="text-end mt-2">
+                                    <h5 style="display: inline">Tổng tiền: </h5>
+                                    <h5 style="display: inline" id="total-price-order" th:text="${#numbers.formatCurrency(order.total)}">3.000.000đ</h5>
+                                </div>
+                                <div class="mt-3">
+                                    <h5>Thêm sản phẩm</h5>
+
+                                    <div class="row mb-3">
+                                        <label class="col-md-3 col-form-label" for="productId">Chọn sản phẩm</label>
+                                        <div class="col-md-9">
+                                            <select class="form-select" id="productId">
+                                                <option th:each="product : ${products}" th:value="${product.id}"
+                                                        th:text="${product.name}">Phạm Đức Thọ
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label class="col-md-3 col-form-label" for="p-quantity">Số lượng</label>
+                                    <div class="col-md-9">
+                                        <input type="number" id="p-quantity" name="confirm3"
+                                               class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label class="col-md-3 col-form-label" for="p-price">Đơn giá</label>
+                                    <div class="col-md-9">
+                                        <input type="number" id="p-price" name="confirm3"
+                                               class="form-control" readonly>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <button type="button" id="add-new-product" class="btn btn-primary">Thêm mới</button>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="statusOrder">Chọn trạng thái đơn hàng</label>
+                                    <select class="form-select" id="statusOrder">
+                                        <option value="0">Đã hủy</option>
+                                        <option value="1">Chờ xử lý</option>
+                                        <option value="2">Đã tiếp nhận</option>
+<!--                                        <option value="3">Đang giao</option>-->
+<!--                                        <option value="4">Đã giao</option>-->
+<!--                                        <option value="5">Hoàn tất</option>-->
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                    <ul class="list-inline wizard mb-0">
+                        <li id="btn-back" class="previous list-inline-item disabled"><a href="javascript:void(0);"
+                                                                                        class="btn btn-info">Quay
+                            lại</a>
+                        </li>
+                        <li id="btn-next" class="next list-inline-item float-end"><a href="javascript:void(0);"
+                                                                                     class="btn btn-info">Tiếp
+                            tục</a></li>
+                        <li id="btn-save" class="next list-inline-item float-end" style="display: none">
+                            <a href="javascript:void(0);" class="btn btn-info">Lưu</a></li>
+                    </ul>
+                </div>
+
+            </div> <!-- end card-body -->
+        </div> <!-- end card-->
+    </div>
+    <div class="row" th:unless="${order.status == 1}">
+        <form th:action="@{/admin/order/updateStatus}" method="post">
+            <div class="mb-4 d-flex align-items-end">
+                <div class="me-3">
+                    <label for="statusOrder">Chọn trạng thái đơn hàng</label>
+                    <select class="form-select" name="statusOrder" id="statusOrder">
+                        <option value="0">Đã hủy</option>
+                        <option value="1">Chờ xử lý</option>
+                        <option value="2">Đã tiếp nhận</option>
+                        <option value="3">Đang giao</option>
+                        <option value="4">Đã giao</option>
+                        <option value="5">Hoàn tất</option>
+                    </select>
+                    <input type="hidden" id="orderId" name="orderId" th:value="${order.id}">
+                </div>
+                <div>
+                    <button type="submit" id="btn-update-status" class="btn btn-primary">Cập nhật</button>
+                </div>
+            </div>
+        </form>
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <ul class="nav nav-tabs nav-bordered mb-3">
+                        <li class="nav-item">
+                            <a href="#vertical-left-tabs-order" data-bs-toggle="tab" aria-expanded="false"
+                               class="nav-link active">
+                                Đơn hàng
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#vertical-left-tabs-address" data-bs-toggle="tab" aria-expanded="true"
+                               class="nav-link">
+                                Địa chỉ giao hàng
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#vertical-left-tabs-products" data-bs-toggle="tab" aria-expanded="true"
+                               class="nav-link">
+                                Sản phẩm
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane show active" id="vertical-left-tabs-order">
+                            <table class="table table-bordered">
+                                <tbody>
+                                <tr>
+                                    <td>Mã Đơn hàng:</td>
+                                    <td th:text="${'#'+order.id}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Khách hàng:</td>
+                                    <td th:text="${order.user.name}"> nguyên</td>
+                                </tr>
+                                <tr>
+                                    <td>E-Mail:</td>
+                                    <td th:text="${order.user.email}">hotiendat@yahoo.com</td>
+                                </tr>
+                                <tr>
+                                    <td>Điện thoại:</td>
+                                    <td th:text="${order.user.phone}">0964562448</td>
+                                </tr>
+                                <tr>
+                                    <td>Tổng:</td>
+                                    <td th:text="${#numbers.formatCurrency(order.total)}">154.000 VNĐ</td>
+                                </tr>
+                                <tr>
+                                    <td>Trạng thái Đơn hàng:</td>
+                                    <td id="order-status">Đang xử lý</td>
+                                </tr>
+                                <tr>
+                                    <td>Ngày Đặt hàng:</td>
+                                    <td th:text="${#dates.format(order.createdAt, 'dd-MM-yyyy HH:mm:ss')}">30/10/2021
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="tab-pane" id="vertical-left-tabs-address">
+                            <table class="table table-bordered">
+                                <tbody>
+                                <tr>
+                                    <td>Họ Tên:</td>
+                                    <td th:text="${order.deliveryAddress.customerName}">nguyên</td>
+                                </tr>
+                                <tr>
+                                    <td>Số điện thoại:</td>
+                                    <td th:text="${order.deliveryAddress.customerName}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Quận / Huyện:</td>
+                                    <td th:text="${order.deliveryAddress.districtName}">Quận 11</td>
+                                </tr>
+                                <tr>
+                                    <td>Phường / Xã:</td>
+                                    <td th:text="${order.deliveryAddress.wardsName}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Tỉnh / Thành phố:</td>
+                                    <td th:text="${order.deliveryAddress.provinceName}">TP.Hồ Chí Minh</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="tab-pane" id="vertical-left-tabs-products">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <td class="text-left">Sản phẩm</td>
+                                    <td class="text-left">Dòng sản phẩm</td>
+                                    <td class="text-right">Số lượng</td>
+                                    <td class="text-right">Đơn giá</td>
+                                    <td class="text-right">Tổng</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="detail : ${order.detailOrders}">
+                                    <td class="text-left"><a
+                                            href="https://asiav.com.vn/admin/index" th:text="${detail.product.name}">Khẩu
+                                        trang bảo hộ phòng dịch N95 MaYan</a>
+                                    </td>
+                                    <td class="text-left">BH-9501</td>
+                                    <td class="text-end" th:text="${detail.quantity}">10</td>
+                                    <td class="text-end" th:text="${#numbers.formatCurrency(detail.price)}">13.200 VNĐ
+                                    </td>
+                                    <td class="text-end" th:text="${#numbers.formatCurrency(detail.total)}">132.000
+                                        VNĐ
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-end">Thành tiền:</td>
+                                    <td class="text-end"
+                                        th:text="${#numbers.formatCurrency(order.total - order.feeShip)}">120.000 VNĐ
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-end">Phí vận chuyển:</td>
+                                    <td class="text-end" th:text="${#numbers.formatCurrency(order.feeShip)}">12.000
+                                        VNĐ
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-end">Tổng cộng :</td>
+                                    <td class="text-end" th:text="${#numbers.formatCurrency(order.total)}">154.000 VNĐ
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+        </div> <!-- end col -->
+    </div>
+
+</div>
+<!-- end row -->
+</div> <!-- End Content -->
+<th:block layout:fragment="script">
+    <script type="text/javascript" th:src="@{/admin/assets/js/pages/order/validate-order.js}"></script>
+    <script type="text/javascript" th:src="@{/admin/assets/js/pages/order/form-wizard.js}"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        $(document).ready(function () {
+            "use strict";
+
+            const status = /*[[${order.status}]]*/ 'default';
+            $('#statusOrder').val(status);
+
+            $('#totalPriceOrder').val(/*[[${order.total}]]*/ 'default')
+
+            initAddress();
+
+            initUser();
+
+            initDetail();
+
+            initTotal();
+
+            function initUser() {
+                const user = /*[[${order.user}]]*/ 'default';
+                $('#customerId').val(user.id)
+                $.ajax({
+                    url: '/admin/user/api/getInfo/' + user.id,
+                    type: 'GET',
+                    success: function (user) {
+                        $('#fullname').val(user.name);
+                        $('#email').val(user.email);
+                        $('#phone').val(user.phone);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            }
+
+            function initDetail() {
+                const details = /*[[${order.detailOrders}]]*/ 'default';
+                $('#countItem').val(details.length - 1);
+                details.forEach(function (item, index) {
+                    $('#table-detail-order tbody').append(`
+                    <tr>
+                        <td>${item.product.name}</td>
+                        <td class="render-quantity">${item.quantity}</td>
+                        <td>${item.price}</td>
+                        <td class="render-total">${item.total}</td>
+                        <td>
+                        <a class='action-icon'>
+                            <i class='mdi mdi-delete btn-remove-item-detail'></i>
+                        </a>
+                        </td>
+                        <input type="hidden" class="product-id" name='detailOrders[${index}].product.id' value='${item.product.id}'>
+                        <input type="hidden" class="product-quantity" name='detailOrders[${index}].quantity' value='${item.quantity}'>
+                        <input type="hidden" class="product-price" name='detailOrders[${index}].price' value='${item.price}'>
+                        <input type="hidden" class="product-total" name='detailOrders[${index}].total' value='${item.total}'>
+                    </tr>
+                    `)
+                })
+                $.getScript('/admin/assets/js/pages/order/form-wizard.js')
+            }
+
+            function initAddress() {
+                const addressId = /*[[${order.deliveryAddress.id}]]*/ 'default';
+                $('#checkedAddress').val(addressId)
+            }
+
+            function initTotal() {
+                let feeShip = /*[[${order.feeShip}]]*/ 'default';
+                let totalCart = Number($('#totalPriceOrder').val()) - Number(feeShip);
+                $('#feeShip').val(feeShip);
+                feeShip = formatToCurrency(feeShip);
+                $('#fee-ship').text(feeShip + ' đ');
+
+                $('#totalCart').val(totalCart);
+                totalCart = formatToCurrency(totalCart);
+                $('#total-cart').text(totalCart + ' đ');
+                $('#total-price-order').text(formatToCurrency($('#totalPriceOrder').val()) + ' đ')
+
+            }
+
+            $('#add-new-product').click(function () {
+                if($('#p-quantity').val() <= 0) {
+                    alert("Vui lòng nhập vào số lượng");
+                } else {
+                    let exist = false;
+                    let count = $('#countItem').val();
+                    let idP = $('#productId option:selected').val();
+                    let nameP = $('#productId option:selected').text();
+                    let price = $('#p-price').val();
+                    let quantity = $('#p-quantity').val();
+                    let total = price * quantity;
+                    $('#table-detail-order tbody tr').each(function (index) {
+                        let pIdEle = $(this).find('.product-id')[0];
+                        if (pIdEle == null) {
+                            return false;
+                        }
+                        let pId = $(pIdEle).val();
+                        if (idP == pId) {
+                            exist = true;
+                            let oldQuantity = $(this).find('.product-quantity').val()
+                            $(this).find('.product-quantity').val(Number(oldQuantity) + Number(quantity));
+                            $(this).find('.product-total').val(Number($(this).find('.product-price').val()) * Number($(this).find('.product-quantity').val()));
+                            $(this).find('.render-quantity').text($(this).find('.product-quantity').val());
+                            $(this).find('.render-total').text($(this).find('.product-total').val())
+                            updateTotalPrice();
+                        }
+                    })
+
+                    if (exist == false) {
+                        count++;
+                        $('#countItem').val(count);
+                        $('#table-detail-order tbody').append(`
+                    <tr>
+                        <td>${nameP}</td>
+                        <td class="render-quantity">${quantity}</td>
+                        <td>${formatToCurrency(price)}</td>
+                        <td class="render-total">${formatToCurrency(total)}</td>
+                        <td>
+                        <a class='action-icon'>
+                            <i class='mdi mdi-delete btn-remove-item-detail'></i>
+                        </a>
+                        </td>
+                        <input type="hidden" class="product-id" name='detailOrders[${count}].product.id' value='${idP}'>
+                        <input type="hidden" class="product-quantity" name='detailOrders[${count}].quantity' value='${quantity}'>
+                        <input type="hidden" class="product-price" name='detailOrders[${count}].price' value='${price}'>
+                        <input type="hidden" class="product-total" name='detailOrders[${count}].total' value='${total}'>
+                    </tr>
+                    `)
+                        updateTotalPrice();
+                    }
+                    $.getScript('/admin/assets/js/pages/order/form-wizard.js')
+                }
+            })
+
+            function updateTotalPrice() {
+                let feeShip = Number($('#feeShip').val());
+                let totalCart = 0;
+                $('#table-detail-order tbody tr').each(function (index) {
+                    totalCart += Number($(this).find('.product-total').val())
+                })
+                $('#totalCart').val(totalCart);
+                $('#totalPriceOrder').val(totalCart + Number(feeShip))
+
+                $('#total-cart').text(formatToCurrency(totalCart) + ' đ');
+                $('#total-price-order').text(formatToCurrency($('#totalPriceOrder').val()) + ' đ');
+            }
+
+            $('#btn-save').click(function () {
+                let addressId = $('input[type=radio]:checked').val()
+                let cusId = $('#customerId').val()
+                $.ajax({
+                    url: '/admin/order/update',
+                    type: 'POST',
+                    data: $('#detailForm').serialize() +
+                        '&deliveryAddressId=' + addressId +
+                        '&cusId=' + cusId +
+                        '&total=' + $('#totalPriceOrder').val() +
+                        '&feeShip=' + $('#feeShip').val() +
+                        '&status=' + $('#statusOrder').val() +
+                        '&orderId=' + $('#orderId').val(),
+                    success: function (response) {
+                        window.location.href = '/admin/order';
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            })
+
+        });
+
+        /*]]>*/
+    </script>
+</th:block>
+</body>
+</html>

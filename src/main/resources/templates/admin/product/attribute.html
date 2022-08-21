@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="row">
+    <div class="col-md-5">
+        <div class="mb-3">
+            <label for="select-attr-product" class="form-label">Thuộc tính sản phẩm</label>
+            <select class="form-select form-select-attr" id="select-attr-product" name="attributes.name">
+                <option selected>Chọn thuộc tính</option>
+                <option th:each="attr : ${listAttributes}" th:value="${attr.id}" th:text="${attr.name}"></option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="mb-3">
+            <label for="select-attr-value-product" class="form-label">Giá trị</label>
+            <select class="form-select form-select-value" id="select-attr-value-product" name="attributes.value">
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <button type="button" style="margin-top: 28px" class="btn btn-danger btn-remove-attr">Xóa</button>
+    </div>
+
+</div>
+<script type="text/javascript" th:src="@{/admin/assets/js/pages/product/add-product.js}"></script>
+</body>
+</html>

@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{client/layout.html}">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <title>
+        Danh sách sản phẩm
+    </title>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- Start Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-6 col-12">
+                    <div class="breadcrumbs-content">
+                        <h1 class="page-title">Single Product</h1>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12">
+                    <ul class="breadcrumb-nav">
+                        <li>
+                            <a href="index.html"><i class="lni lni-home"></i> Home</a>
+                        </li>
+                        <li><a href="index.html">Shop</a></li>
+                        <li>Single Product</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Breadcrumbs -->
+
+    <!-- Start Checkout -->
+    <section class="checkout-wrapper section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="checkout-steps-form-style-1">
+                        <ul id="accordionExample">
+                            <li>
+                                <h6
+                                        class="title"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#collapseThree"
+                                        aria-expanded="true"
+                                        aria-controls="collapseThree"
+                                >
+                                    1. Thông tin liên hệ
+                                </h6>
+                                <section
+                                        class="checkout-steps-form-content collapse show"
+                                        id="collapseThree"
+                                        aria-labelledby="headingThree"
+                                        data-bs-parent="#accordionExample"
+                                >
+                                    <div class="row" th:if="${addresses.size() != 0}">
+                                        <h6 class="card-title mt-3" id="contact-info-step-1"
+                                            th:text="${addresses[0].customerName} + ', ' + ${addresses[0].customerPhone}">
+                                            Phạm Đức Thọ, 0343510657</h6>
+                                    </div>
+                                    <div class="row" th:unless="${addresses.size() != 0}">
+                                        <div class="col-md-12">
+                                            <div class="single-form form-default">
+                                                <label>Họ và tên</label>
+                                                <div class="col-md-12 form-input form">
+                                                    <input type="text"
+                                                           th:value="${#authentication.principal.getPhone()}"
+                                                           placeholder="Họ và tên" id="customer_name"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="single-form form-default">
+                                                <label>Địa chỉ email</label>
+                                                <div class="form-input form">
+                                                    <input type="text" placeholder="Nhập email"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="single-form form-default">
+                                                <label>Số điện thoại</label>
+                                                <div class="form-input form">
+                                                    <input type="text" placeholder="Nhập số điện thoại"
+                                                           id="customer_phone"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form button">
+                                                <button
+                                                        class="btn"
+                                                        data-bs-toggle="collapse"
+                                                        data-bs-target="#collapseFour"
+                                                        aria-expanded="false"
+                                                        aria-controls="collapseFour"
+                                                >
+                                                    Tiếp
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </li>
+                            <li>
+                                <h6
+                                        class="title collapsed"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#collapseFour"
+                                        aria-expanded="false"
+                                        aria-controls="collapseFour"
+                                >
+                                    2. Địa chỉ giao hàng
+                                </h6>
+                                <section
+                                        class="checkout-steps-form-content collapse"
+                                        id="collapseFour"
+                                        aria-labelledby="headingFour"
+                                        data-bs-parent="#accordionExample"
+                                >
+                                    <div class="row" th:if="${addresses.size() != 0}">
+                                        <div class="row" id="container-address">
+                                            <div class="col-md-6 mt-3" th:each="address, iStat : ${addresses}">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="form-check">
+                                                            <div class="d-flex">
+                                                                <div style="width: 90%">
+                                                                    <input th:if="${iStat.index == 0}"
+                                                                           class="form-check-input"
+                                                                           type="radio"
+                                                                           name="radioAddress" th:id="${address.id}"
+                                                                           th:value="${address.id}" checked>
+                                                                    <input th:unless="${iStat.index == 0}"
+                                                                           class="form-check-input"
+                                                                           type="radio"
+                                                                           name="radioAddress" th:id="${address.id}"
+                                                                           th:value="${address.id}">
+                                                                    <label class="form-check-label"
+                                                                           th:for="${address.id}">
+                                                                        <div class="d-flex justify-content-between">
+                                                                            <h6 class="card-title"
+                                                                                th:id="${'contact-info'+address.id}"
+                                                                                th:text="${address.customerName} + ', ' + ${address.customerPhone}">
+                                                                                Phạm Đức Thọ, 0343510657</h6>
+                                                                        </div>
+                                                                        <p class="card-text"
+                                                                           th:text="${address.deliveryAddress} + ', ' + ${address.wardsName} + ', ' +${address.districtName} + ', ' +${address.provinceName}">
+                                                                            Address</p>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="btn-edit-address" style="width: 10%;">
+                                                                    <label th:for="${'address'+address.id}">
+                                                                        <i class="fa-regular fa-pen-to-square fs-4 mdi-cursor-pointer"></i>
+                                                                    </label>
+                                                                    <input type="hidden" th:id="${'address'+address.id}"
+                                                                           th:value="${address.id}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mt-3">
+                                            <i class="lni lni-plus"></i>
+                                            <a class="link-primary" id="btn-show-modal-add-address">Thêm địa chỉ mới</a>
+                                        </div>
+                                        <div class="col-md-6 mt-3">
+                                            <div class="card" style="border: none; background-color: #F8FAFC">
+                                                <div class="card-body">
+                                                    <p class="card-title">Phí vận chuyển tạm tính:<span
+                                                            class="fee-ship"></span></p>
+                                                    <p class="card-title">Thời gian giao hàng dự kiến:<span
+                                                            class="time-ship"></span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" th:unless="${addresses.size() != 0}">
+                                        <div class="col-md-12">
+                                            <div class="single-form form-default">
+                                                <label>Tỉnh / Thành phố</label>
+                                                <div class="select-items">
+                                                    <select class="form-control" name="calc_shipping_provinces"
+                                                            id="calc_shipping_provinces"
+                                                            required="">
+                                                        <option selected>Tỉnh / Thành phố</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form form-default">
+                                                <label>Quận / Huyện</label>
+                                                <div class="select-items">
+                                                    <select class="form-control" name="calc_shipping_district"
+                                                            id="calc_shipping_district"
+                                                            required="">
+                                                        <option value="">Quận / Huyện</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form form-default">
+                                                <label>Phường / Xã</label>
+                                                <div class="select-items">
+                                                    <select class="form-control" id="calc_shipping_wards" required="">
+                                                        <option value="">Phường / Xã</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form form-default">
+                                                <label>Địa chỉ</label>
+                                                <div class="col-md-12 form-input form">
+                                                    <input id="delivery_adddress" type="text"
+                                                           placeholder="Số nhà, tên đường"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <h6 class="heading-6 font-weight-400 payment-title mt-3 mb-3">
+                                                Chọn hình thức giao hàng
+                                            </h6>
+                                            <div id="option-delivery">
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="steps-form-btn button">
+                                                <button
+                                                        class="btn"
+                                                        data-bs-toggle="collapse"
+                                                        data-bs-target="#collapseThree"
+                                                        aria-expanded="false"
+                                                        aria-controls="collapseThree"
+                                                >
+                                                    Quay lại
+                                                </button>
+                                                <a href="javascript:void(0)" id="btn_save_address" class="btn btn-alt">Lưu
+                                                    địa chỉ</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </li>
+<!--                            <li>-->
+<!--                                <h6-->
+<!--                                        class="title collapsed"-->
+<!--                                        data-bs-toggle="collapse"-->
+<!--                                        data-bs-target="#collapsefive"-->
+<!--                                        aria-expanded="false"-->
+<!--                                        aria-controls="collapsefive"-->
+<!--                                >-->
+<!--                                    Payment Info-->
+<!--                                </h6>-->
+<!--                                <section-->
+<!--                                        class="checkout-steps-form-content collapse"-->
+<!--                                        id="collapsefive"-->
+<!--                                        aria-labelledby="headingFive"-->
+<!--                                        data-bs-parent="#accordionExample"-->
+<!--                                >-->
+<!--                                    <div class="row">-->
+<!--                                        <div class="col-12">-->
+<!--                                            <div class="checkout-payment-form">-->
+<!--                                                <div class="single-form form-default">-->
+<!--                                                    <label>Cardholder Name</label>-->
+<!--                                                    <div class="form-input form">-->
+<!--                                                        <input-->
+<!--                                                                type="text"-->
+<!--                                                                placeholder="Cardholder Name"-->
+<!--                                                        />-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                                <div class="single-form form-default">-->
+<!--                                                    <label>Card Number</label>-->
+<!--                                                    <div class="form-input form">-->
+<!--                                                        <input-->
+<!--                                                                id="credit-input"-->
+<!--                                                                type="text"-->
+<!--                                                                placeholder="0000 0000 0000 0000"-->
+<!--                                                        />-->
+<!--                                                        <img-->
+<!--                                                                src="assets/images/payment/card.png"-->
+<!--                                                                alt="card"-->
+<!--                                                        />-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                                <div class="payment-card-info">-->
+<!--                                                    <div class="single-form form-default mm-yy">-->
+<!--                                                        <label>Expiration</label>-->
+<!--                                                        <div class="expiration d-flex">-->
+<!--                                                            <div class="form-input form">-->
+<!--                                                                <input type="text" placeholder="MM"/>-->
+<!--                                                            </div>-->
+<!--                                                            <div class="form-input form">-->
+<!--                                                                <input type="text" placeholder="YYYY"/>-->
+<!--                                                            </div>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                    <div class="single-form form-default">-->
+<!--                                                        <label-->
+<!--                                                        >CVC/CVV-->
+<!--                                                            <span><i class="mdi mdi-alert-circle"></i></span-->
+<!--                                                            ></label>-->
+<!--                                                        <div class="form-input form">-->
+<!--                                                            <input type="text" placeholder="***"/>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                                <div class="single-form form-default button">-->
+<!--                                                    <button class="btn">pay now</button>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </section>-->
+<!--                            </li>-->
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="checkout-sidebar">
+                        <div class="checkout-sidebar-coupon" style="padding: 0px" th:if="${session.CART}">
+                            <div style="padding: 20px;">
+                                <div style="display: flex; justify-content: space-between; align-items: baseline">
+                                    <p>Đơn hàng</p>
+                                    <a th:href="@{/gio-hang}" class="btn btn-primary btn-sm">Sửa</a>
+                                </div>
+                                <span th:text="${session.CART.size()}+' sản phẩm &nbsp;'">1 sản phẩm</span>
+                                <a data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
+                                   aria-controls="collapseExample">
+                                    Xem thông tin <i class="fa-solid fa-sort-down"></i>
+                                </a>
+                                <div class="collapse mt-3" id="collapseExample">
+                                    <div style="display: flex; justify-content: space-between"
+                                         th:each="item : ${session.CART}">
+                                        <p th:text="${item.value.quantity}+'x'">1x</p>
+                                        <p th:text="${item.value.product.name}">Laptop dell</p>
+                                        <p th:text="${#numbers.formatCurrency(item.value.totalPrice)}">3.000.000đ</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="padding: 20px; border-top: solid 1px #e1e1e1">
+                                <div style="display: flex; justify-content: space-between">
+                                    <p><b>Tạm tính</b></p>
+                                    <p th:text="${#numbers.formatCurrency(session.TOTAL_CART_PRICE)}">3.000.000đ</p>
+                                </div>
+                                <div style="display: flex; justify-content: space-between">
+                                    <p><b>Phí vận chuyển</b></p>
+                                    <p class="fee-ship">0đ</p>
+                                </div>
+                            </div>
+                            <div style="padding: 20px; border-top: solid 1px #e1e1e1; display: flex; justify-content: space-between">
+                                <p><b>Tổng tiền</b></p>
+                                <p id="total-price-order"
+                                   th:text="${#numbers.formatCurrency(session.TOTAL_ORDER_PRICE)}">3.000.000đ</p>
+                            </div>
+                        </div>
+                        <form th:action="@{/thanh-toan}" method="post">
+                            <div class="mt-3">
+                                <button type="button" id="btn-check-out" class="btn btn-danger w-100">ĐẶT HÀNG</button>
+                            </div>
+                        </form>
+
+<!--                        <div class="checkout-sidebar-banner mt-30">-->
+<!--                            <a href="product-grids.html">-->
+<!--                                <img src="assets/images/banner/banner.jpg" alt="#"/>-->
+<!--                            </a>-->
+<!--                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Checkout -->
+
+    <!-- Review Modal -->
+    <div
+            class="modal fade review-modal"
+            id="exampleModal"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+    >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Leave a Review</h5>
+                    <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                    ></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="review-name">Your Name</label>
+                                <input
+                                        class="form-control"
+                                        type="text"
+                                        id="review-name"
+                                        required
+                                />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="review-email">Your Email</label>
+                                <input
+                                        class="form-control"
+                                        type="email"
+                                        id="review-email"
+                                        required
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="review-subject">Subject</label>
+                                <input
+                                        class="form-control"
+                                        type="text"
+                                        id="review-subject"
+                                        required
+                                />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="review-rating">Rating</label>
+                                <select class="form-control" id="review-rating">
+                                    <option>5 Stars</option>
+                                    <option>4 Stars</option>
+                                    <option>3 Stars</option>
+                                    <option>2 Stars</option>
+                                    <option>1 Star</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="review-message">Review</label>
+                        <textarea
+                                class="form-control"
+                                id="review-message"
+                                rows="8"
+                                required
+                        ></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer button">
+                    <button type="button" class="btn">Submit Review</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Review Modal -->
+
+    <div class="modal fade" id="modal-address" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thêm địa chỉ giao hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3" style="background-color: #F8FAFC">
+                    <div style="padding: 20px;background: #fff;border-radius: 12px;box-shadow: 0px 0px 12px rgb(0 0 0 / 6%);">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="single-form form-default">
+                                    <label class="form-label">Họ và tên</label>
+                                    <div class="col-md-12 form-input form">
+                                        <input type="text" class="form-control customer_name" placeholder="Họ và tên"
+                                               id="customer_name"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-3 mb-3">
+                                <div class="single-form form-default">
+                                    <label class="form-label">Địa chỉ email</label>
+                                    <input class="form-control" type="text" placeholder="Nhập email"/>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-3 mb-3">
+                                <div class="single-form form-default">
+                                    <label class="form-label">Số điện thoại</label>
+                                    <input type="text" class="form-control customer_phone"
+                                           placeholder="Nhập số điện thoại"
+                                           id="customer_phone"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="single-form form-default">
+                                    <label class="form-label">Tỉnh / Thành phố</label>
+                                    <div class="select-items">
+                                        <select class="form-select calc_shipping_provinces"
+                                                name="calc_shipping_provinces"
+                                                id="calc_shipping_provinces"
+                                                required="">
+                                            <option selected>Tỉnh / Thành phố</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="single-form form-default">
+                                    <label class="form-label">Quận / Huyện</label>
+                                    <div class="select-items">
+                                        <select class="form-select calc_shipping_district" name="calc_shipping_district"
+                                                id="calc_shipping_district"
+                                                required="">
+                                            <option value="">Quận / Huyện</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="single-form form-default">
+                                    <label class="form-label">Phường / Xã</label>
+                                    <div class="select-items">
+                                        <select class="form-select calc_shipping_wards" id="calc_shipping_wards"
+                                                required="">
+                                            <option value="">Phường / Xã</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="single-form form-default">
+                                    <label class="form-label">Địa chỉ</label>
+                                    <div class="col-md-12 form-input form">
+                                        <input id="delivery_adddress" type="text" class="form-control"
+                                               placeholder="Số nhà, tên đường"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" id="btn_save_address" class="btn btn-primary">Thêm mới</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-edit-address" tabindex="-1" aria-labelledby="exampleModalLabel1"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sửa địa chỉ giao hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3" style="background-color: #F8FAFC">
+                    <div style="padding: 20px;background: #fff;border-radius: 12px;box-shadow: 0px 0px 12px rgb(0 0 0 / 6%);">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="single-form form-default">
+                                    <label class="form-label">Họ và tên</label>
+                                    <div class="col-md-12 form-input form">
+                                        <input type="text" class="form-control customer_name" placeholder="Họ và tên"
+                                               id="customer_name"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-3 mb-3">
+                                <div class="single-form form-default">
+                                    <label class="form-label">Địa chỉ email</label>
+                                    <input class="form-control" type="text" placeholder="Nhập email"/>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-3 mb-3">
+                                <div class="single-form form-default">
+                                    <label class="form-label">Số điện thoại</label>
+                                    <input type="text" class="form-control customer_phone"
+                                           placeholder="Nhập số điện thoại"
+                                           id="customer_phone"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="single-form form-default">
+                                    <label class="form-label">Tỉnh / Thành phố</label>
+                                    <div class="select-items">
+                                        <select class="form-select calc_shipping_provinces"
+                                                name="calc_shipping_provinces"
+                                                id="calc_shipping_provinces"
+                                                required="">
+                                            <option selected>Tỉnh / Thành phố</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="single-form form-default">
+                                    <label class="form-label">Quận / Huyện</label>
+                                    <div class="select-items">
+                                        <select class="form-select calc_shipping_district" name="calc_shipping_district"
+                                                id="calc_shipping_district"
+                                                required="">
+                                            <option value="">Quận / Huyện</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="single-form form-default">
+                                    <label class="form-label">Phường / Xã</label>
+                                    <div class="select-items">
+                                        <select class="form-select calc_shipping_wards" id="calc_shipping_wards"
+                                                required="">
+                                            <option value="">Phường / Xã</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="single-form form-default">
+                                    <label class="form-label">Địa chỉ</label>
+                                    <div class="col-md-12 form-input form">
+                                        <input id="delivery_adddress" type="text" class="form-control"
+                                               placeholder="Số nhà, tên đường"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" id="btn_update_address" class="btn btn-primary">Lưu</button>
+                    <button type='button' id='btn_delete_address' class='btn btn-danger'>Xóa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="info-alert-checkout-success" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body p-4">
+                    <div class="text-center">
+                        <i class="fa-light fa-circle-check"></i>
+                        <h4 class="mt-2">Đặt hàng thành công</h4>
+                        <p class="mt-3">Cảm ơn quý khách đã đặt hàng. Chúng tôi sẽ giao hàng cho quý khách trong thời gian sớm nhất.</p>
+                        <button type="button" class="btn btn-info my-2" data-bs-dismiss="modal">Tiếp tục</button>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div>
+<!-- ========================= JS here ========================= -->
+<th:block layout:fragment="script">
+    <script>
+        $(document).ready(function () {
+
+            function showPreload() {
+                document.querySelector('.preloader').style.opacity = '0.8';
+                document.querySelector('.preloader').style.display = 'block';
+            }
+
+            function hidePreload() {
+                document.querySelector('.preloader').style.opacity = '0';
+                document.querySelector('.preloader').style.display = 'none';
+            }
+
+            $.ajax({
+                url: '/delivery-address/' + $("input[type='radio']:checked").val(),
+                type: 'GET',
+                success: function (response) {
+                    caculateFeeShip(response);
+                    caculateTimeShip(response);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            })
+
+            function updateTotalPrice(feeShip) {
+                $.ajax({
+                    url: '/update-total-price-order',
+                    type: 'POST',
+                    data: {"feeShip": feeShip},
+                    success: function (totalPrice) {
+                        var feeShip = (totalPrice).toLocaleString('it-IT', {
+                            style: 'currency',
+                            currency: 'VND',
+                        });
+                        $('#total-price-order').text(feeShip.substring(0, feeShip.length - 4) + ' đ');
+                        // $('#total-price-order').load(" #total-price-order > *");
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            }
+
+            $(document).on('change', 'input[type=radio]', function () {
+                if ($(this).prop("checked")) {
+                    var id = $(this).val();
+                    $.ajax({
+                        url: '/delivery-address/' + id,
+                        type: 'GET',
+                        beforeSend: function () {
+                            showPreload();
+                        },
+                        success: function (address) {
+                            $('#contact-info-step-1').text($(`#contact-info${id}`).text());
+                            caculateFeeShip(address);
+                            caculateTimeShip(address);
+                            hidePreload();
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    })
+                }
+            })
+
+            function caculateFeeShip(address) {
+                $.ajax({
+                    url: 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee',
+                    type: 'GET',
+                    headers: {
+                        "Token": "cf8dbcb8-cd38-11ec-a4f1-1ab3296c576f",
+                        "Content-Type": "application/json",
+                        "ShopId": 2735528
+                    },
+                    data: {
+                        "from_district_id": 1482,
+                        "service_id": null,
+                        "service_type_id": 2,
+                        "to_district_id": address.districtId,
+                        "to_ward_code": `${address.wardsCode}`,
+                        "height": 50,
+                        "length": 20,
+                        "weight": 200,
+                        "width": 20,
+                        "insurance_value": 10000,
+                        "coupon": null
+                    },
+                    success: function (response) {
+                        var feeShip = (response.data.total).toLocaleString('it-IT', {
+                            style: 'currency',
+                            currency: 'VND',
+                        });
+                        $('.fee-ship').text(feeShip.substring(0, feeShip.length - 4) + ' đ');
+                        updateTotalPrice(response.data.total);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            }
+
+            function caculateTimeShip(address) {
+                $.ajax({
+                    url: 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/leadtime',
+                    type: 'GET',
+                    headers: {
+                        "Token": "cf8dbcb8-cd38-11ec-a4f1-1ab3296c576f",
+                        "Content-Type": "application/json",
+                        "ShopId": 2735528
+                    },
+                    data: {
+                        "from_district_id": 1482,
+                        "to_district_id": address.districtId,
+                        "to_ward_code": `${address.wardsCode}`,
+                        "service_id": 53320
+                    },
+                    success: function (response) {
+                        var date = new Date(response.data.leadtime * 1000);
+                        $('.time-ship').text(date.toLocaleDateString('en-GB'));
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            }
+
+            $('#option-delivery').change(function () {
+                selected_value = $("input[type=radio]:checked").val();
+                $.ajax({
+                    url: 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee',
+                    type: 'GET',
+                    headers: {
+                        "Token": "cf8dbcb8-cd38-11ec-a4f1-1ab3296c576f",
+                        "Content-Type": "application/json",
+                        "ShopId": 2735528,
+                    },
+                    data: {
+                        "from_district_id": 1482,
+                        "service_id": selected_value,
+                        "service_type_id": null,
+                        "to_district_id": $('#calc_shipping_district option:selected').val(),
+                        "to_ward_code": $('#calc_shipping_wards option:selected').val(),
+                        "height": 50,
+                        "length": 20,
+                        "weight": 200,
+                        "width": 20,
+                        "insurance_value": 10000,
+                        "coupon": null
+                    },
+                    success: function (response) {
+                        var feeShip = (response.data.total).toLocaleString('it-IT', {
+                            style: 'currency',
+                            currency: 'VND',
+                        });
+                        $('#fee-ship').text(feeShip.substring(0, feeShip.length - 4) + ' đ')
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            });
+
+            $('#btn-check-out').click(function () {
+                var addressId = $("input[name='radioAddress']:checked").val();
+                $.ajax({
+                    url: '/thanh-toan',
+                    type: 'POST',
+                    data: {"addressId": addressId},
+                    beforeSend: function () {
+                        showPreload();
+                    },
+                    success: function (order) {
+                        hidePreload();
+                        var modalCheckoutSuccess = new bootstrap.Modal(document.getElementById('info-alert-checkout-success'))
+                        modalCheckoutSuccess.show();
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            })
+
+        })
+    </script>
+</th:block>
+</body>
+</html>

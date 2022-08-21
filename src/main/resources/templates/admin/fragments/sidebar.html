@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="leftside-menu leftside-menu-detached" th:fragment="sidebar">
+    <div class="leftbar-user">
+        <a>
+            <span class="leftbar-user-name" sec:authentication="name">Bob</span>
+        </a>
+    </div>
+
+    <!--- Sidemenu -->
+    <ul class="side-nav">
+        <li class="side-nav-title side-nav-item">Apps</li>
+
+        <li class="side-nav-item">
+            <a
+                    data-bs-toggle="collapse"
+                    href="#sidebarEcommerce"
+                    aria-expanded="false"
+                    aria-controls="sidebarEcommerce"
+                    class="side-nav-link"
+            >
+                <i class="uil-store"></i>
+                <span> Quản lý bán hàng </span>
+                <span class="menu-arrow"></span>
+            </a>
+            <div class="collapse" id="sidebarEcommerce">
+                <ul class="side-nav-second-level">
+                    <li>
+                        <a th:href="@{/admin/dashboard}">Thống kê</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/product}">Quản lý sản phẩm</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/category}">Quản lý danh mục</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/attribute}">Quản lý thuộc tính</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/order}">Quản lý hóa đơn</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/customer}">Quản lý khách hàng</a>
+                    </li>
+                    <li class="side-nav-item">
+                        <a
+                                data-bs-toggle="collapse"
+                                href="#sidebarAccount"
+                                aria-expanded="false"
+                                aria-controls="sidebarAccount"
+                                class="side-nav-link"
+                        >
+<!--                            <i class="uil-store"></i>-->
+                            <span> Quản trị viên </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarAccount">
+                            <ul class="side-nav-second-level">
+                                <li>
+                                    <a th:href="@{/admin/user}">&emsp;&emsp; Tài khoản</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/admin/user-group}">&emsp;&emsp; Nhóm tài khoản</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
+        <li class="side-nav-item">
+            <a th:href="@{/admin/upload}" class="side-nav-link">
+                <i class="uil-folder-plus"></i>
+                <span> File Manager </span>
+            </a>
+        </li>
+
+    </ul>
+
+    <!-- End Sidebar -->
+
+    <div class="clearfix"></div>
+    <!-- Sidebar -left -->
+</div>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{client/layout.html}">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <title>
+        Danh sách sản phẩm
+    </title>
+    <style>
+        .splide {
+            margin: 0 auto;
+        }
+
+        .thumbnails {
+            display: flex;
+            margin: 1rem auto 0;
+            padding: 0;
+            justify-content: start;
+            flex-direction: column;
+        }
+
+        .thumbnail {
+            width: 70px;
+            height: 70px;
+            overflow: hidden;
+            list-style: none;
+            margin: 0 0.2rem;
+            cursor: pointer;
+            opacity: 0.3;
+        }
+
+        .thumbnail.is-active {
+            opacity: 1;
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- Start Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-6 col-12">
+                    <div class="breadcrumbs-content">
+                        <h1 class="page-title">Thông tin sản phẩm</h1>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12">
+                    <ul class="breadcrumb-nav">
+                        <li><a href="index.html"><i class="lni lni-home"></i> Home</a></li>
+                        <li><a href="index.html">Shop</a></li>
+                        <li>Single Product</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Breadcrumbs -->
+
+    <!-- Start Item Details -->
+    <section class="item-details section">
+        <div class="container">
+            <div class="top-area">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-md-12 col-12">
+                        <div class="d-flex">
+                            <ul id="thumbnails" class="thumbnails">
+                                <li class="thumbnail" th:each="img : ${product.images}">
+                                    <img th:src="@{${img.url}}" alt="">
+                                </li>
+                            </ul>
+
+                            <section id="main-carousel" class="splide p-2" aria-label="My Awesome Gallery">
+                                <div class="splide__track">
+                                    <ul class="splide__list">
+                                        <li class="splide__slide" th:each="img : ${product.images}">
+                                            <img th:src="@{${img.url}}" alt="">
+                                        </li>
+                                    </ul>
+                                </div>
+                            </section>
+
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-12">
+                        <div class="product-info">
+                            <input type="hidden" id="product-id" th:value="${product.id}">
+                            <h2 class="title" th:text="${product.name}">product name</h2>
+<!--                            <p class="category"><i class="lni lni-tag"></i> Drones:<a href="javascript:void(0)">Action-->
+<!--                                cameras</a></p>-->
+                            <p class="info-text">
+                                [(${product.shortDes})]
+                            </p>
+                            <h3 class="price" th:text="${#numbers.formatCurrency(product.price)}">product price<span>$945</span></h3>
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-12">
+                                    <input type="hidden">
+                                    <input class="form-control-sm" id="quantity" value="1" type="number" min="1" th:max="${product.quantity}" step="1"/>
+                                </div>
+                            </div>
+                            <div class="bottom-content">
+                                <div class="row align-items-end">
+                                    <div class="col-lg-4 col-md-4 col-12">
+                                        <div th:if="${product.status == 1}" class="button cart-button">
+                                            <button class="btn btn-add-to-cart" style="width: 100%;">Thêm vào giỏ hàng</button>
+                                        </div>
+                                        <div th:unless="${product.status == 1}" class="button cart-button">
+                                            <button class="btn btn-danger" style="width: 100%;">Vui lòng liên hệ</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-12">
+                                        <div class="wish-button">
+                                            <button class="btn"><i class="lni lni-heart"></i> To Wishlist</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-details-info">
+                <div class="single-block">
+                    [(${product.detailDes})]
+                </div>
+<!--                    <div class="row">-->
+<!--                        <div class="col-lg-6 col-12">-->
+<!--                            <div class="info-body custom-responsive-margin">-->
+<!--                                <h4>Details</h4>-->
+<!--                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor-->
+<!--                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud-->
+<!--                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute-->
+<!--                                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.</p>-->
+<!--                                <h4>Features</h4>-->
+<!--                                <ul class="features">-->
+<!--                                    <li>Capture 4K30 Video and 12MP Photos</li>-->
+<!--                                    <li>Game-Style Controller with Touchscreen</li>-->
+<!--                                    <li>View Live Camera Feed</li>-->
+<!--                                    <li>Full Control of HERO6 Black</li>-->
+<!--                                    <li>Use App for Dedicated Camera Operation</li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-lg-6 col-12">-->
+<!--                            <div class="info-body">-->
+<!--                                <h4>Specifications</h4>-->
+<!--                                <ul class="normal-list">-->
+<!--                                    <li><span>Weight:</span> 35.5oz (1006g)</li>-->
+<!--                                    <li><span>Maximum Speed:</span> 35 mph (15 m/s)</li>-->
+<!--                                    <li><span>Maximum Distance:</span> Up to 9,840ft (3,000m)</li>-->
+<!--                                    <li><span>Operating Frequency:</span> 2.4GHz</li>-->
+<!--                                    <li><span>Manufacturer:</span> GoPro, USA</li>-->
+<!--                                </ul>-->
+<!--                                <h4>Shipping Options:</h4>-->
+<!--                                <ul class="normal-list">-->
+<!--                                    <li><span>Courier:</span> 2 - 4 days, $22.50</li>-->
+<!--                                    <li><span>Local Shipping:</span> up to one week, $10.00</li>-->
+<!--                                    <li><span>UPS Ground Shipping:</span> 4 - 6 days, $18.00</li>-->
+<!--                                    <li><span>Unishop Global Export:</span> 3 - 4 days, $25.00</li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+            </div>
+        </div>
+    </section>
+    <!-- End Item Details -->
+
+    <div class="position-fixed bottom-0 start-0 p-3" style="z-index: 11">
+        <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Đã thêm vào giỏ hàng</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div class="modal fade review-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Leave a Review</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="review-name">Your Name</label>
+                                <input class="form-control" type="text" id="review-name" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="review-email">Your Email</label>
+                                <input class="form-control" type="email" id="review-email" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="review-subject">Subject</label>
+                                <input class="form-control" type="text" id="review-subject" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="review-rating">Rating</label>
+                                <select class="form-control" id="review-rating">
+                                    <option>5 Stars</option>
+                                    <option>4 Stars</option>
+                                    <option>3 Stars</option>
+                                    <option>2 Stars</option>
+                                    <option>1 Star</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="review-message">Review</label>
+                        <textarea class="form-control" id="review-message" rows="8" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer button">
+                    <button type="button" class="btn">Submit Review</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Review Modal -->
+</div>
+<!-- ========================= JS here ========================= -->
+<script type="text/javascript" layout:fragment="script">
+
+    $("input[type='number']").inputSpinner();
+
+    var splide = new Splide( '#main-carousel', {
+        // width: 300,
+        // height: 300,
+        pagination: false,
+        rewind: true
+        // cover: true
+    } );
+
+    var thumbnails = document.getElementsByClassName( 'thumbnail' );
+    var current;
+
+    for ( var i = 0; i < thumbnails.length; i++ ) {
+        initThumbnail( thumbnails[ i ], i );
+    }
+
+    function initThumbnail( thumbnail, index ) {
+        thumbnail.addEventListener( 'click', function () {
+            splide.go( index );
+        } );
+    }
+
+    splide.on( 'mounted move', function () {
+        var thumbnail = thumbnails[ splide.index ];
+
+        if ( thumbnail ) {
+            if ( current ) {
+                current.classList.remove( 'is-active' );
+            }
+            thumbnail.classList.add( 'is-active' );
+            current = thumbnail;
+        }
+    } );
+
+    splide.mount();
+
+    $(".btn-add-to-cart").click(function () {
+        let productId = $('#product-id').val()
+        $.ajax({
+            url: `/them-vao-gio-hang/${productId}`,
+            type: 'POST',
+            data: {quantity: $('#quantity').val()},
+            success: function (response) {
+                $('.cart-items').replaceWith($(response).find('.cart-items'));
+                var myToastEl = document.getElementById('liveToast')
+                var myToast = new bootstrap.Toast(myToastEl)
+                myToast.show();
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
+    })
+</script>
+</body>
+</html>

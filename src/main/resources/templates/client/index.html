@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{client/layout.html}">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <title>
+        Trang chủ
+    </title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="hero-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-12 custom-padding-right">
+                    <div class="slider-head">
+                        <!-- Start Hero Slider -->
+                        <div class="hero-slider">
+                            <!-- Start Single Slider -->
+                            <div class="single-slider"
+                                 style="background-image: url('https://hanoicomputercdn.com/media/banner/26_Jan8d7f2b0ef863dc27f6aec1a99271c2b3.png')">
+                                <div class="content">
+                                    <div class="button">
+                                        <a th:href="@{/collections/laptop}" class="btn">Mua ngay</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Single Slider -->
+                            <!-- Start Single Slider -->
+                            <div class="single-slider"
+                                 style="background-image: url('https://hanoicomputercdn.com/media/banner/01_Apr45f876310e10d19aa8b44de759c69ffc.png')">
+                                <div class="content">
+                                    <div class="button">
+                                        <a th:href="@{/collections/laptop}" class="btn">Mua ngay</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Single Slider -->
+                        </div>
+                        <!-- End Hero Slider -->
+                    </div>
+                </div>
+                <div class="col-lg-4 col-12">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-6 col-12 md-custom-padding">
+                            <!-- Start Small Banner -->
+                            <div class="hero-small-banner"
+                                 style="background-image: url('https://hanoicomputercdn.com/media/banner/13_Junb7aeb8a0534c372db486559009ec7bbe.png')">
+                                <div class="content">
+<!--                                    <h2>-->
+<!--                                        <span>New line required</span>-->
+<!--                                        iPhone 12 Pro Max-->
+<!--                                    </h2>-->
+<!--                                    <h3>$259.99</h3>-->
+                                </div>
+                            </div>
+                            <!-- End Small Banner -->
+                        </div>
+                        <div class="col-lg-12 col-md-6 col-12">
+                            <!-- Start Small Banner -->
+                            <div class="hero-small-banner style2">
+                                <div class="content">
+<!--                                    <h2>Weekly Sale!</h2>-->
+<!--                                    <p>Saving up to 50% off all online store items this week.</p>-->
+<!--                                    <div class="button">-->
+<!--                                        <a class="btn" href="product-grids.html">Shop Now</a>-->
+<!--                                    </div>-->
+                                </div>
+                            </div>
+                            <!-- Start Small Banner -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Hero Area -->
+
+    <!-- Start Trending Product Area -->
+    <section class="trending-product section" style="margin-top: 12px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-title">
+                        <h2>Sản phẩm bán chạy nhất</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-12" th:each="product : ${topSellProducts}">
+                    <!-- Start Single Product -->
+                    <div class="single-product">
+                        <div class="product-image">
+                            <input class="product-id" type="hidden" th:value="${product.id}">
+                            <img th:if="${product.images.size() > 0}"
+                                    th:src="@{${product.images[0].url}}"
+                                    alt="#"
+                            />
+<!--                            <div class="button btn-add-to-cart">-->
+<!--                                <button class="btn"><i class="lni lni-cart"></i>-->
+<!--                                    Thêm-->
+<!--                                </button>-->
+<!--                            </div>-->
+                        </div>
+                        <div class="product-info">
+                            <h4 class="title" style="height: 40px;overflow: hidden">
+                                <a th:href="@{/san-pham/{id}(id=${product.id})}"
+                                   th:text="${product.name}">product name</a>
+                            </h4>
+                            <div class="price">
+                                <span th:text="${#numbers.formatCurrency(product.price)}">product price</span>
+                            </div>
+                            <div>
+                                <span th:if="${product.status == 1}" class="p-qty" style="color: #2cc067">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                    Còn hàng  </span>
+                                <span th:unless="${product.status == 1}" style="color: #0074da;" class="qty">
+                                    <i class="fas fa-phone fa-flip-horizontal"></i>
+                                    Liên hệ</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Single Product -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Trending Product Area -->
+
+    <!-- Start Shipping Info -->
+    <section class="shipping-info">
+        <div class="container">
+            <ul>
+                <!-- Free Shipping -->
+                <li>
+                    <div class="media-icon">
+                        <i class="lni lni-delivery"></i>
+                    </div>
+                    <div class="media-body">
+                        <h5>Free Shipping</h5>
+                        <span>On order over $99</span>
+                    </div>
+                </li>
+                <!-- Money Return -->
+                <li>
+                    <div class="media-icon">
+                        <i class="lni lni-support"></i>
+                    </div>
+                    <div class="media-body">
+                        <h5>24/7 Support.</h5>
+                        <span>Live Chat Or Call.</span>
+                    </div>
+                </li>
+                <!-- Support 24/7 -->
+                <li>
+                    <div class="media-icon">
+                        <i class="lni lni-credit-cards"></i>
+                    </div>
+                    <div class="media-body">
+                        <h5>Online Payment.</h5>
+                        <span>Secure Payment Services.</span>
+                    </div>
+                </li>
+                <!-- Safe Payment -->
+                <li>
+                    <div class="media-icon">
+                        <i class="lni lni-reload"></i>
+                    </div>
+                    <div class="media-body">
+                        <h5>Easy Return.</h5>
+                        <span>Hassle Free Shopping.</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </section>
+    <!-- End Shipping Info -->
+</div>
+<!-- ========================= JS here ========================= -->
+<!--    <script th:src="@{/client/assets/js/cart.js}"></script>-->
+<th:block layout:fragment="script">
+    <script type="text/javascript">
+        //========= Hero Slider
+        tns({
+            container: '.hero-slider',
+            slideBy: 'page',
+            autoplay: true,
+            autoplayButtonOutput: false,
+            mouseDrag: true,
+            gutter: 0,
+            items: 1,
+            nav: false,
+            controls: true,
+            controlsText: ['<i class="lni lni-chevron-left"></i>', '<i class="lni lni-chevron-right"></i>'],
+        });
+
+        //======== Brand Slider
+        tns({
+            container: '.brands-logo-carousel',
+            autoplay: true,
+            autoplayButtonOutput: false,
+            mouseDrag: true,
+            gutter: 15,
+            nav: false,
+            controls: false,
+            responsive: {
+                0: {
+                    items: 1,
+                },
+                540: {
+                    items: 3,
+                },
+                768: {
+                    items: 5,
+                },
+                992: {
+                    items: 6,
+                }
+            }
+        });
+    </script>
+</th:block>
+
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+<head>
+    <meta charset="utf-8"/>
+    <title>Chỉnh sửa thuộc tính</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta
+            content="A fully featured admin theme which can be used to build CRM, CMS, etc."
+            name="description"
+    />
+    <meta content="Coderthemes" name="author"/>
+    <th:block layout:fragment="css">
+        <link th:href="@{/admin/assets/css/vendor/dataTables.bootstrap5.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{/admin/assets/css/vendor/responsive.bootstrap5.css}" rel="stylesheet" type="text/css"/>
+    </th:block>
+</head>
+
+<body
+        class="loading"
+        data-layout-color="light"
+        data-layout="detached"
+        data-rightbar-onstart="true"
+>
+<div class="content" layout:fragment="content">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                        <li class="breadcrumb-item active">Products</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Chỉnh sửa thuộc tính</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+    <form action="#" th:action="@{/admin/attribute/update}" th:object="${attr}" method="post">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-body">
+                            <p class="text-muted font-14 mb-3" style="text-align: end;">
+                                <button type="submit" class="btn btn-primary">Lưu lại</button>
+                            </p>
+                            <input type="hidden" id="attr-id" th:value="${attr.id}" th:field="*{id}">
+                            <ul class="nav nav-tabs nav-bordered mb-3">
+                                <li class="nav-item">
+                                    <a href="#vertical-left-tabs-info" data-bs-toggle="tab" aria-expanded="false"
+                                       class="nav-link active">
+                                        Thông tin thuộc tính
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#vertical-left-tabs-values" data-bs-toggle="tab" aria-expanded="false"
+                                       class="nav-link">
+                                        Giá trị
+                                    </a>
+                                </li>
+                            </ul> <!-- end nav-->
+                            <div class="tab-content">
+                                <div class="tab-pane show active" id="vertical-left-tabs-info">
+                                    <div class="row">
+                                        <div class="col-sm-9">
+                                            <div class="mb-3">
+                                                <label for="simpleinput" class="form-label">Tên thuộc tính</label>
+                                                <input type="text" id="simpleinput" th:value="${attr.name}" th:field="*{name}"
+                                                       class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="vertical-left-tabs-values">
+                                    <div class="col-sm-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-centered w-100 dt-responsive nowrap"
+                                                   id="attribute-values-datatable">
+                                                <thead class="table-light">
+                                                <tr>
+                                                    <th class="all" style="width: 20px;">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input"
+                                                                   id="customCheck1">
+                                                            <label class="form-check-label"
+                                                                   for="customCheck1">&nbsp;</label>
+                                                        </div>
+                                                    </th>
+                                                    <th>Tên</th>
+                                                    <th style="width: 85px;">Action</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr th:each="attrValue, iStat : ${attr.attributeValueEntities}">
+                                                    <td>
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input"
+                                                                   th:id="'customCheck'+${iStat.index + 1}">
+                                                            <label class="form-check-label"
+                                                                   th:for="'customCheck'+${iStat.index + 1}">&nbsp;</label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <span th:text="${attrValue.value}"></span>
+                                                    </td>
+                                                    <td class="table-action">
+                                                        <a th:onclick="'editValue('+${attrValue.id}+')'"
+                                                           class="action-icon"> <i
+                                                                class="mdi mdi-square-edit-outline"></i></a>
+                                                        <a href="javascript:void(0);" class="action-icon"> <i
+                                                                class="mdi mdi-delete"></i></a>
+                                                    </td>
+                                                </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="mt-3">
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Thêm mới thuộc tính
+                                            </button>
+                                        </div>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="exampleModal" tabindex="-1"
+                                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Thêm mới thuộc
+                                                            tính</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="mb-3">
+                                                            <label for="input-value" class="form-label">Giá trị</label>
+                                                            <input type="text" id="input-value" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary close-modal"
+                                                                data-bs-dismiss="modal">Đóng
+                                                        </button>
+                                                        <button type="button" class="btn btn-primary"
+                                                                id="btn-add-new-value">Lưu
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal fade" id="modalEditValue" tabindex="-1"
+                                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="modalEditValueLabel">Chỉnh sửa thuộc
+                                                            tính</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="mb-3">
+                                                            <label for="input-value" class="form-label">Giá trị</label>
+                                                            <input type="text" id="input-edit-value" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary close-modal"
+                                                                data-bs-dismiss="modal">Đóng
+                                                        </button>
+                                                        <button type="button" class="btn btn-primary"
+                                                                id="btn-update-new-value">Lưu
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div> <!-- end tab-content-->
+                        </div>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div> <!-- end col -->
+        </div>
+    </form>
+    <!-- end row -->
+</div> <!-- End Content -->
+<th:block layout:fragment="script">
+    <script type="text/javascript" th:src="@{/admin/assets/js/vendor/jquery.dataTables.min.js}"></script>
+    <script type="text/javascript" th:src="@{/admin/assets/js/vendor/dataTables.bootstrap5.js}"></script>
+    <script type="text/javascript" th:src="@{/admin/assets/js/vendor/dataTables.responsive.min.js}"></script>
+    <script type="text/javascript" th:src="@{/admin/assets/js/vendor/responsive.bootstrap5.min.js}"></script>
+    <script type="text/javascript" th:src="@{/admin/assets/js/vendor/dataTables.checkboxes.min.js}"></script>
+    <script type="text/javascript" th:src="@{/admin/assets/js/pages/attribute/attribute.values.js}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            "use strict";
+            $('#btn-add-new-value').on('click', function () {
+                let attrId = $('#attr-id').val();
+                let value = $('#input-value').val();
+                $.ajax({
+                    url: '/admin/attribute/add-value-to-attr/'+attrId,
+                    type: 'POST',
+                    data: {"value": value},
+                    success: function (response) {
+                        $('.close-modal').trigger('click');
+                        $('#attribute-values-datatable').DataTable().destroy();
+                        $('#attribute-values-datatable').replaceWith($(response).find('#attribute-values-datatable'));
+                        $.getScript('/admin/assets/js/pages/attribute/attribute.values.js')
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            })
+        });
+    </script>
+</th:block>
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+<head>
+    <meta charset="utf-8"/>
+    <title>Quản lý hóa đơn</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta
+            content="A fully featured admin theme which can be used to build CRM, CMS, etc."
+            name="description"
+    />
+    <meta content="Coderthemes" name="author"/>
+    <th:block layout:fragment="css">
+        <link th:href="@{/admin/assets/css/vendor/dataTables.bootstrap5.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{/admin/assets/css/vendor/responsive.bootstrap5.css}" rel="stylesheet" type="text/css"/>
+    </th:block>
+</head>
+
+<body
+        class="loading"
+        data-layout-color="light"
+        data-layout="detached"
+        data-rightbar-onstart="true"
+>
+<div class="content" layout:fragment="content">
+
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                        <li class="breadcrumb-item active">Products</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Thêm mới</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title mb-3"> Thêm mới hóa đơn</h4>
+                    <input type="hidden" id="countItem" value="-1">
+                    <input type="hidden" id="totalCart" value="0">
+                    <input type="hidden" id="feeShip" value="0">
+                    <input type="hidden" id="totalPriceOrder" value="0">
+                    <input type="hidden" id="checkedAddress" value="0">
+
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" style="pointer-events: none;" role="presentation">
+                            <button class="nav-link active" id="cus-tab" data-bs-toggle="tab" data-bs-target="#cus"
+                                    type="button" role="tab" aria-controls="home" aria-selected="true">Chi tiết khách
+                                hàng
+                            </button>
+                        </li>
+                        <li class="nav-item" style="pointer-events: none;" role="presentation">
+                            <button class="nav-link" id="address-tab" data-bs-toggle="tab" data-bs-target="#address"
+                                    type="button" role="tab" aria-controls="profile" aria-selected="false">Địa chỉ giao
+                                hàng
+                            </button>
+                        </li>
+                        <li class="nav-item" style="pointer-events: none;" role="presentation">
+                            <button class="nav-link" id="detail-tab" data-bs-toggle="tab" data-bs-target="#detail"
+                                    type="button" role="tab" aria-controls="messages" aria-selected="false">Sản phẩm
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="cus" role="tabpanel" aria-labelledby="home-tab">
+                            <form id="customerForm" method="post" action="#" class="form-horizontal">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="row mb-3 mt-3">
+                                            <label class="col-md-3 col-form-label">Khách hàng</label>
+                                            <div class="col-md-9">
+                                                <select class="form-select" id="customerId" name="customerId">
+                                                    <option value="-1">Chọn khách hàng</option>
+                                                    <option th:each="user : ${users}" th:value="${user.id}"
+                                                            th:text="${user.name}">Phạm Đức Thọ
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-md-3 col-form-label" for="fullname">Họ và tên</label>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control" id="fullname"
+                                                       name="userName3" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-md-3 col-form-label" for="email">Email</label>
+                                            <div class="col-md-9">
+                                                <input type="text" id="email" name="password3"
+                                                       class="form-control" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-md-3 col-form-label" for="phone">Số điện thoại</label>
+                                            <div class="col-md-9">
+                                                <input type="text" id="phone" name="confirm3"
+                                                       class="form-control" readonly>
+                                            </div>
+                                        </div>
+                                    </div> <!-- end col -->
+                                </div> <!-- end row -->
+                            </form>
+
+                        </div>
+                        <div class="tab-pane" id="address" role="tabpanel" aria-labelledby="profile-tab">
+                            <div id="content-addresses" style="padding: 20px">
+
+                            </div>
+
+                        </div>
+                        <div class="tab-pane" id="detail" role="tabpanel" aria-labelledby="messages-tab">
+                            <form action="#" id="detailForm">
+                                <table id="table-detail-order" class="table table-centered mb-0">
+                                    <thead>
+                                    <tr>
+                                        <th>Sản phẩm</th>
+                                        <th>Số lượng</th>
+                                        <th>Đơn giá</th>
+                                        <th>Tổng</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                                <div class="text-end mt-2">
+                                    <h5 style="display: inline">Tổng: </h5>
+                                    <h5 style="display: inline" id="total-cart">0đ</h5>
+                                </div>
+                                <div class="text-end mt-2">
+                                    <h5 style="display: inline">Phí vận chuyển: </h5>
+                                    <h5 style="display: inline" id="fee-ship">0đ</h5>
+                                </div>
+                                <div class="text-end mt-2">
+                                    <h5 style="display: inline">Tổng tiền: </h5>
+                                    <h5 style="display: inline" id="total-price-order">0đ</h5>
+                                </div>
+                                <div class="mt-3">
+                                    <h5>Thêm sản phẩm</h5>
+
+                                    <div class="row mb-3">
+                                        <label class="col-md-3 col-form-label" for="password3">Chọn sản phẩm</label>
+                                        <div class="col-md-9">
+                                            <select class="form-select" id="productId" name="customerId">
+                                                <option th:each="product : ${products}" th:value="${product.id}"
+                                                        th:text="${product.name}">Phạm Đức Thọ
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label class="col-md-3 col-form-label" for="p-quantity">Số lượng</label>
+                                    <div class="col-md-9">
+                                        <input type="number" id="p-quantity" name="confirm3"
+                                               class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label class="col-md-3 col-form-label" for="p-price">Đơn giá</label>
+                                    <div class="col-md-9">
+                                        <input type="number" id="p-price" name="confirm3"
+                                               class="form-control" readonly>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <button type="button" id="add-new-product" class="btn btn-primary">Thêm mới</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!--                        <div class="tab-pane" id="total-order" role="tabpanel" aria-labelledby="total-tab">-->
+                        <!--                            <form action="#" id="totalForm">-->
+                        <!--                                <div class="row">-->
+                        <!--                                    <div class="col-12">-->
+                        <!--                                        <div class="row mb-3 mt-3">-->
+                        <!--                                            <label class="col-md-3 col-form-label">Phương thức thanh toán</label>-->
+                        <!--                                            <div class="col-md-9">-->
+                        <!--                                                <select class="form-select" id="payMethod" name="payMethod">-->
+                        <!--                                                    <option value="COD">Thu tiền khi giao hàng</option>-->
+                        <!--                                                    <option value="Paypal">Thanh toán qua paypal</option>-->
+                        <!--                                                </select>-->
+                        <!--                                            </div>-->
+                        <!--                                        </div>-->
+                        <!--                                        <div class="row mb-3">-->
+                        <!--                                            <label class="col-md-3 col-form-label" for="userName3">Mã giảm giá</label>-->
+                        <!--                                            <div class="col-md-9">-->
+                        <!--                                                <input type="text" class="form-control" id="userName3"-->
+                        <!--                                                       name="userName3" readonly>-->
+                        <!--                                            </div>-->
+                        <!--                                        </div>-->
+                        <!--                                        <div class="row mb-3">-->
+                        <!--                                            <label class="col-md-3 col-form-label" for="note">Ghi chú</label>-->
+                        <!--                                            <div class="col-md-9">-->
+                        <!--                                                <input type="text" id="note" name="note" class="form-control">-->
+                        <!--                                            </div>-->
+                        <!--                                        </div>-->
+
+                        <!--                                    </div> &lt;!&ndash; end col &ndash;&gt;-->
+                        <!--                                </div>-->
+                        <!--                            </form>-->
+                        <!--                        </div>-->
+                    </div>
+                    <ul class="list-inline wizard mb-0">
+                        <li id="btn-back" class="previous list-inline-item disabled"><a href="javascript:void(0);"
+                                                                                        class="btn btn-info">Quay
+                            lại</a>
+                        </li>
+                        <li id="btn-next" class="next list-inline-item float-end"><a href="javascript:void(0);"
+                                                                                     class="btn btn-info">Tiếp
+                            tục</a></li>
+                        <li id="btn-save" class="next list-inline-item float-end" style="display: none">
+                            <a href="javascript:void(0);" class="btn btn-info">Lưu</a></li>
+                    </ul>
+                </div>
+
+            </div> <!-- end card-body -->
+        </div> <!-- end card-->
+    </div>
+</div>
+<!-- end row -->
+</div> <!-- End Content -->
+<th:block layout:fragment="script">
+    <script type="text/javascript" th:src="@{/admin/assets/js/pages/order/validate-order.js}"></script>
+    <script type="text/javascript" th:src="@{/admin/assets/js/pages/order/form-wizard.js}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            "use strict";
+            $('#add-new-product').click(function () {
+                if($('#p-quantity').val() <= 0) {
+                    alert("Vui lòng nhập vào số lượng");
+                } else {
+                    let exist = false;
+                    let count = $('#countItem').val();
+                    let idP = $('#productId option:selected').val();
+                    let nameP = $('#productId option:selected').text();
+                    let price = $('#p-price').val();
+                    let quantity = $('#p-quantity').val();
+                    let total = price * quantity;
+                    $('#table-detail-order tbody tr').each(function (index) {
+                        let pIdEle = $(this).find('.product-id')[0];
+                        if (pIdEle == null) {
+                            return false;
+                        }
+                        let pId = $(pIdEle).val();
+                        if (idP == pId) {
+                            exist = true;
+                            let oldQuantity = $(this).find('.product-quantity').val()
+                            $(this).find('.product-quantity').val(Number(oldQuantity) + Number(quantity));
+                            $(this).find('.product-total').val(Number($(this).find('.product-price').val()) * Number($(this).find('.product-quantity').val()));
+                            $(this).find('.render-quantity').text($(this).find('.product-quantity').val());
+                            $(this).find('.render-total').text($(this).find('.product-total').val())
+                            updateTotalPrice();
+                        }
+                    })
+
+                    if (exist == false) {
+                        count++;
+                        $('#countItem').val(count);
+                        $('#table-detail-order tbody').append(`
+                    <tr>
+                        <td>${nameP}</td>
+                        <td class="render-quantity">${quantity}</td>
+                        <td>${formatToCurrency(price)}</td>
+                        <td class="render-total">${formatToCurrency(total)}</td>
+                        <td>
+                        <a class='action-icon'>
+                            <i class='mdi mdi-delete btn-remove-item-detail'></i>
+                        </a>
+                        </td>
+                        <input type="hidden" class="product-id" name='detailOrders[${count}].product.id' value='${idP}'>
+                        <input type="hidden" class="product-quantity" name='detailOrders[${count}].quantity' value='${quantity}'>
+                        <input type="hidden" class="product-price" name='detailOrders[${count}].price' value='${price}'>
+                        <input type="hidden" class="product-total" name='detailOrders[${count}].total' value='${total}'>
+                    </tr>
+                    `)
+                        updateTotalPrice();
+                    }
+                    $.getScript('/admin/assets/js/pages/order/form-wizard.js')
+                }
+            })
+
+            function updateTotalPrice() {
+                let feeShip = Number($('#feeShip').val());
+                let totalCart = 0;
+                $('#table-detail-order tbody tr').each(function (index) {
+                    totalCart += Number($(this).find('.product-total').val())
+                })
+                $('#totalCart').val(totalCart);
+                $('#totalPriceOrder').val(totalCart + Number(feeShip))
+
+                $('#total-cart').text(formatToCurrency(totalCart) + ' đ');
+                $('#total-price-order').text(formatToCurrency($('#totalPriceOrder').val()) + ' đ');
+            }
+
+            $('#btn-save').click(function () {
+                let addressId = $('input[type=radio]:checked').val()
+                let cusId = $('#customerId').val()
+                $.ajax({
+                    url: '/admin/order/save',
+                    type: 'POST',
+                    data: $('#detailForm').serialize() + '&deliveryAddressId=' + addressId + '&cusId=' + cusId + '&total=' + $('#totalPriceOrder').val() + '&feeShip=' + $('#feeShip').val(),
+                    success: function (response) {
+                        window.location.href = '/admin/order';
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            })
+
+        });
+    </script>
+</th:block>
+</body>
+</html>
