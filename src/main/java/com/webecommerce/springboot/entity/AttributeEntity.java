@@ -27,4 +27,8 @@ public class AttributeEntity {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "attributeEntity")
     private List<AttributeValueEntity> attributeValueEntities;
+
+    @ManyToOne
+    @JoinColumn(name = "type_product_id")
+    private TypeProductEntity typeProductEntity;
 }

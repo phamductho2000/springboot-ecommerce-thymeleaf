@@ -26,7 +26,9 @@ public class AttributeValueServiceImpl implements AttributeValueService {
 
     @Override
     public AttributeValueEntity findEntityById(Long id) {
-        return attributeValueRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Not found"));
+//       Optional<AttributeValueEntity> ave = Optional.of(attributeValueRepository.findById(id))
+//               .filter(Optional::isPresent).map(Optional::get);
+        return attributeValueRepository.findById(id).orElse(null);
     }
 
     @Override

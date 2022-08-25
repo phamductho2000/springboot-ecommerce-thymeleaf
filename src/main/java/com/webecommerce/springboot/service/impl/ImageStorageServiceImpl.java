@@ -1,6 +1,7 @@
 package com.webecommerce.springboot.service.impl;
 
 import com.webecommerce.springboot.dto.ImageDTO;
+import com.webecommerce.springboot.dto.UploadFoldersDTO;
 import com.webecommerce.springboot.entity.ImageEntity;
 import com.webecommerce.springboot.repository.ImageRepository;
 import com.webecommerce.springboot.service.StorageService;
@@ -19,10 +20,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -71,7 +72,7 @@ public class ImageStorageServiceImpl implements StorageService {
 //            String generatedFileName = UUID.randomUUID().toString().replace("-", "");
 //            generatedFileName = generatedFileName + "." + fileExtension;
             Path destinationFilePath = this.storageFolder.resolve(
-                    Paths.get(file.getOriginalFilename()))
+                            Paths.get(file.getOriginalFilename()))
                     .normalize().toAbsolutePath();
             if (!destinationFilePath.getParent().equals(this.storageFolder.toAbsolutePath())) {
                 throw new RuntimeException(
@@ -145,9 +146,47 @@ public class ImageStorageServiceImpl implements StorageService {
     @Override
     public ImageEntity findByIdFromDb(Long id) {
         Optional<ImageEntity> imageEntity = imageRepository.findById(id);
-        if(imageEntity.isPresent()) {
+        if (imageEntity.isPresent()) {
             return imageEntity.get();
         }
         return null;
     }
+
+    @Override
+    public List<UploadFoldersDTO> loadAllFolders() throws IOException {
+        List<UploadFoldersDTO> uploadFoldersDTOs = Files.walk(storageFolder, Integer.MAX_VALUE)
+                .filter(Files::isDirectory)
+                .map(path -> {
+                    UploadFoldersDTO folder = new UploadFoldersDTO();
+                    folder.setName(path.toString());
+                    folder.setParentPath(path.toAbsolutePath().toString());
+                    return folder;
+                })
+                .collect(Collectors.toList());
+
+        return uploadFoldersDTOs.stream().filter(folder -> folder.getParentPath().isEmpty())
+                .map(folder -> {
+                    folder.setChildren(getSubFolder(uploadFoldersDTOs, folder));
+                    return folder;
+                }).collect(Collectors.toList());
+    }
+
+    public List<UploadFoldersDTO> getSubFolder(List<UploadFoldersDTO> folders, UploadFoldersDTO root) {
+        return folders.stream().filter(folder -> folder.getParentPath().equals(root.getName()))
+                .map(folder -> {
+                    folder.setChildren(getSubFolder(folders, folder));
+                    return folder;
+                }).collect(Collectors.toList());
+    }
+
+//    @Override
+//    public void loadAllFolders() throws IOException {
+//        List<UploadFoldersDTO> uploadFoldersDTO = new ArrayList<>();
+//        List<Path> dirs = Files.walk(storageFolder, Integer.MAX_VALUE)
+//                .filter(Files::isDirectory)
+//                .collect(Collectors.toList());
+//        dirs.forEach(item -> {
+//            System.out.printf(item.toString());
+//        });
+//    }
 }

@@ -23,4 +23,6 @@ public interface AttributeRepository extends JpaRepository<AttributeEntity, Long
             "INNER JOIN avpe.categories ce " +
             "WHERE ce.slug LIKE %?1%)")
     List<Object[]> getAttrAndValueByCate(String cate);
+
+    List<AttributeEntity> findAllByTypeProductEntityId(Long typeProductId);
 }

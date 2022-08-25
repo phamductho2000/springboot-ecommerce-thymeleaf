@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/db_ecommerce
     username: root
-    password: tho2022000@
+    password: Tho2022000@
 
   main:
     allow-bean-definition-overriding: true

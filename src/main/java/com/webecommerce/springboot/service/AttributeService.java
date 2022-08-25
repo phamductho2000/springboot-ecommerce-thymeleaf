@@ -25,5 +25,7 @@ public interface AttributeService {
 
     AttributeAndValueDTO addAttrAndValue(String attr, String value);
 
+    List<AttributeAndValueFilterDTO> findAllByTypeProductId(Long typeId);
+
     void remove(Long id);
 }

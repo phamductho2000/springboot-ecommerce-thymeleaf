@@ -16,9 +16,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.sql.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -71,7 +68,7 @@ public class AttributeServiceImpl implements AttributeService {
                 .map(o -> new AttributeAndValueDTO(new AttributeDTO((Long) o[0], (String) o[1]), null)
                 ).collect(Collectors.toSet());
         return attributeAndValueDTOS.stream().map(s ->
-                new AttributeAndValueFilterDTO(s.getAttr(), findAllAttrValueByAttrId(s.getAttr().getId())))
+                        new AttributeAndValueFilterDTO(s.getAttr(), findAllAttrValueByAttrId(s.getAttr().getId())))
                 .collect(Collectors.toList());
     }
 
@@ -85,9 +82,21 @@ public class AttributeServiceImpl implements AttributeService {
         newValue.setAttributeEntity(newAttr);
         newValue = attributeValueRepository.save(newValue);
         return new AttributeAndValueDTO(
-                mapper.map(newAttr,AttributeDTO.class),
+                mapper.map(newAttr, AttributeDTO.class),
                 mapper.map(newValue, AttributeValueDTO.class)
         );
+    }
+
+    @Override
+    public List<AttributeAndValueFilterDTO> findAllByTypeProductId(Long typeId) {
+        return attributeRepository.findAllByTypeProductEntityId(typeId).stream()
+                .map(entity -> mapper.map(entity, AttributeDTO.class))
+                .map(attr -> {
+                    AttributeAndValueFilterDTO attributeAndValueFilterDTO = new AttributeAndValueFilterDTO();
+                    attributeAndValueFilterDTO.setAttr(attr);
+                    attributeAndValueFilterDTO.setAttrValues(findAllAttrValueByAttrId(attr.getId()));
+                    return attributeAndValueFilterDTO;
+                }).collect(Collectors.toList());
     }
 
     @Override

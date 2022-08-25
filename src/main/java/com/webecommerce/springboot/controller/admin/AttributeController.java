@@ -1,6 +1,7 @@
 package com.webecommerce.springboot.controller.admin;
 
 import com.webecommerce.springboot.dto.AttributeAndValueDTO;
+import com.webecommerce.springboot.dto.AttributeAndValueFilterDTO;
 import com.webecommerce.springboot.dto.AttributeDTO;
 import com.webecommerce.springboot.dto.AttributeValueDTO;
 import com.webecommerce.springboot.service.AttributeService;
@@ -104,6 +105,12 @@ public class AttributeController {
         attributeService.remove(id);
         atts.addFlashAttribute("message", "Xóa thuộc tính thành công");
         return "redirect:/admin/attribute";
+    }
+
+    @PostMapping("/findAllByTypeProductId")
+    @ResponseBody
+    public List<AttributeAndValueFilterDTO> findAllByTypeProductId(@RequestParam Long typeProductId) {
+        return attributeService.findAllByTypeProductId(typeProductId);
     }
 
 }

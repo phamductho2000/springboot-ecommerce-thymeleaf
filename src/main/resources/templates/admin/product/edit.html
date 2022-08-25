@@ -175,18 +175,18 @@
                                 </div> <!-- end preview-->
 
                                 <div class="tab-pane" id="vertical-left-tabs-code">
-                                    <div class="mb-3 text-end">
-                                        <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"
-                                                data-bs-target="#standard-modal"><i
-                                                class="mdi mdi-plus-circle me-2"></i>Thêm thuộc tính mới
-                                        </button>
-                                    </div>
+<!--                                    <div class="mb-3 text-end">-->
+<!--                                        <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"-->
+<!--                                                data-bs-target="#standard-modal"><i-->
+<!--                                                class="mdi mdi-plus-circle me-2"></i>Thêm thuộc tính mới-->
+<!--                                        </button>-->
+<!--                                    </div>-->
                                     <div id="content-add-attribute"></div>
-                                    <div class="mb-3">
-                                        <button type="button" class="btn btn-outline-info" id="add-attribute"><i
-                                                class="mdi mdi-plus-circle me-2"></i>Thêm thuộc tính
-                                        </button>
-                                    </div>
+<!--                                    <div class="mb-3">-->
+<!--                                        <button type="button" class="btn btn-outline-info" id="add-attribute"><i-->
+<!--                                                class="mdi mdi-plus-circle me-2"></i>Thêm thuộc tính-->
+<!--                                        </button>-->
+<!--                                    </div>-->
                                     <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog"
                                          aria-labelledby="standard-modalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -329,34 +329,44 @@
 
             function renderAttrs() {
                 const attrs = /*[[${product.attributes}]]*/ 'default';
+                console.log(attrs);
                 $('#countAttr').val(attrs.length - 1);
                 attrs.forEach(function (item, index) {
                     $('#content-add-attribute').append(
                         `
-                                <div class='row'>
-                                    <div class='col-md-5'>
-                                        <div class='mb-3'>
-                                            <label for='select-attr-product' class='form-label'>Thuộc tính sản phẩm</label>
-                                            <input class='form-control' value="${item.attr.name}" readonly>
-                                            <input type="hidden" class='form-control form-select-attr' id='select-attr-product${index}' name='attributes[${index}].attr.id' value="${item.attr.id}">
-                                        </div>
-                                    </div>
-
-                                    <div class='col-md-5'>
-                                        <div class='mb-3'>
-                                            <label for='select-attr-value-product' class='form-label'>Giá trị</label>
-                                            <input class='form-control' value="${item.attrValue.value}" readonly>
-                                            <input type="hidden" class='form-control form-select-value' id='select-attr-value-product${index}' name='attributes[${index}].attrValue.id' value="${item.attrValue.id}">
-                                        </div>
-                                    </div>
-
-                                    <div class='col-md-2'>
-                                        <button type='button' style='margin-top: 28px' class='btn btn-danger btn-remove-attr'>Xóa</button>
-                                    </div>
-
+                         <div class="row">
+                            <div class="col-md-5">
+                                <div class="mb-3">
+                                    <label for="select-attr-product" class="form-label">Tên thuộc tính</label>
+                                    <input class="form-control" type="text" value="${item.attr.name}" readonly>
+                                    <input class="form-control" type="number" value="${item.attr.id}" name="attributes[${index}].attr.id" hidden>
                                 </div>
-                            `
-                    )
+                            </div>
+
+                            <div class="col-md-5">
+                                <div class="mb-3">
+                                    <label for="select-attr-value-product" class="form-label">Giá trị</label>
+                                    <select class="form-select form-select-value" id="select-attr-value-product${index}" name="attributes[${index}].attrValue.id">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        `);
+
+                    $.ajax({
+                        url: '/admin/attribute/attribute-value/'+item.attr.id,
+                        type: 'GET',
+                        success: function (response) {
+                            response.forEach(function (value) {
+                                $(`#select-attr-value-product${index}`).append(new Option(value.value, value.id));
+                            })
+                            $(`#select-attr-value-product${index}`).val(item.attrValue.id);
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    })
+
                 })
                 $.getScript('/admin/assets/js/pages/product/add-product.js')
             }

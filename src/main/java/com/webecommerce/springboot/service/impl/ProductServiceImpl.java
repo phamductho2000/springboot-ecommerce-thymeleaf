@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -106,7 +107,10 @@ public class ProductServiceImpl implements ProductService {
         ProductEntity newProduct = mapper.map(productDTO, ProductEntity.class);
         if (productDTO.getAttributes() != null) {
             List<AttributeValueEntity> attributeValueEntities =
-                    productDTO.getAttributes().stream().map(a -> attributeValueService.findEntityById(a.getAttrValue().getId()))
+                    productDTO.getAttributes().stream()
+                            .filter(a -> Objects.nonNull(a.getAttrValue()))
+                            .map(a -> attributeValueService.findEntityById(a.getAttrValue().getId()))
+                            .filter(v -> Objects.nonNull(v))
                             .collect(Collectors.toList());
             newProduct.setAttributeValueEntities(attributeValueEntities);
         }
