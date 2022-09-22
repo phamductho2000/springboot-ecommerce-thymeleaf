@@ -43,7 +43,7 @@ public class AttributeValueServiceImpl implements AttributeValueService {
     @Override
     public AttributeValueDTO save(Long attrId, String value) {
         AttributeValueEntity newAttributeValueEntity = new AttributeValueEntity();
-        AttributeEntity findAttrEntity = attributeService.findById(attrId);
+        AttributeEntity findAttrEntity = attributeService.findEntityById(attrId);
         newAttributeValueEntity.setValue(value);
         newAttributeValueEntity.setAttributeEntity(findAttrEntity);
         return mapper.map(attributeValueRepository.save(newAttributeValueEntity), AttributeValueDTO.class);

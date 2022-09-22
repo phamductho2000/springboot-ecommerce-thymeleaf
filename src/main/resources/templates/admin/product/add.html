@@ -51,29 +51,31 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-body">
-                            <p class="text-muted font-14 mb-3" style="text-align: end;">
-                                <button type="submit" class="btn btn-primary">Lưu lại</button>
-                            </p>
+                            <!--                            <p class="text-muted font-14 mb-3" style="text-align: end;">-->
+                            <!--                                <button type="submit" class="btn btn-primary">Lưu lại</button>-->
+                            <!--                            </p>-->
 
-                            <ul class="nav nav-tabs nav-bordered mb-3">
-                                <li class="nav-item">
-                                    <a href="#vertical-left-tabs-preview" data-bs-toggle="tab" aria-expanded="false"
-                                       class="nav-link active">
+                            <ul class="nav nav-tabs" id="product-tab" role="tablist">
+                                <li class="nav-item" style="pointer-events: none;" role="presentation">
+                                    <button class="nav-link active" id="info-tab" data-bs-toggle="tab"
+                                            data-bs-target="#info"
+                                            type="button" role="tab" aria-controls="home" aria-selected="true">
                                         Thông tin cơ bản
-                                    </a>
+                                    </button>
                                 </li>
-                                <li class="nav-item" style="pointer-events: none;">
-                                    <a href="#vertical-left-tabs-attr" data-bs-toggle="tab" aria-expanded="true"
-                                       class="nav-link">
+                                <li class="nav-item" style="pointer-events: none;" role="presentation">
+                                    <button class="nav-link" id="attr-tab" data-bs-toggle="tab" data-bs-target="#attr"
+                                            type="button" role="tab" aria-controls="profile" aria-selected="false">
                                         Thuộc tính sản phẩm
-                                    </a>
+                                    </button>
                                 </li>
-                            </ul> <!-- end nav-->
+                            </ul>
+
                             <div class="tab-content">
-                                <div class="tab-pane show active" id="vertical-left-tabs-preview">
+                                <div class="tab-pane show active" id="info">
                                     <div class="row">
                                         <div class="col-sm-9">
-                                            <div class="mb-3">
+                                            <div class="mb-3 mt-3">
                                                 <label for="name" class="form-label">Tên sản phẩm</label>
                                                 <input type="text" id="name" th:field="*{name}"
                                                        class="form-control">
@@ -137,26 +139,18 @@
                                             </div>
                                         </div> <!-- end col-->
 
-                                        <div class="col-sm-3 mb-2 mb-sm-0">
-                                            <div class="mb-3">
-                                                <label for="ori-price-input" class="form-label">Loại sản phẩm</label>
-                                                <select class="form-select" name="category" id="select-types">
-                                                    <option selected value="0">Chọn loại sản phẩm</option>
-                                                    <option th:each="cate : ${listCategories}" th:value="${cate.id}"
-                                                            th:text="${cate.name}"></option>
-                                                </select>
-                                            </div>
+                                        <div class="col-sm-3 mb-2 mb-sm-0 mt-3">
                                             <div class="mb-3">
                                                 <label for="ori-price-input" class="form-label">Giá nhập</label>
                                                 <input type="text" class="form-control" id="ori-price-input"
-                                                       onblur="handleOnblurPrice(this)">
+                                                       onblur="handleOnblurPrice(this)" name="inputOriginalPrice">
                                                 <input type="number" hidden class="mark-input"
                                                        th:field="*{originalPrice}">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="price-input" class="form-label">Giá bán</label>
                                                 <input type="text" id="price-input" class="form-control"
-                                                       onblur="handleOnblurPrice(this)">
+                                                       onblur="handleOnblurPrice(this)" name="inputPrice">
                                                 <input type="number" hidden class="mark-input" th:field="*{price}">
                                             </div>
                                             <div class="mb-3">
@@ -171,19 +165,25 @@
                                     <!-- end row-->
                                 </div> <!-- end preview-->
 
-                                <div class="tab-pane" id="vertical-left-tabs-attr">
-<!--                                    <div class="mb-3 text-end">-->
-<!--                                        <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"-->
-<!--                                                data-bs-target="#standard-modal"><i-->
-<!--                                                class="mdi mdi-plus-circle me-2"></i>Thêm thuộc tính mới-->
-<!--                                        </button>-->
-<!--                                    </div>-->
-                                    <div id="content-add-attribute"></div>
-<!--                                    <div class="mb-3">-->
-<!--                                        <button type="button" class="btn btn-outline-info" id="add-attribute"><i-->
-<!--                                                class="mdi mdi-plus-circle me-2"></i>Thêm thuộc tính-->
-<!--                                        </button>-->
-<!--                                    </div>-->
+                                <div class="tab-pane" id="attr">
+                                    <div class="mb-3 mt-3">
+                                        <label for="select-types" class="form-label">Loại sản phẩm</label>
+                                        <select class="form-select" name="type" id="select-types">
+                                            <option selected value="0">Chọn loại sản phẩm</option>
+                                        </select>
+                                    </div>
+                                    <!--                                    <div class="mb-3 text-end">-->
+                                    <!--                                        <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"-->
+                                    <!--                                                data-bs-target="#standard-modal"><i-->
+                                    <!--                                                class="mdi mdi-plus-circle me-2"></i>Thêm thuộc tính mới-->
+                                    <!--                                        </button>-->
+                                    <!--                                    </div>-->
+                                    <div id="content-add-attribute" class="mt-3"></div>
+                                    <!--                                    <div class="mb-3">-->
+                                    <!--                                        <button type="button" class="btn btn-outline-info" id="add-attribute"><i-->
+                                    <!--                                                class="mdi mdi-plus-circle me-2"></i>Thêm thuộc tính-->
+                                    <!--                                        </button>-->
+                                    <!--                                    </div>-->
                                     <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog"
                                          aria-labelledby="standard-modalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -218,6 +218,21 @@
                                     </div><!-- /.modal -->
                                 </div>
                             </div> <!-- end tab-content-->
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <button type="button" id="back-step" class="btn btn-primary">
+                                        Quay lại
+                                    </button>
+                                </div>
+                                <div class="col-sm-6 text-end">
+                                    <button type="button" id="next-step" class="btn btn-primary">
+                                        Tiếp tục
+                                    </button>
+                                    <button type="submit" id="submit-form" style="display: none"
+                                            class="btn btn-primary">Lưu lại
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div> <!-- end card-body-->
                 </div> <!-- end card-->
@@ -228,24 +243,54 @@
 </div> <!-- End Content -->
 <th:block layout:fragment="script">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+    <script type="text/javascript" th:src="@{/admin/assets/js/pages/product/form-wizard.js}"></script>
     <script type="text/javascript" th:src="@{/admin/assets/js/pages/product/add-product.js}"></script>
     <script type="text/javascript" th:src="@{/admin/assets/js/pages/product/validate-product.js}"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-
             "use strict";
 
+            var categoryStore = [];
+
+            $('#summernote').summernote({
+                height: 400,
+            });
+
             $.ajax({
-                url: '/admin/attribute/findAllByTypeProductId',
-                type: 'POST',
-                data: {
-                    "typeProductId": 1,
-                },
+                url: '/admin/type-product/api/get-all',
+                type: 'GET',
                 success: function (response) {
-                    response.forEach(function (item, index) {
-                        $('#content-add-attribute').append(`
+                    response.forEach(function (type) {
+                        $(`#select-types`).append(new Option(type.name, type.id));
+                    })
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            })
+
+            $(document).on('change', '#select-types', function () {
+                let selectValue = $("#select-types option:selected").val();
+                if (Number(selectValue) === 0) {
+                    return;
+                }
+                getAttrsByTypeId(Number(selectValue));
+            })
+
+            function getAttrsByTypeId(id) {
+                if (id != null) {
+                    $('#content-add-attribute').empty();
+                    $.ajax({
+                        url: '/admin/attribute/get-all-by-type-product-id',
+                        type: 'POST',
+                        data: {
+                            "typeProductId": id,
+                        },
+                        success: function (response) {
+                            response.forEach(function (item, index) {
+                                $('#content-add-attribute').append(`
                         <div class="row">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="select-attr-product" class="form-label">Tên thuộc tính</label>
                                     <input class="form-control" type="text" value="${item.attr.name}" readonly>
@@ -254,7 +299,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="select-attr-value-product" class="form-label">Giá trị</label>
                                     <select class="form-select form-select-value" id="select-attr-value-product${index}" name="attributes[${index}].attrValue.id">
@@ -263,20 +308,18 @@
                             </div>
                         </div>
                         `);
-                        item.attrValues.forEach(function (value) {
-                            $(`#select-attr-value-product${index}`).append(new Option(value.value, value.id));
-                        })
+                                item.attrValues.forEach(function (value) {
+                                    $(`#select-attr-value-product${index}`).append(new Option(value.value, value.id));
+                                })
+                            })
+
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
                     })
-
-                },
-                error: function (error) {
-                    console.log(error);
                 }
-            })
-
-            $('#summernote').summernote({
-                height: 400,
-            });
+            }
 
             $('#btn-save-attr-and-value').click(function () {
                 $.ajax({
@@ -317,11 +360,22 @@
             })
 
             $(document).on('change', '#select-categories', function () {
+                let selectValue = $("#select-categories option:selected").val();
+                if (Number(selectValue) === 0) {
+                    return;
+                }
+                if (categoryStore.includes(selectValue)) {
+                    return;
+                } else {
+                    categoryStore.push(selectValue);
+                }
+
                 let count = $('#countCate').val();
                 count++;
                 $('#countCate').val(count);
-                let formatName = $("#select-categories option:selected").text().split('>')
+                let formatName = $("#select-categories option:selected").text().split('>');
                 let name = formatName[formatName.length - 1];
+
                 $('#tag-categories').append(
                     `
                     <div class="tag-cate-item">
@@ -329,9 +383,10 @@
                             ${name}
                             <i class="fa-solid fa-xmark btn-remove-tag-cate"></i>
                         </a>
-                        <input type='hidden' name='categories[${count}].id' value=' ${$("#select-categories option:selected").val()}'>
+                        <input type='hidden' name='categories[${count}].id' value='${selectValue}'>
                     </div>`
                 )
+
                 $.getScript('/admin/assets/js/pages/product/add-product.js')
             })
 

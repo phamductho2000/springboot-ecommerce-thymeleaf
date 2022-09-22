@@ -26,7 +26,7 @@ public class UserController {
     CategoryService categoryService;
 
     @GetMapping("/thong-tin-tai-khoan")
-    public String indexPage(Model model) {
+    public String infoPage(Model model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof MyUserDetails) {
 
@@ -38,6 +38,20 @@ public class UserController {
             model.addAttribute("orders", orderService.findAllByUserEmail(oAuth2User.getEmail()));
         }
         model.addAttribute("menuItems", categoryService.listWithTree());
-        return "client/user/index";
+        return "client/user/info";
+    }
+
+    @GetMapping("/thong-tin-lien-he")
+    public String locationPage(Model model) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof MyUserDetails) {
+
+        } else {
+            CustomOAuth2User oAuth2User = (CustomOAuth2User) principal;
+            model.addAttribute("typeUser", "oauth2");
+            model.addAttribute("addresses", deliveryAddressService.findAllByUserEmail(oAuth2User.getEmail()));
+        }
+        model.addAttribute("menuItems", categoryService.listWithTree());
+        return "client/user/location";
     }
 }

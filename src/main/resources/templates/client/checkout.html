@@ -169,7 +169,8 @@
                                         </div>
                                         <div class="col-12 mt-3">
                                             <i class="lni lni-plus"></i>
-                                            <a class="link-primary" id="btn-show-modal-add-address">Thêm địa chỉ mới</a>
+                                            <a class="link-primary" data-bs-toggle="modal"
+                                               data-bs-target="#modal-address">Thêm địa chỉ mới</a>
                                         </div>
                                         <div class="col-md-6 mt-3">
                                             <div class="card" style="border: none; background-color: #F8FAFC">
@@ -245,7 +246,7 @@
                                                 >
                                                     Quay lại
                                                 </button>
-                                                <a href="javascript:void(0)" id="btn_save_address" class="btn btn-alt">Lưu
+                                                <a href="javascript:void(0)" id="btn-save-address" class="btn btn-alt">Lưu
                                                     địa chỉ</a>
                                             </div>
                                         </div>
@@ -555,7 +556,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" id="btn_save_address" class="btn btn-primary">Thêm mới</button>
+                    <button type="button" id="btn-save-address" class="btn btn-primary">Thêm mới</button>
                 </div>
             </div>
         </div>
@@ -566,7 +567,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Sửa địa chỉ giao hàng</h5>
+                    <h5 class="modal-title">Cập nhật địa chỉ giao hàng</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3" style="background-color: #F8FAFC">
@@ -647,13 +648,12 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" id="btn_update_address" class="btn btn-primary">Lưu</button>
+                    <button type="button" id="btn-update-address" class="btn btn-primary">Lưu</button>
                     <button type='button' id='btn_delete_address' class='btn btn-danger'>Xóa</button>
                 </div>
             </div>
         </div>
     </div>
-
 
     <div id="info-alert-checkout-success" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-sm">
@@ -668,7 +668,7 @@
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+    </div>
 </div>
 <!-- ========================= JS here ========================= -->
 <th:block layout:fragment="script">

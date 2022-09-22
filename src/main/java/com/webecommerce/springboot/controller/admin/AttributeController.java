@@ -107,7 +107,7 @@ public class AttributeController {
         return "redirect:/admin/attribute";
     }
 
-    @PostMapping("/findAllByTypeProductId")
+    @PostMapping("/get-all-by-type-product-id")
     @ResponseBody
     public List<AttributeAndValueFilterDTO> findAllByTypeProductId(@RequestParam Long typeProductId) {
         return attributeService.findAllByTypeProductId(typeProductId);

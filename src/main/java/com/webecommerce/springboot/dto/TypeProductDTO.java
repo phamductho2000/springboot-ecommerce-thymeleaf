@@ -6,15 +6,12 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
-public class AttributeDTO {
-
-    private Long id;
+@ToString
+public class TypeProductDTO extends AbstractDTO {
 
     private String name;
 
-    private String code;
+    List<AttributeDTO> attributes;
 }

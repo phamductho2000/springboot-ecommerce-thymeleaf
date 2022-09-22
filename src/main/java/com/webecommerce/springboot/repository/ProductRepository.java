@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<ProductEntity, Long>, JpaSpecificationExecutor<ProductEntity> {
 
-    @Query("SELECT ae.id, ae.name, ave.id, ave.value " +
+    @Query("SELECT ae.id, ae.name, ae.code, ave.id, ave.value " +
             "FROM AttributeValueEntity ave " +
             "INNER JOIN ave.attributeEntity ae " +
             "WHERE ae.deleted = false AND ave.id IN " +

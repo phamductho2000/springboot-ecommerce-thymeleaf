@@ -53,7 +53,7 @@
                 <div class="col-lg-4 col-md-4 col-12">
                     <!--                    <div class="top-middle">-->
                     <!--                        <ul class="useful-links">-->
-                    <!--                            <li><a href="index.html">Home</a></li>-->
+                    <!--                            <li><a href="info.html">Home</a></li>-->
                     <!--                            <li><a href="about-us.html">About Us</a></li>-->
                     <!--                            <li><a href="contact.html">Contact Us</a></li>-->
                     <!--                        </ul>-->
@@ -133,13 +133,13 @@
                         <form th:action="@{/san-pham}" method="get">
                             <!-- navbar search start -->
                             <div class="navbar-search search-style-5">
-<!--                                <div class="search-select">-->
-<!--                                    <div class="select-position">-->
-<!--                                        <select id="select1">-->
-<!--                                            <option selected>Tên</option>-->
-<!--                                        </select>-->
-<!--                                    </div>-->
-<!--                                </div>-->
+                                <!--                                <div class="search-select">-->
+                                <!--                                    <div class="select-position">-->
+                                <!--                                        <select id="select1">-->
+                                <!--                                            <option selected>Tên</option>-->
+                                <!--                                        </select>-->
+                                <!--                                    </div>-->
+                                <!--                                </div>-->
 
                                 <div class="search-input">
                                     <input type="text" name="key" placeholder="Nhập tên sản phẩm"/>
@@ -232,6 +232,49 @@
                                 </div>
                                 <!--/ End Shopping Item -->
                             </div>
+                            <div class="cart-items" style="margin-left: 15px">
+                                <a href="javascript:void(0)" class="main-btn">
+                                    <i class="lni lni-user"></i>
+                                </a>
+                                <div class="shopping-item"
+                                     sec:authorize="!isAuthenticated()">
+                                    <p>Hãy đăng nhập để theo dõi đơn hàng và bảo hành dễ dàng nhé</p>
+                                    <br>
+                                    <div class="d-grid gap-2">
+                                        <a th:href="@{/dang-nhap}" class="btn btn-primary" type="button">Đăng nhập</a>
+                                    </div>
+                                    <br>
+                                    <p>
+                                        <span>Bạn chưa có tài khoản?</span>
+                                        <a th:href="@{/dang-ky}">Đăng ký</a>
+                                    </p>
+                                </div>
+
+                                <div class="shopping-item p-0" sec:authorize="isAuthenticated()">
+                                    <div class="text-center" style="padding: 15px 25px">
+                                        <p class="fs-5 fw-bold text-black" th:text="${#request.userPrincipal.principal.name}">Tho Pham</p>
+                                    </div>
+                                    <ul class="list-group">
+                                        <li class="list-group-item border-0">
+                                            <i class="lni lni-user fs-5 me-2" style="color: #0065EE"></i>
+                                            <a th:href="@{/tai-khoan/thong-tin-tai-khoan}" class="link-dark fs-6">Thông tin tài khoản</a>
+                                        </li>
+                                        <li class="list-group-item border-0">
+                                            <i class="lni lni-delivery fs-5 me-2" style="color: #0065EE"></i>
+                                            <a th:href="@{/tai-khoan/thong-tin-lien-he}" class="link-dark fs-6">Thông tin liên hệ & Địa chỉ</a>
+                                        </li>
+                                        <li class="list-group-item border-0">
+                                            <i class="lni lni-cart fs-5 me-2" style="color: #0065EE"></i>
+                                            <a th:href="@{/tai-khoan/quan-ly-don-hang}" class="link-dark fs-6">Lịch sử mua hàng</a>
+                                        </li>
+                                        <li class="list-group-item border-top">
+                                            <i class="lni lni-shift-right fs-5 me-2" style="color: #FE3464"></i>
+                                            <a href="#" class="link-dark fs-6">Đăng xuất</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -294,7 +337,7 @@
                         >
                             <ul id="nav" class="navbar-nav ms-auto">
                                 <!--                                <li class="nav-item">-->
-                                <!--                                    <a href="index.html" aria-label="Toggle navigation"-->
+                                <!--                                    <a href="info.html" aria-label="Toggle navigation"-->
                                 <!--                                    >Home</a-->
                                 <!--                                    >-->
                                 <!--                                </li>-->

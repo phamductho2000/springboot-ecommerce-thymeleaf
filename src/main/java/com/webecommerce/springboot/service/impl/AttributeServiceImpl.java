@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -47,8 +48,17 @@ public class AttributeServiceImpl implements AttributeService {
     }
 
     @Override
-    public AttributeEntity findById(Long id) {
-        return attributeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Not found"));
+    public AttributeEntity findEntityById(Long id) {
+        return attributeRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public AttributeDTO findById(Long id) {
+        AttributeEntity attributeEntity = findEntityById(id);
+        if (!Objects.isNull(attributeEntity)) {
+            return mapper.map(attributeEntity, AttributeDTO.class);
+        }
+        return null;
     }
 
     @Override
@@ -65,7 +75,7 @@ public class AttributeServiceImpl implements AttributeService {
     @Override
     public List<AttributeAndValueFilterDTO> getAttrAndValueByCate(String cate) {
         Set<AttributeAndValueDTO> attributeAndValueDTOS = attributeRepository.getAttrAndValueByCate(cate).stream()
-                .map(o -> new AttributeAndValueDTO(new AttributeDTO((Long) o[0], (String) o[1]), null)
+                .map(o -> new AttributeAndValueDTO(new AttributeDTO((Long) o[0], (String) o[1], (String) o[2]), null)
                 ).collect(Collectors.toSet());
         return attributeAndValueDTOS.stream().map(s ->
                         new AttributeAndValueFilterDTO(s.getAttr(), findAllAttrValueByAttrId(s.getAttr().getId())))

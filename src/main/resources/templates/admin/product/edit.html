@@ -296,7 +296,11 @@
                 count++;
                 $('#countCate').val(count);
                 let formatName = $("#select-categories option:selected").text().split('>')
+                let selectValue = $("#select-categories option:selected").val();
                 let name = formatName[formatName.length - 1];
+                if(Number(selectValue) === 0) {
+                    return;
+                }
                 $('#tag-categories').append(
                     `
                     <div class="tag-cate-item">

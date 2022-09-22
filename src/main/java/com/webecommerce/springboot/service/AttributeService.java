@@ -15,7 +15,9 @@ public interface AttributeService {
 
     Page<AttributeDTO> findAll(Pageable pageable);
 
-    AttributeEntity findById(Long id);
+    AttributeEntity findEntityById(Long id);
+
+    AttributeDTO findById(Long id);
 
     List<AttributeValueDTO> findAllAttrValueByAttrId(Long attrId);
 

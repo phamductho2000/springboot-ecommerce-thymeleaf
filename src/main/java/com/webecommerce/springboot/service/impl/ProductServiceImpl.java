@@ -95,8 +95,8 @@ public class ProductServiceImpl implements ProductService {
     public List<AttributeAndValueDTO> getAttrAndValueById(Long productId) {
         if(productRepository.getAttrAndValueByProductId(productId).size() > 0) {
             return productRepository.getAttrAndValueByProductId(productId).stream()
-                    .map(o -> new AttributeAndValueDTO(new AttributeDTO((Long) o[0], (String) o[1]),
-                            new AttributeValueDTO((Long) o[2], (String) o[3]))
+                    .map(o -> new AttributeAndValueDTO(new AttributeDTO((Long) o[0], (String) o[1], (String) o[2]),
+                            new AttributeValueDTO((Long) o[3], (String) o[4]))
                     ).collect(Collectors.toList());
         }
         return null;

@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 
-@RequestMapping("/home")
+@RequestMapping("")
 @Controller
 public class HomeController {
 

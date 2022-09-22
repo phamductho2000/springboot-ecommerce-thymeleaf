@@ -67,13 +67,19 @@
                             <div class="tab-content">
                                 <div class="tab-pane show active" id="vertical-left-tabs-info">
                                     <div class="row">
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-12">
                                             <div class="mb-3">
                                                 <label for="simpleinput" class="form-label">Tên thuộc tính</label>
                                                 <input type="text" id="simpleinput" th:value="${attr.name}" th:field="*{name}"
                                                        class="form-control">
                                             </div>
                                         </div>
+                                        <div class="col-sm-12">
+                                            <div class="mb-3">
+                                                <label for="attr-code" class="form-label">Mã code</label>
+                                                <input type="text" id="attr-code" th:field="*{code}" class="form-control">
+                                            </div>
+                                        </div> <!-- end col-->
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="vertical-left-tabs-values">

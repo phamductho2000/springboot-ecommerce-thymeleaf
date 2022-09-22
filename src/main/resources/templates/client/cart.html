@@ -245,22 +245,6 @@
 <!-- ========================= JS here ========================= -->
 <script type="text/javascript" layout:fragment="script">
     $("input[type='number']").inputSpinner();
-    const current = document.getElementById("current");
-    const opacity = 0.6;
-    const imgs = document.querySelectorAll(".img");
-    imgs.forEach(img => {
-        img.addEventListener("click", (e) => {
-            //reset opacity
-            imgs.forEach(img => {
-                img.style.opacity = 1;
-            });
-            current.src = e.target.src;
-            //adding class
-            //current.classList.add("fade-in");
-            //opacity
-            e.target.style.opacity = opacity;
-        });
-    });
 
     function updateCart(id) {
         var quantity = $(`#inputQuantity${id}`).val();

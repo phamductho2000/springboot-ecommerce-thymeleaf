@@ -1641,7 +1641,7 @@ ol {
   align-items: center;
   -webkit-box-pack: justify;
   -ms-flex-pack: justify;
-  justify-content: space-between;
+  justify-content: start;
 }
 
 @media (max-width: 767px) {
@@ -8703,4 +8703,11 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
   position: relative;
   display: block;
   clear: both;
+}
+
+.t-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 0px 12px rgb(0 0 0 / 6%);
+  overflow: hidden;
 }

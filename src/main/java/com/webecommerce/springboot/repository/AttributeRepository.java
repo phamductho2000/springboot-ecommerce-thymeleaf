@@ -15,7 +15,7 @@ public interface AttributeRepository extends JpaRepository<AttributeEntity, Long
     @Query("SELECT new com.webecommerce.springboot.dto.AttributeValueDTO(av.id, av.value) FROM AttributeEntity a JOIN a.attributeValueEntities av WHERE a.id = ?1")
     List<AttributeValueDTO> findAllAttrValueByAttrId(Long attrId);
 
-    @Query("SELECT ae.id, ae.name, ave.id, ave.value " +
+    @Query("SELECT ae.id, ae.name, ae.code, ave.id, ave.value " +
             "FROM AttributeValueEntity ave " +
             "INNER JOIN ave.attributeEntity ae " +
             "WHERE ae.deleted = false AND ave.id IN " +
