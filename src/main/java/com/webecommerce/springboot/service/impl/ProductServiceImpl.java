@@ -10,17 +10,15 @@ import com.webecommerce.springboot.service.AttributeValueService;
 import com.webecommerce.springboot.service.CategoryService;
 import com.webecommerce.springboot.service.ProductService;
 import com.webecommerce.springboot.service.StorageService;
-import com.webecommerce.springboot.specification.ProductSearchCriteria;
-import com.webecommerce.springboot.specification.ProductSpecification;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -46,7 +44,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> findAllProducts() {
-        return productRepository.findAll().stream().map(p -> {
+        return productRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")).stream().map(p -> {
             List<AttributeAndValueDTO> attributeAndValueDTOS = getAttrAndValueById(p.getId());
             ProductDTO productDTO = mapper.map(p, ProductDTO.class);
             productDTO.setAttributes(attributeAndValueDTOS);
@@ -93,9 +91,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<AttributeAndValueDTO> getAttrAndValueById(Long productId) {
-        if(productRepository.getAttrAndValueByProductId(productId).size() > 0) {
+        if (productRepository.getAttrAndValueByProductId(productId).size() > 0) {
             return productRepository.getAttrAndValueByProductId(productId).stream()
-                    .map(o -> new AttributeAndValueDTO(new AttributeDTO((Long) o[0], (String) o[1], (String) o[2]),
+                    .map(o -> new AttributeAndValueDTO(new AttributeDTO((Long) o[0], (String) o[1], (String) o[2], null),
                             new AttributeValueDTO((Long) o[3], (String) o[4]))
                     ).collect(Collectors.toList());
         }
@@ -132,7 +130,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO findById(Long id) {
         Optional<ProductEntity> foundProduct = productRepository.findById(id);
         if (!foundProduct.isPresent()) {
-            throw new RuntimeException("");
+            return null;
         }
         ProductDTO product = mapper.map(foundProduct.get(), ProductDTO.class);
         product.setAttributes(getAttrAndValueById(id));

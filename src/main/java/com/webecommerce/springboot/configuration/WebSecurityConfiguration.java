@@ -95,7 +95,7 @@ public class WebSecurityConfiguration {
         public void configure(WebSecurity web) throws Exception {
             web
                     .ignoring() 
-                    .antMatchers("/resources/**", "/static/**", "/client/assets/**", "/admin/assets/**", "/css/**", "/js/**", "/img/**", "/icon/**");
+                    .antMatchers("/resources/**", "/static/**", "/client/assets/**", "/admin/assets/**", "/admin/assets/css/**", "/css/**", "/js/**", "/img/**", "/icon/**");
         }
 
     }

@@ -6,6 +6,7 @@ import com.webecommerce.springboot.entity.ProductEntity;
 import com.webecommerce.springboot.service.AttributeService;
 import com.webecommerce.springboot.service.CategoryService;
 import com.webecommerce.springboot.service.ProductService;
+import com.webecommerce.springboot.service.TypeProductService;
 import com.webecommerce.springboot.specification.ProductSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,6 +32,9 @@ public class ProductController {
     @Autowired
     CategoryService categoryService;
 
+    @Autowired
+    TypeProductService typeProductService;
+
     @GetMapping("")
     public String indexPage(Model model) {
         model.addAttribute("listProducts", productService.findAllProducts());
@@ -42,6 +46,7 @@ public class ProductController {
         model.addAttribute("product", new ProductDTO());
         List<CategoryDTO> listCate  = categoryService.loadCategory(categoryService.findAll(), 0L, 0, "");
         model.addAttribute("listCategories", listCate);
+        model.addAttribute("listTypesProduct", typeProductService.findAll());
         return "admin/product/add";
     }
 
@@ -58,6 +63,7 @@ public class ProductController {
         List<CategoryDTO> listCate  = categoryService.loadCategory(categoryService.findAll(), 0L, 0, "");
         model.addAttribute("listAttributes", attributeService.findAll());
         model.addAttribute("listCategories", listCate);
+        model.addAttribute("listTypesProduct", typeProductService.findAll());
         return "admin/product/edit";
     }
 

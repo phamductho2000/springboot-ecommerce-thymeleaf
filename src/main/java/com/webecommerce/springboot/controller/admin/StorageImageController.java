@@ -5,12 +5,10 @@ import com.webecommerce.springboot.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,5 +35,26 @@ public class StorageImageController {
     public String upload(MultipartFile file) {
         storageService.storeFile(file);
         return "redirect:/admin/upload";
+    }
+
+    @GetMapping("/test")
+    public String homePage(Model model) throws IOException {
+        model.addAttribute("folders", storageService.loadAllFolders());
+        model.addAttribute("listImages", storageService.loadAll());
+        return "admin/file_manager/file-manager";
+    }
+
+    @PostMapping("/test-upload")
+    @ResponseBody
+    public String uploadTest(@RequestParam("file") MultipartFile file) {
+        storageService.storeFile(file);
+        return "ok";
+    }
+
+    @PostMapping("/create-sub-folder")
+    @ResponseBody
+    public String createSubFolder(@RequestParam("parentPath") String parentPath, @RequestParam("folderName") String folderName) {
+        storageService.createSubFolder(parentPath, folderName);
+        return "ok";
     }
 }

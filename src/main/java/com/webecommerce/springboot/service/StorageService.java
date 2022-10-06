@@ -23,4 +23,6 @@ public interface StorageService {
     ImageEntity findByIdFromDb(Long id);
 
     List<UploadFoldersDTO> loadAllFolders() throws IOException;
+
+    void createSubFolder(String parentPath, String folderName);
 }

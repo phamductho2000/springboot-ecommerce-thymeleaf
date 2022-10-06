@@ -68,7 +68,7 @@
     <section class="item-details section">
         <div class="container">
             <div class="top-area">
-                <div class="row align-items-center">
+                <div class="row">
                     <div class="col-lg-6 col-md-12 col-12">
                         <div class="d-flex">
                             <ul id="thumbnails" class="thumbnails">
@@ -92,13 +92,18 @@
                     <div class="col-lg-6 col-md-12 col-12">
                         <div class="product-info">
                             <input type="hidden" id="product-id" th:value="${product.id}">
-                            <h2 class="title" th:text="${product.name}">product name</h2>
-<!--                            <p class="category"><i class="lni lni-tag"></i> Drones:<a href="javascript:void(0)">Action-->
-<!--                                cameras</a></p>-->
-                            <p class="info-text">
-                                [(${product.shortDes})]
-                            </p>
-                            <h3 class="price" th:text="${#numbers.formatCurrency(product.price)}">product price<span>$945</span></h3>
+                            <h2 class="title mb-3" th:text="${product.name}"></h2>
+<!--                            <p class="info-text">-->
+<!--                                [(${product.shortDes})]-->
+<!--                            </p>-->
+                            <h3 class="price text-danger mb-3" th:text="${#numbers.formatCurrency(product.price)}"></h3>
+                            <div class="detail-product-info mb-3">
+                                <div class="d-flex" th:each="item, iStat : ${product.attributes}">
+                                    <p class="text-dark">[[${item.attr.name}]]:</p>
+                                    <p class="text-dark ms-2">[[${item.attrValue.value}]]</p>
+                                </div>
+                            </div>
+
                             <div class="row">
                                 <div class="col-lg-4 col-md-4 col-12">
                                     <input type="hidden">
@@ -109,7 +114,7 @@
                                 <div class="row align-items-end">
                                     <div class="col-lg-4 col-md-4 col-12">
                                         <div th:if="${product.status == 1}" class="button cart-button">
-                                            <button class="btn btn-add-to-cart" style="width: 100%;">Thêm vào giỏ hàng</button>
+                                            <button class="btn btn-add-to-cart" style="width: 100%;" th:onclick="'addItemtoCart('+${product.id}+')'">Thêm vào giỏ hàng</button>
                                         </div>
                                         <div th:unless="${product.status == 1}" class="button cart-button">
                                             <button class="btn btn-danger" style="width: 100%;">Vui lòng liên hệ</button>
@@ -280,23 +285,23 @@
 
     splide.mount();
 
-    $(".btn-add-to-cart").click(function () {
-        let productId = $('#product-id').val()
-        $.ajax({
-            url: `/them-vao-gio-hang/${productId}`,
-            type: 'POST',
-            data: {quantity: $('#quantity').val()},
-            success: function (response) {
-                $('.cart-items').replaceWith($(response).find('.cart-items'));
-                var myToastEl = document.getElementById('liveToast')
-                var myToast = new bootstrap.Toast(myToastEl)
-                myToast.show();
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        })
-    })
+    // $(".btn-add-to-cart").click(function () {
+    //     let productId = $('#product-id').val()
+    //     $.ajax({
+    //         url: `/them-vao-gio-hang/${productId}`,
+    //         type: 'POST',
+    //         data: {quantity: $('#quantity').val()},
+    //         success: function (response) {
+    //             $('.cart-items').replaceWith($(response).find('.cart-items'));
+    //             var myToastEl = document.getElementById('liveToast')
+    //             var myToast = new bootstrap.Toast(myToastEl)
+    //             myToast.show();
+    //         },
+    //         error: function (error) {
+    //             console.log(error);
+    //         }
+    //     })
+    // })
 </script>
 </body>
 </html>

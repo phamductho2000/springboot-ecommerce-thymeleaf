@@ -6,7 +6,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
@@ -17,4 +16,7 @@ public class AttributeDTO {
     private String name;
 
     private String code;
+
+    private List<AttributeValueDTO> attributeValueEntities;
+
 }

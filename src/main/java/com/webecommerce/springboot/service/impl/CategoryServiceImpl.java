@@ -89,6 +89,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryEntity save(CategoryDTO categoryDTO) {
+        if(categoryDTO.getParentId() == null) {
+            categoryDTO.setParentId(0L);
+        }
         if(categoryDTO.getId() != 0) {
             CategoryEntity updateCate = findEntityById(categoryDTO.getId());
             updateCate = mapper.map(categoryDTO,CategoryEntity.class);

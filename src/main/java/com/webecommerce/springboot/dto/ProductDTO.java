@@ -32,6 +32,8 @@ public class ProductDTO extends AbstractDTO {
 
     private String slug;
 
+    private long typeProduct;
+
     private List<ImageDTO> images;
     
     private List<AttributeAndValueDTO> attributes;

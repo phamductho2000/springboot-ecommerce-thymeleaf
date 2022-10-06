@@ -39,7 +39,7 @@ function saveValue(valueId) {
 }
 
 function handleOnblurPrice(ele) {
-    const oldValue = $(ele).val().toString().replaceAll(",", "");
+    const oldValue = $(ele).val().toString().replaceAll(".", "");
     let formatPrice = formatToCurrency(oldValue);
     $(ele).val(formatPrice);
     const input = $(ele).closest('.mb-3').find('input[type=number]');
@@ -47,11 +47,12 @@ function handleOnblurPrice(ele) {
 }
 
 function handleOnPastePrice(ele) {
-    const oldValue = $(ele).val().toString().replaceAll(",", "");
+    const oldValue = $(ele).val().toString().replaceAll(".", "");
     const input = $(ele).closest('.mb-3').find('input[type=number]');
     $(input).val(oldValue);
 }
 
 const formatToCurrency = amount => {
-    return amount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+    return amount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
 }
+

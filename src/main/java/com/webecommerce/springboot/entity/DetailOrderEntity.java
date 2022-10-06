@@ -12,11 +12,11 @@ import java.util.List;
 @Table(name = "tbl_detail_order")
 public class DetailOrderEntity extends BaseEntity {
 
-    private double total;
+    private long total;
 
     private int quantity;
 
-    private double price;
+    private long price;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")

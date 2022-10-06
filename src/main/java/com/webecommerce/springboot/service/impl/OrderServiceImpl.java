@@ -73,7 +73,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO save(String userEmail, Long addressId, HashMap<Long, CartDTO> cart, Double totalOrderPrice, Double feeShip) {
+    public OrderDTO save(String userEmail, Long addressId, HashMap<Long, CartDTO> cart, long totalOrderPrice, long feeShip) {
         OrderEntity newOrder = new OrderEntity();
         newOrder.setDeliveryAddress(
                 deliveryAddressService.findEntityById(addressId)
@@ -132,7 +132,7 @@ public class OrderServiceImpl implements OrderService {
                         ProductEntity p = productService.findEntityById(detail.getProduct().getId());
                         p.setQuantity(p.getQuantity() - detail.getQuantity());
                         p.setSellCount(detail.getQuantity());
-                        if(p.getQuantity() == 0) {
+                        if (p.getQuantity() == 0) {
                             p.setStatus(0);
                         }
                         productRepository.save(p);
@@ -144,7 +144,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDTO> findAllByUserEmail(String email) {
         return orderRepository.findAllByUser_Email(email).stream().map(o ->
-            mapper.map(o, OrderDTO.class)
+                mapper.map(o, OrderDTO.class)
         ).collect(Collectors.toList());
     }
 

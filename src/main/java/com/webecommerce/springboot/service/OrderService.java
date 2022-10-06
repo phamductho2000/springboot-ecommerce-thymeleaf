@@ -12,7 +12,7 @@ public interface OrderService {
 
     OrderDTO findById(Long id);
 
-    OrderDTO save(String userEmail, Long addressId, HashMap<Long, CartDTO> cart, Double totalOrderPrice, Double feeShip);
+    OrderDTO save(String userEmail, Long addressId, HashMap<Long, CartDTO> cart, long totalOrderPrice, long feeShip);
 
     OrderDTO adminSave(FormAddOrderDTO formAddOrderDTO);
 

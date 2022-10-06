@@ -7,11 +7,11 @@ import lombok.Setter;
 @Setter
 public class DetailOrderDTO extends AbstractDTO {
 
-    private int total;
+    private long total;
 
     private int quantity;
 
-    private int price;
+    private long price;
 
     private ProductDTO product;
 

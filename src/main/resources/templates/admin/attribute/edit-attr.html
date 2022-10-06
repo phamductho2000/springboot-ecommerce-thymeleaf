@@ -70,14 +70,16 @@
                                         <div class="col-sm-12">
                                             <div class="mb-3">
                                                 <label for="simpleinput" class="form-label">Tên thuộc tính</label>
-                                                <input type="text" id="simpleinput" th:value="${attr.name}" th:field="*{name}"
+                                                <input type="text" id="simpleinput" th:value="${attr.name}"
+                                                       th:field="*{name}"
                                                        class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-sm-12">
                                             <div class="mb-3">
                                                 <label for="attr-code" class="form-label">Mã code</label>
-                                                <input type="text" id="attr-code" th:field="*{code}" class="form-control">
+                                                <input type="text" id="attr-code" th:value="${attr.code}"
+                                                       th:field="*{code}" class="form-control">
                                             </div>
                                         </div> <!-- end col-->
                                     </div>
@@ -127,7 +129,8 @@
                                             </table>
                                         </div>
                                         <div class="mt-3">
-                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Thêm mới thuộc tính
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                    data-bs-target="#exampleModal">Thêm mới thuộc tính
                                             </button>
                                         </div>
                                         <!-- Modal -->
@@ -172,7 +175,8 @@
                                                     <div class="modal-body">
                                                         <div class="mb-3">
                                                             <label for="input-value" class="form-label">Giá trị</label>
-                                                            <input type="text" id="input-edit-value" class="form-control">
+                                                            <input type="text" id="input-edit-value"
+                                                                   class="form-control">
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
@@ -213,7 +217,7 @@
                 let attrId = $('#attr-id').val();
                 let value = $('#input-value').val();
                 $.ajax({
-                    url: '/admin/attribute/add-value-to-attr/'+attrId,
+                    url: '/admin/attribute/add-value-to-attr/' + attrId,
                     type: 'POST',
                     data: {"value": value},
                     success: function (response) {

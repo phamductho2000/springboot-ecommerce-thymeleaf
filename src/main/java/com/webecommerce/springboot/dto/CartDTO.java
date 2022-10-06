@@ -11,5 +11,5 @@ public class CartDTO {
 
     private int quantity;
 
-    private double totalPrice;
+    private long totalPrice;
 }

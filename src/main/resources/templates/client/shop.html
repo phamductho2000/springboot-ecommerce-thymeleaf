@@ -40,15 +40,15 @@
             <div class="row">
                 <div class="col-lg-3 col-12">
                     <div class="product-sidebar mt-30">
-<!--                        <div class="single-widget search">-->
-<!--                            <h3>Search Product</h3>-->
-<!--                            <form action="#">-->
-<!--                                <input type="text" placeholder="Search Here..."/>-->
-<!--                                <button type="submit">-->
-<!--                                    <i class="lni lni-search-alt"></i>-->
-<!--                                </button>-->
-<!--                            </form>-->
-<!--                        </div>-->
+                        <!--                        <div class="single-widget search">-->
+                        <!--                            <h3>Search Product</h3>-->
+                        <!--                            <form action="#">-->
+                        <!--                                <input type="text" placeholder="Search Here..."/>-->
+                        <!--                                <button type="submit">-->
+                        <!--                                    <i class="lni lni-search-alt"></i>-->
+                        <!--                                </button>-->
+                        <!--                            </form>-->
+                        <!--                        </div>-->
 
                         <div class="single-widget">
                             <h3>Danh mục</h3>
@@ -57,7 +57,7 @@
                                     <a th:href="@{/collections/{cate}(cate=${cate.slug})}" th:text="${cate.name}">Computers
                                         &amp; Accessories </a
                                     >
-<!--                                    <span>(1138)</span>-->
+                                    <!--                                    <span>(1138)</span>-->
                                 </li>
                             </ul>
                         </div>
@@ -67,10 +67,16 @@
 
                             <div id="slider-range" class="price-filter-range w-100" name="rangeInput"></div>
 
-                            <div style="margin:30px auto" class="d-flex">
-                                <input type="number" min=0 th:max="${maxAndMin.min}" oninput="validity.valid||(value='0');" id="min_price" class="form-control" />
-                                <span>&nbsp;</span>
-                                <input type="number" min=0 th:max="${maxAndMin.max}" oninput="validity.valid||(value='10000');" id="max_price" class="form-control" />
+                            <div style="margin:30px auto">
+                                <p>Từ</p>
+                                <input type="text" min=0 th:max="${maxAndMin.min}"
+                                       onblur="handleInputPrice('min_price')"
+                                       oninput="validity.valid||(value='0');" id="min_price" class="form-control"/>
+
+                                <p>Đến</p>
+                                <input type="text" min=0 th:max="${maxAndMin.max}"
+                                       onblur="handleInputPrice('max_price')"
+                                       oninput="validity.valid||(value='10000');" id="max_price" class="form-control"/>
                             </div>
 
                             <button class="btn btn-primary w-100" id="btn-range-price">Lọc</button>
@@ -83,7 +89,7 @@
                                 <li class="side-nav-item">
                                     <a
                                             data-bs-toggle="collapse"
-                                            th:href="'#'+${attr.attr.name}"
+                                            th:href="'#'+${attr.attr.code}"
                                             aria-expanded="false"
                                             th:aria-controls="'multiCollapse'+${iStat.index + 1}"
                                             class="side-nav-link"
@@ -91,25 +97,27 @@
                                         <span> [[${attr.attr.name}]] </span>
                                         <span class="menu-arrow"></span>
                                     </a>
-                                    <div class="collapse collapse-search" th:id="${attr.attr.name}">
+                                    <div class="collapse collapse-search" th:id="${attr.attr.code}">
                                         <ul class="side-nav-second-level">
                                             <li>
                                                 <a class="form-check"
-                                                   th:href="@{${urlBuilder.replaceQueryParam(attr.attr.name, 'a_'+attrValue.value).build().toUriString()}}"
+                                                   th:href="@{${urlBuilder.replaceQueryParam(attr.attr.code, 'a_'+attrValue.value).build().toUriString()}}"
                                                    th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"
                                                    th:each="attrValue, iStat1 : ${attr.attrValues}">
                                                     <th:block
-                                                            th:if="${#strings.equals(param.get(attr.attr.name.toString()), 'a_'+attrValue.value)}">
+                                                            th:if="${#strings.equals(param.get(attr.attr.code.toString()), 'a_'+attrValue.value)}">
                                                         <i class="fa-regular fa-square-check" aria-hidden="true"></i>
-                                                        <label class="form-check-label" th:for="'flexCheckDefaul'+${iStat1.index + 1}"
+                                                        <label class="form-check-label"
+                                                               th:for="'flexCheckDefaul'+${iStat1.index + 1}"
                                                                th:text="'&nbsp;'+${attrValue.value}">
                                                             Attr name
                                                         </label>
                                                     </th:block>
                                                     <th:block
-                                                            th:unless="${#strings.equals(param.get(attr.attr.name.toString()), 'a_'+attrValue.value)}">
+                                                            th:unless="${#strings.equals(param.get(attr.attr.code.toString()), 'a_'+attrValue.value)}">
                                                         <i class="fa-regular fa-square"></i>
-                                                        <label class="form-check-label" th:for="'flexCheckDefaul'+${iStat1.index + 1}"
+                                                        <label class="form-check-label"
+                                                               th:for="'flexCheckDefaul'+${iStat1.index + 1}"
                                                                th:text="'&nbsp;'+${attrValue.value}">
                                                             &nbsp;Attr name
                                                         </label>
@@ -125,55 +133,55 @@
                 </div>
                 <div class="col-lg-9 col-12">
                     <div class="product-grids-head">
-<!--                        <div class="product-grid-topbar">-->
-<!--                            <div class="row align-items-center">-->
-<!--                                <div class="col-lg-7 col-md-8 col-12">-->
-<!--                                    <div class="product-sorting">-->
-<!--                                        <label for="sorting">Sắp xếp:</label>-->
-<!--                                        <select class="form-control" id="sorting">-->
-<!--                                            <option value="sellCount_asc">Bán chạy nhất</option>-->
-<!--                                            <option value="price_asc">Giá tăng dần</option>-->
-<!--                                            <option value="price_desc">Giá giảm dần</option>-->
-<!--                                            <option value="name_asc">Tên tăng dần</option>-->
-<!--                                            <option value="name_desc">Tên giảm dần</option>-->
-<!--                                        </select>-->
-<!--                                        <h3 class="total-show-product">-->
-<!--                                            Hiển thị: <span>1 - 6 sản phẩm</span>-->
-<!--                                        </h3>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <div class="col-lg-5 col-md-4 col-12">-->
-<!--                                    <nav>-->
-<!--                                        <div class="nav nav-tabs" id="nav-tab" role="tablist">-->
-<!--                                            <button-->
-<!--                                                    class="nav-link active"-->
-<!--                                                    id="nav-grid-tab"-->
-<!--                                                    data-bs-toggle="tab"-->
-<!--                                                    data-bs-target="#nav-grid"-->
-<!--                                                    type="button"-->
-<!--                                                    role="tab"-->
-<!--                                                    aria-controls="nav-grid"-->
-<!--                                                    aria-selected="true"-->
-<!--                                            >-->
-<!--                                                <i class="lni lni-grid-alt"></i>-->
-<!--                                            </button>-->
-<!--                                            <button-->
-<!--                                                    class="nav-link"-->
-<!--                                                    id="nav-list-tab"-->
-<!--                                                    data-bs-toggle="tab"-->
-<!--                                                    data-bs-target="#nav-list"-->
-<!--                                                    type="button"-->
-<!--                                                    role="tab"-->
-<!--                                                    aria-controls="nav-list"-->
-<!--                                                    aria-selected="false"-->
-<!--                                            >-->
-<!--                                                <i class="lni lni-list"></i>-->
-<!--                                            </button>-->
-<!--                                        </div>-->
-<!--                                    </nav>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
+                        <!--                        <div class="product-grid-topbar">-->
+                        <!--                            <div class="row align-items-center">-->
+                        <!--                                <div class="col-lg-7 col-md-8 col-12">-->
+                        <!--                                    <div class="product-sorting">-->
+                        <!--                                        <label for="sorting">Sắp xếp:</label>-->
+                        <!--                                        <select class="form-control" id="sorting">-->
+                        <!--                                            <option value="sellCount_asc">Bán chạy nhất</option>-->
+                        <!--                                            <option value="price_asc">Giá tăng dần</option>-->
+                        <!--                                            <option value="price_desc">Giá giảm dần</option>-->
+                        <!--                                            <option value="name_asc">Tên tăng dần</option>-->
+                        <!--                                            <option value="name_desc">Tên giảm dần</option>-->
+                        <!--                                        </select>-->
+                        <!--                                        <h3 class="total-show-product">-->
+                        <!--                                            Hiển thị: <span>1 - 6 sản phẩm</span>-->
+                        <!--                                        </h3>-->
+                        <!--                                    </div>-->
+                        <!--                                </div>-->
+                        <!--                                <div class="col-lg-5 col-md-4 col-12">-->
+                        <!--                                    <nav>-->
+                        <!--                                        <div class="nav nav-tabs" id="nav-tab" role="tablist">-->
+                        <!--                                            <button-->
+                        <!--                                                    class="nav-link active"-->
+                        <!--                                                    id="nav-grid-tab"-->
+                        <!--                                                    data-bs-toggle="tab"-->
+                        <!--                                                    data-bs-target="#nav-grid"-->
+                        <!--                                                    type="button"-->
+                        <!--                                                    role="tab"-->
+                        <!--                                                    aria-controls="nav-grid"-->
+                        <!--                                                    aria-selected="true"-->
+                        <!--                                            >-->
+                        <!--                                                <i class="lni lni-grid-alt"></i>-->
+                        <!--                                            </button>-->
+                        <!--                                            <button-->
+                        <!--                                                    class="nav-link"-->
+                        <!--                                                    id="nav-list-tab"-->
+                        <!--                                                    data-bs-toggle="tab"-->
+                        <!--                                                    data-bs-target="#nav-list"-->
+                        <!--                                                    type="button"-->
+                        <!--                                                    role="tab"-->
+                        <!--                                                    aria-controls="nav-list"-->
+                        <!--                                                    aria-selected="false"-->
+                        <!--                                            >-->
+                        <!--                                                <i class="lni lni-list"></i>-->
+                        <!--                                            </button>-->
+                        <!--                                        </div>-->
+                        <!--                                    </nav>-->
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
                         <div class="tab-content" id="nav-tabContent">
                             <div
                                     class="tab-pane fade show active"
@@ -187,11 +195,12 @@
                                             <div class="product-image">
                                                 <input class="product-id" type="hidden" th:value="${product.id}">
                                                 <img th:if="${product.images.size() > 0}"
-                                                        th:src="@{${product.images[0].url}}"
-                                                        alt="#"
+                                                     th:src="@{${product.images[0].url}}"
+                                                     alt="#"
                                                 />
                                                 <div th:if="${product.status == 1}" class="button btn-add-to-cart">
-                                                    <button class="btn"><i class="lni lni-cart"></i>
+                                                    <button class="btn" th:onclick="'addItemtoCart('+${product.id}+')'">
+                                                        <i class="lni lni-cart"></i>
                                                         Thêm
                                                     </button>
                                                 </div>
@@ -201,22 +210,24 @@
                                                     <a th:href="@{/san-pham/{id}(id=${product.id})}"
                                                        th:text="${product.name}">product name</a>
                                                 </h4>
-<!--                                                <ul class="review">-->
-<!--                                                    <li><i class="lni lni-star-filled"></i></li>-->
-<!--                                                    <li><i class="lni lni-star-filled"></i></li>-->
-<!--                                                    <li><i class="lni lni-star-filled"></i></li>-->
-<!--                                                    <li><i class="lni lni-star-filled"></i></li>-->
-<!--                                                    <li><i class="lni lni-star"></i></li>-->
-<!--                                                    <li><span>4.0 Review(s)</span></li>-->
-<!--                                                </ul>-->
+                                                <!--                                                <ul class="review">-->
+                                                <!--                                                    <li><i class="lni lni-star-filled"></i></li>-->
+                                                <!--                                                    <li><i class="lni lni-star-filled"></i></li>-->
+                                                <!--                                                    <li><i class="lni lni-star-filled"></i></li>-->
+                                                <!--                                                    <li><i class="lni lni-star-filled"></i></li>-->
+                                                <!--                                                    <li><i class="lni lni-star"></i></li>-->
+                                                <!--                                                    <li><span>4.0 Review(s)</span></li>-->
+                                                <!--                                                </ul>-->
                                                 <div class="price">
                                                     <span th:text="${#numbers.formatCurrency(product.price)}">product price</span>
                                                 </div>
                                                 <div>
-                                                    <span th:if="${product.status == 1}" class="p-qty" style="color: #2cc067">
+                                                    <span th:if="${product.status == 1}" class="p-qty"
+                                                          style="color: #2cc067">
                                                         <i class="fa fa-check" aria-hidden="true"></i>
                                                         Còn hàng  </span>
-                                                    <span th:unless="${product.status == 1}" style="color: #0074da;" class="qty">
+                                                    <span th:unless="${product.status == 1}" style="color: #0074da;"
+                                                          class="qty">
                                                         <i class="fas fa-phone fa-flip-horizontal"></i>
                                                         Liên hệ</span>
                                                 </div>
@@ -482,104 +493,6 @@
         </div>
     </section>
     <!-- End Item Details -->
-
-    <!-- Review Modal -->
-    <div
-            class="modal fade review-modal"
-            id="exampleModal"
-            tabindex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-    >
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Leave a Review</h5>
-                    <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                    ></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="review-name">Your Name</label>
-                                <input
-                                        class="form-control"
-                                        type="text"
-                                        id="review-name"
-                                        required
-                                />
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="review-email">Your Email</label>
-                                <input
-                                        class="form-control"
-                                        type="email"
-                                        id="review-email"
-                                        required
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="review-subject">Subject</label>
-                                <input
-                                        class="form-control"
-                                        type="text"
-                                        id="review-subject"
-                                        required
-                                />
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="review-rating">Rating</label>
-                                <select class="form-control" id="review-rating">
-                                    <option>5 Stars</option>
-                                    <option>4 Stars</option>
-                                    <option>3 Stars</option>
-                                    <option>2 Stars</option>
-                                    <option>1 Star</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="review-message">Review</label>
-                        <textarea
-                                class="form-control"
-                                id="review-message"
-                                rows="8"
-                                required
-                        ></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer button">
-                    <button type="button" class="btn">Submit Review</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Review Modal -->
-    <div class="position-fixed bottom-0 start-0 p-3" style="z-index: 11">
-        <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <strong class="me-auto">Đã thêm vào giỏ hàng</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <!--            <div class="toast-body">-->
-            <!--                Hello, world! This is a toast message.-->
-            <!--            </div>-->
-        </div>
-    </div>
 </div>
 <!-- ========================= JS here ========================= -->
 <th:block layout:fragment="script">
@@ -639,19 +552,37 @@
             let field = val.toString().split('_')[0];
             let value = val.toString().split('_')[1]
             let url = new URL(window.location.href);
-            url.searchParams.set(field, 'p_'+value);
+            url.searchParams.set(field, 'p_' + value);
             window.location.href = url;
         })
 
         $('#btn-range-price').on('click', function () {
             var min_price = $('#min_price').val();
             var max_price = $('#max_price').val();
-            let url = new URL(window.location.href);
-            url.searchParams.set('price', 'p_'+min_price+'to'+max_price);
-            window.location.href = url;
+            if (min_price && max_price) {
+                let url = new URL(window.location.href);
+                url.searchParams.set('price', 'p_' + min_price + 'to' + max_price);
+                window.location.href = url;
+            }
         })
 
+        function handleInputPrice(elementId) {
+            var amount = document.getElementById(elementId).value;
+            amount = amount.toString().replaceAll(".", "");
+            if (amount) {
+                document.getElementById(elementId).value = formatToCurrency(amount);
+            }
+        }
 
+        const formatToCurrency = amount => {
+            // return formatter.format(amount);
+            return amount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+        }
+
+        var formatter = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
         /*]]>*/
     </script>
 </th:block>

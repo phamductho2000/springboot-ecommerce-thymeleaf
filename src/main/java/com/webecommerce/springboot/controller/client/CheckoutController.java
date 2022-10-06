@@ -48,8 +48,8 @@ public class CheckoutController {
     @PostMapping("/update-total-price-order")
     @ResponseBody
     public Double updateTotalPriceOrder(HttpSession session, @RequestParam("feeShip") double feeShip) {
-        Double totalPrice = (Double) session.getAttribute("TOTAL_CART_PRICE");
-        Double newTotalPrice = (Double) session.getAttribute("TOTAL_ORDER_PRICE");
+        Long totalPrice = (Long) session.getAttribute("TOTAL_CART_PRICE");
+        Long newTotalPrice = (Long) session.getAttribute("TOTAL_ORDER_PRICE");
         if (newTotalPrice == null) {
             newTotalPrice = totalPrice;
             session.setAttribute("TOTAL_ORDER_PRICE", totalPrice);
@@ -61,8 +61,8 @@ public class CheckoutController {
     @PostMapping("/thanh-toan")
     @ResponseBody
     public OrderDTO checkout(HttpSession session, @RequestParam("addressId") Long addressId) {
-        Double totalOrderPrice = (Double) session.getAttribute("TOTAL_ORDER_PRICE");
-        Double totalCartPrice = (Double) session.getAttribute("TOTAL_CART_PRICE");
+        Long totalOrderPrice = (Long) session.getAttribute("TOTAL_ORDER_PRICE");
+        Long totalCartPrice = (Long) session.getAttribute("TOTAL_CART_PRICE");
         HashMap<Long, CartDTO> cart = (HashMap<Long, CartDTO>) session.getAttribute("CART");
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof MyUserDetails) {

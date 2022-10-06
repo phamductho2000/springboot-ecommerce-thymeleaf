@@ -39,6 +39,9 @@ public class ProductEntity extends BaseEntity {
 
     private String slug;
 
+    @Column(name = "type_product")
+    private long typeProduct;
+
     private boolean deleted = Boolean.FALSE;
 
     @JsonIgnore

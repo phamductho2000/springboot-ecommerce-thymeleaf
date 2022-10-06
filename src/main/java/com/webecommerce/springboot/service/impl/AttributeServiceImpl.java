@@ -75,7 +75,7 @@ public class AttributeServiceImpl implements AttributeService {
     @Override
     public List<AttributeAndValueFilterDTO> getAttrAndValueByCate(String cate) {
         Set<AttributeAndValueDTO> attributeAndValueDTOS = attributeRepository.getAttrAndValueByCate(cate).stream()
-                .map(o -> new AttributeAndValueDTO(new AttributeDTO((Long) o[0], (String) o[1], (String) o[2]), null)
+                .map(o -> new AttributeAndValueDTO(new AttributeDTO((Long) o[0], (String) o[1], (String) o[2], null), null)
                 ).collect(Collectors.toSet());
         return attributeAndValueDTOS.stream().map(s ->
                         new AttributeAndValueFilterDTO(s.getAttr(), findAllAttrValueByAttrId(s.getAttr().getId())))

@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RevenuesAndBenefitDTO {
 
-    private double revenues;
+    private long revenues;
 
-    private double benefit;
+    private long benefit;
 }

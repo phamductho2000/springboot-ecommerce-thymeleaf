@@ -146,7 +146,8 @@
                                 </div>
                                 <div class="text-end mt-2">
                                     <h5 style="display: inline">Tổng tiền: </h5>
-                                    <h5 style="display: inline" id="total-price-order" th:text="${#numbers.formatCurrency(order.total)}">3.000.000đ</h5>
+                                    <h5 style="display: inline" id="total-price-order"
+                                        th:text="${#numbers.formatCurrency(order.total)}">3.000.000đ</h5>
                                 </div>
                                 <div class="mt-3">
                                     <h5>Thêm sản phẩm</h5>
@@ -187,9 +188,9 @@
                                         <option value="0">Đã hủy</option>
                                         <option value="1">Chờ xử lý</option>
                                         <option value="2">Đã tiếp nhận</option>
-<!--                                        <option value="3">Đang giao</option>-->
-<!--                                        <option value="4">Đã giao</option>-->
-<!--                                        <option value="5">Hoàn tất</option>-->
+                                        <!--                                        <option value="3">Đang giao</option>-->
+                                        <!--                                        <option value="4">Đã giao</option>-->
+                                        <!--                                        <option value="5">Hoàn tất</option>-->
                                     </select>
                                 </div>
                             </form>
@@ -421,8 +422,8 @@
                     <tr>
                         <td>${item.product.name}</td>
                         <td class="render-quantity">${item.quantity}</td>
-                        <td>${item.price}</td>
-                        <td class="render-total">${item.total}</td>
+                        <td>${formatToCurrency(item.price) + ' ₫'}</td>
+                        <td class="render-total">${formatToCurrency(item.total) + ' ₫'}</td>
                         <td>
                         <a class='action-icon'>
                             <i class='mdi mdi-delete btn-remove-item-detail'></i>
@@ -448,17 +449,17 @@
                 let totalCart = Number($('#totalPriceOrder').val()) - Number(feeShip);
                 $('#feeShip').val(feeShip);
                 feeShip = formatToCurrency(feeShip);
-                $('#fee-ship').text(feeShip + ' đ');
+                $('#fee-ship').text(feeShip + ' ₫');
 
                 $('#totalCart').val(totalCart);
                 totalCart = formatToCurrency(totalCart);
-                $('#total-cart').text(totalCart + ' đ');
-                $('#total-price-order').text(formatToCurrency($('#totalPriceOrder').val()) + ' đ')
+                $('#total-cart').text(totalCart + ' ₫');
+                $('#total-price-order').text(formatToCurrency($('#totalPriceOrder').val()) + ' ₫')
 
             }
 
             $('#add-new-product').click(function () {
-                if($('#p-quantity').val() <= 0) {
+                if ($('#p-quantity').val() <= 0) {
                     alert("Vui lòng nhập vào số lượng");
                 } else {
                     let exist = false;
@@ -492,8 +493,8 @@
                     <tr>
                         <td>${nameP}</td>
                         <td class="render-quantity">${quantity}</td>
-                        <td>${formatToCurrency(price)}</td>
-                        <td class="render-total">${formatToCurrency(total)}</td>
+                        <td>${formatToCurrency(price) + ' ₫'}</td>
+                        <td class="render-total">${formatToCurrency(total) + ' ₫'}</td>
                         <td>
                         <a class='action-icon'>
                             <i class='mdi mdi-delete btn-remove-item-detail'></i>

@@ -15,9 +15,9 @@ public class OrderDTO extends AbstractDTO {
 
     private String note;
 
-    private double total;
+    private long total;
 
-    private double feeShip;
+    private long feeShip;
 
     private UserDTO user;
 

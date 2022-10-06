@@ -80,7 +80,8 @@
                                 <th>Đơn giá</th>
                                 <th>Số lượng</th>
                                 <th>Trạng thái</th>
-                                <th>Ngày thêm</th>
+                                <th>Ngày tạo</th>
+                                <th>Ngày chỉnh sửa</th>
                                 <th style="width: 85px;">Action</th>
                             </tr>
                             </thead>
@@ -121,8 +122,11 @@
                                     <span th:if="${product.status == 1}" class="badge bg-success">Còn hàng</span>
                                     <span th:unless="${product.status == 1}" class="badge bg-danger">Hết hàng</span>
                                 </td>
-                                <td th:text="${#dates.format(product.createdAt, 'dd-MM-yyyy')}">
+                                <td th:text="${#dates.format(product.createdAt, 'dd-MM-yyyy HH:mm')}">
                                     Created at
+                                </td>
+                                <td th:text="${#dates.format(product.updatedAt, 'dd-MM-yyyy HH:mm')}">
+                                    Updated at
                                 </td>
                                 <td class="table-action">
                                     <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-eye"></i></a>

@@ -30,8 +30,9 @@ $().ready(function () {
                 min: 1
             },
             "category": {
-                required: true,
-                min: 1
+                depends: function (element) {
+                    return $('#countCate').val >= 0;
+                }
             }
         },
         messages: {

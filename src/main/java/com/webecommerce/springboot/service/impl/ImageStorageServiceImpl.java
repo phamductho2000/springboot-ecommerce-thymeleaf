@@ -16,10 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -72,7 +69,7 @@ public class ImageStorageServiceImpl implements StorageService {
 //            String generatedFileName = UUID.randomUUID().toString().replace("-", "");
 //            generatedFileName = generatedFileName + "." + fileExtension;
             Path destinationFilePath = this.storageFolder.resolve(
-                            Paths.get(file.getOriginalFilename()))
+                    Paths.get(file.getOriginalFilename()))
                     .normalize().toAbsolutePath();
             if (!destinationFilePath.getParent().equals(this.storageFolder.toAbsolutePath())) {
                 throw new RuntimeException(
@@ -154,12 +151,15 @@ public class ImageStorageServiceImpl implements StorageService {
 
     @Override
     public List<UploadFoldersDTO> loadAllFolders() throws IOException {
-        List<UploadFoldersDTO> uploadFoldersDTOs = Files.walk(storageFolder, Integer.MAX_VALUE)
+        List<UploadFoldersDTO> uploadFoldersDTOs = Files.walk(storageFolder, FileVisitOption.FOLLOW_LINKS)
                 .filter(Files::isDirectory)
                 .map(path -> {
                     UploadFoldersDTO folder = new UploadFoldersDTO();
-                    folder.setName(path.toString());
-                    folder.setParentPath(path.toAbsolutePath().toString());
+                    String fullPath = path.toString();
+                    String[] pathFolder = getParentPath(fullPath);
+                    folder.setPath(fullPath);
+                    folder.setName(pathFolder[0]);
+                    folder.setParentPath(pathFolder[1]);
                     return folder;
                 })
                 .collect(Collectors.toList());
@@ -168,25 +168,43 @@ public class ImageStorageServiceImpl implements StorageService {
                 .map(folder -> {
                     folder.setChildren(getSubFolder(uploadFoldersDTOs, folder));
                     return folder;
-                }).collect(Collectors.toList());
+                })
+                .collect(Collectors.toList()).get(0).getChildren();
     }
 
     public List<UploadFoldersDTO> getSubFolder(List<UploadFoldersDTO> folders, UploadFoldersDTO root) {
-        return folders.stream().filter(folder -> folder.getParentPath().equals(root.getName()))
+        return folders.stream()
+                .filter(folder -> folder.getParentPath().equals(root.getPath()))
                 .map(folder -> {
                     folder.setChildren(getSubFolder(folders, folder));
                     return folder;
-                }).collect(Collectors.toList());
+                })
+                .collect(Collectors.toList());
     }
 
-//    @Override
-//    public void loadAllFolders() throws IOException {
-//        List<UploadFoldersDTO> uploadFoldersDTO = new ArrayList<>();
-//        List<Path> dirs = Files.walk(storageFolder, Integer.MAX_VALUE)
-//                .filter(Files::isDirectory)
-//                .collect(Collectors.toList());
-//        dirs.forEach(item -> {
-//            System.out.printf(item.toString());
-//        });
-//    }
+    public String[] getParentPath(String fullPath) {
+        int lastIndex = fullPath.lastIndexOf("\\");
+        if (lastIndex != -1) {
+            String folderName = fullPath.substring(lastIndex + 1, fullPath.length());
+            String parenPath = fullPath.substring(0, lastIndex);
+            return new String[]{folderName, parenPath};
+        }
+        return new String[]{fullPath, ""};
+    }
+
+    @Override
+    public void createSubFolder(String parentPath, String folderName) {
+        try {
+            String newPathFolder = parentPath.replace("\\", "/").concat("/".concat(folderName));
+
+            Path path = Paths.get(newPathFolder);
+
+            Files.createDirectories(path);
+
+            System.out.println("Directory is created!");
+
+        } catch (IOException e) {
+            System.err.println("Failed to create directory!" + e.getMessage());
+        }
+    }
 }

@@ -17,7 +17,7 @@ public class TopSellingProductDTO {
 
     private long quantity;
 
-    private double price;
+    private long price;
 
-    private double total;
+    private long total;
 }

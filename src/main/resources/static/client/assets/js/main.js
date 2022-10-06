@@ -89,4 +89,5 @@ Author: GrayGrids
     // $("#max_price").val($("#slider-range").slider("values", 1));
 
 
+
 })();

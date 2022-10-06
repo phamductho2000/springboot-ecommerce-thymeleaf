@@ -23,28 +23,24 @@ public class ProductSpecification implements Specification<ProductEntity> {
             List<Predicate> list = new ArrayList<>();
             if (criteria.getValue().startsWith("p")) {
                 String value = criteria.getValue().substring(2);
-                if(value.contains("to")) {
+                if (value.contains("to")) {
                     long min = Long.parseLong(value.split("to")[0]);
                     long max = Long.parseLong(value.split("to")[1]);
                     list.add(builder.between(root.get(criteria.getField()), min, max));
 
-                }
-                else if(value.equalsIgnoreCase("asc")) {
+                } else if (value.equalsIgnoreCase("asc")) {
                     list.add((Predicate) builder.asc(root.get(criteria.getField())));
-                }
-                else if(value.equalsIgnoreCase("desc")) {
+                } else if (value.equalsIgnoreCase("desc")) {
                     list.add((Predicate) builder.desc(root.get(criteria.getField())));
-                }
-                else {
+                } else {
                     list.add(builder.like(root.get(criteria.getField()), "%" + value + "%"));
                 }
             }
-            if(criteria.getValue().startsWith("a"))
-            {
+            if (criteria.getValue().startsWith("a")) {
                 String value = criteria.getValue().substring(2);
                 Join<ProductEntity, AttributeValueEntity> joinAttrValue = root.join("attributeValueEntities");
                 Join<AttributeValueEntity, AttributeEntity> joinAttr = joinAttrValue.join("attributeEntity");
-                list.add(builder.equal(joinAttr.get(AttributeEntity_.NAME), criteria.getField()));
+                list.add(builder.equal(joinAttr.get(AttributeEntity_.CODE), criteria.getField()));
                 list.add(builder.like(joinAttrValue.get(AttributeValueEntity_.VALUE), "%" + value + "%"));
             }
             Predicate[] p = new Predicate[list.size()];

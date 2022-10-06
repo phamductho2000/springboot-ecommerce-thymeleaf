@@ -15,7 +15,7 @@ public class RevenuesAndBenefitByYearDTO {
 
     private int month;
 
-    private double revenues;
+    private long revenues;
 
-    private double benefit;
+    private long benefit;
 }

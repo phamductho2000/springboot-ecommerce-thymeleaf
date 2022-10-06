@@ -14,118 +14,75 @@
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/client/assets/images/favicon.svg}"/>
 </head>
 <body>
-<header class="header navbar-area" th:fragment="header">
-    <!-- Start Topbar -->
-    <div class="topbar">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-4 col-md-4 col-12">
-                    <div class="top-left">
-                        <ul class="menu-top-link">
-                            <li>
-                                <!--                                <div class="select-position">-->
-                                <!--                                    <select id="select4">-->
-                                <!--                                        <option value="0" selected>$ USD</option>-->
-                                <!--                                        <option value="1">€ EURO</option>-->
-                                <!--                                        <option value="2">$ CAD</option>-->
-                                <!--                                        <option value="3">₹ INR</option>-->
-                                <!--                                        <option value="4">¥ CNY</option>-->
-                                <!--                                        <option value="5">৳ BDT</option>-->
-                                <!--                                    </select>-->
-                                <!--                                </div>-->
-                            </li>
-                            <li>
-                                <!--                                <div class="select-position">-->
-                                <!--                                    <select id="select5">-->
-                                <!--                                        <option value="0" selected>English</option>-->
-                                <!--                                        <option value="1">Español</option>-->
-                                <!--                                        <option value="2">Filipino</option>-->
-                                <!--                                        <option value="3">Français</option>-->
-                                <!--                                        <option value="4">العربية</option>-->
-                                <!--                                        <option value="5">हिन्दी</option>-->
-                                <!--                                        <option value="6">বাংলা</option>-->
-                                <!--                                    </select>-->
-                                <!--                                </div>-->
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-4 col-12">
-                    <!--                    <div class="top-middle">-->
-                    <!--                        <ul class="useful-links">-->
-                    <!--                            <li><a href="info.html">Home</a></li>-->
-                    <!--                            <li><a href="about-us.html">About Us</a></li>-->
-                    <!--                            <li><a href="contact.html">Contact Us</a></li>-->
-                    <!--                        </ul>-->
-                    <!--                    </div>-->
-                </div>
-                <div class="col-lg-4 col-md-4 col-12">
-                    <div class="top-end">
-                        <div sec:authorize="!isAuthenticated">
-                            <ul class="user-login">
-                                <li>
-                                    <a th:href="@{/dang-nhap}">Đăng nhập</a>
-                                </li>
-                                <li>
-                                    <a th:href="@{/dang-ky}">Đăng ký</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="user" sec:authorize="isAuthenticated()">
-                            <!--                            <div class="dropdown">-->
-                            <!--                                <a class="btn btn-secondary dropdown-toggle" href="#"-->
-                            <!--                                   id="dropdownMenuLink" data-bs-toggle="dropdown" role="button" aria-expanded="false">-->
-                            <!--                                    <i class="lni lni-user"></i>-->
-                            <!--                                    <span th:text="${#request.userPrincipal.principal.name}">Bob</span>-->
-                            <!--                                </a>-->
-                            <!--                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">-->
-                            <!--                                    <li><a class="dropdown-item" href="#">Action</a></li>-->
-                            <!--                                    <li><a class="dropdown-item" href="#">Another action</a></li>-->
-                            <!--                                    <li><a class="dropdown-item" href="#">Something else here</a></li>-->
-                            <!--                                    <li>-->
-                            <!--                                        <hr class="dropdown-divider">-->
-                            <!--                                    </li>-->
-                            <!--                                    <li><a class="dropdown-item" href="#">Separated link</a></li>-->
-                            <!--                                </ul>-->
-                            <!--                            </div>-->
-                            <!--                            <div class="dropdown">-->
-                            <!--                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">-->
-                            <!--                                    Dropdown link-->
-                            <!--                                </a>-->
-
-                            <!--                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">-->
-                            <!--                                    <li><a class="dropdown-item" href="#">Action</a></li>-->
-                            <!--                                    <li><a class="dropdown-item" href="#">Another action</a></li>-->
-                            <!--                                    <li><a class="dropdown-item" href="#">Something else here</a></li>-->
-                            <!--                                </ul>-->
-                            <!--                            </div>-->
-                            <ul class="user-login">
-                                <li>
-                                    <i class="lni lni-user"></i>
-                                    <a th:href="@{/tai-khoan/thong-tin-tai-khoan}"
-                                       th:text="${#request.userPrincipal.principal.name}">Bob</a>
-                                </li>
-                                <li>
-                                    <a th:href="@{/user_logout}">Đăng xuất</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Topbar -->
+<header class="header navbar-area" style="position: fixed; top: 0" th:fragment="header">
     <!-- Start Header Middle -->
     <div class="header-middle">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-lg-3 col-md-3 col-7">
+                <div class="col-lg-2 col-md-2 col-4">
                     <!-- Start Header Logo -->
                     <a class="navbar-brand" href="index.html">
                         <img th:src="@{/client/assets/images/logo/logo.svg}" alt="Logo"/>
                     </a>
                     <!-- End Header Logo -->
+                </div>
+                <div class="col-lg-2 col-md-2 col-4">
+                    <div class="nav-inner justify-content-center">
+                        <!-- Start Mega Category Menu -->
+                        <div class="mega-category-menu">
+                            <nav class="navbar navbar-expand-sm" style="margin-left: -30px">
+                                <div class="container-fluid">
+                                    <div class="collapse navbar-collapse" id="main_nav">
+                                        <ul class="navbar-nav">
+                                            <li class="nav-item dropdown">
+                                                <a
+                                                        class="nav-link"
+                                                        href="#"
+                                                        data-bs-toggle="dropdown">
+                                                <span class="cat-button">
+                                                    <i class="lni lni-menu"></i>
+                                                    Danh mục
+                                                </span>
+                                                </a>
+                                                <ul class="dropdown-menu" style="top: 117% !important;">
+                                                    <th:block layout:insert="client/fragments/category::menu"
+                                                              th:with="menuItems = ${menuItems}"></th:block>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- navbar-collapse.// -->
+                                </div>
+                                <!-- container-fluid.// -->
+                            </nav>
+                        </div>
+                        <!-- End Mega Category Menu -->
+                        <!-- Start Navbar -->
+                        <nav class="navbar navbar-expand-lg">
+                            <button
+                                    class="navbar-toggler mobile-menu-btn"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#navbarSupportedContent"
+                                    aria-controls="navbarSupportedContent"
+                                    aria-expanded="false"
+                                    aria-label="Toggle navigation"
+                            >
+                                <span class="toggler-icon"></span>
+                                <span class="toggler-icon"></span>
+                                <span class="toggler-icon"></span>
+                            </button>
+                            <div
+                                    class="collapse navbar-collapse sub-menu-bar"
+                                    id="navbarSupportedContent"
+                            >
+                                <ul id="nav" class="navbar-nav ms-auto">
+                                </ul>
+                            </div>
+                            <!-- navbar collapse -->
+                        </nav>
+                        <!-- End Navbar -->
+                    </div>
                 </div>
                 <div class="col-lg-5 col-md-7 d-xs-none">
                     <!-- Start Main Menu Search -->
@@ -133,14 +90,6 @@
                         <form th:action="@{/san-pham}" method="get">
                             <!-- navbar search start -->
                             <div class="navbar-search search-style-5">
-                                <!--                                <div class="search-select">-->
-                                <!--                                    <div class="select-position">-->
-                                <!--                                        <select id="select1">-->
-                                <!--                                            <option selected>Tên</option>-->
-                                <!--                                        </select>-->
-                                <!--                                    </div>-->
-                                <!--                                </div>-->
-
                                 <div class="search-input">
                                     <input type="text" name="key" placeholder="Nhập tên sản phẩm"/>
                                 </div>
@@ -153,15 +102,15 @@
                     </div>
                     <!-- End Main Menu Search -->
                 </div>
-                <div class="col-lg-4 col-md-2 col-5">
-                    <div class="middle-right-area">
-                        <div class="nav-hotline">
-                            <i class="lni lni-phone"></i>
-                            <h3>
-                                Hotline:
-                                <span>(+100) 123 456 7890</span>
-                            </h3>
-                        </div>
+                <div class="col-lg-3 col-md-1 col-4">
+                    <div class="middle-right-area justify-content-center">
+                        <!--                        <div class="nav-hotline">-->
+                        <!--                            <i class="lni lni-phone"></i>-->
+                        <!--                            <h3>-->
+                        <!--                                Hotline:-->
+                        <!--                                <span>(+100) 123 456 7890</span>-->
+                        <!--                            </h3>-->
+                        <!--                        </div>-->
                         <div class="navbar-cart">
                             <div class="wishlist">
                                 <a href="javascript:void(0)">
@@ -169,7 +118,7 @@
                                     <span class="total-items">0</span>
                                 </a>
                             </div>
-                            <div class="cart-items">
+                            <div class="cart-items" id="header-cart">
                                 <a href="javascript:void(0)" class="main-btn">
                                     <i class="lni lni-cart"></i>
                                     <span class="total-items" th:if="${session.CART}"
@@ -252,20 +201,24 @@
 
                                 <div class="shopping-item p-0" sec:authorize="isAuthenticated()">
                                     <div class="text-center" style="padding: 15px 25px">
-                                        <p class="fs-5 fw-bold text-black" th:text="${#request.userPrincipal.principal.name}">Tho Pham</p>
+                                        <p class="fs-5 fw-bold text-black"
+                                           th:text="${#request.userPrincipal.principal.name}">Tho Pham</p>
                                     </div>
                                     <ul class="list-group">
                                         <li class="list-group-item border-0">
                                             <i class="lni lni-user fs-5 me-2" style="color: #0065EE"></i>
-                                            <a th:href="@{/tai-khoan/thong-tin-tai-khoan}" class="link-dark fs-6">Thông tin tài khoản</a>
+                                            <a th:href="@{/tai-khoan/thong-tin-tai-khoan}" class="link-dark fs-6">Thông
+                                                tin tài khoản</a>
                                         </li>
                                         <li class="list-group-item border-0">
                                             <i class="lni lni-delivery fs-5 me-2" style="color: #0065EE"></i>
-                                            <a th:href="@{/tai-khoan/thong-tin-lien-he}" class="link-dark fs-6">Thông tin liên hệ & Địa chỉ</a>
+                                            <a th:href="@{/tai-khoan/thong-tin-lien-he}" class="link-dark fs-6">Thông
+                                                tin liên hệ & Địa chỉ</a>
                                         </li>
                                         <li class="list-group-item border-0">
                                             <i class="lni lni-cart fs-5 me-2" style="color: #0065EE"></i>
-                                            <a th:href="@{/tai-khoan/quan-ly-don-hang}" class="link-dark fs-6">Lịch sử mua hàng</a>
+                                            <a th:href="@{/tai-khoan/quan-ly-don-hang}" class="link-dark fs-6">Lịch sử
+                                                mua hàng</a>
                                         </li>
                                         <li class="list-group-item border-top">
                                             <i class="lni lni-shift-right fs-5 me-2" style="color: #FE3464"></i>
@@ -282,187 +235,6 @@
         </div>
     </div>
     <!-- End Header Middle -->
-    <!-- Start Header Bottom -->
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-8 col-md-6 col-12">
-                <div class="nav-inner">
-                    <!-- Start Mega Category Menu -->
-                    <div class="mega-category-menu">
-                        <nav class="navbar navbar-expand-sm" style="margin-left: -30px">
-                            <div class="container-fluid">
-                                <div class="collapse navbar-collapse" id="main_nav">
-                                    <ul class="navbar-nav">
-                                        <li class="nav-item dropdown">
-                                            <a
-                                                    class="nav-link"
-                                                    href="#"
-                                                    data-bs-toggle="dropdown">
-                                                <span class="cat-button">
-                                                    <i class="lni lni-menu"></i>
-                                                    Danh mục
-                                                </span>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <th:block layout:insert="client/fragments/category::menu"
-                                                          th:with="menuItems = ${menuItems}"></th:block>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <!-- navbar-collapse.// -->
-                            </div>
-                            <!-- container-fluid.// -->
-                        </nav>
-                    </div>
-                    <!-- End Mega Category Menu -->
-                    <!-- Start Navbar -->
-                    <nav class="navbar navbar-expand-lg">
-                        <button
-                                class="navbar-toggler mobile-menu-btn"
-                                type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#navbarSupportedContent"
-                                aria-controls="navbarSupportedContent"
-                                aria-expanded="false"
-                                aria-label="Toggle navigation"
-                        >
-                            <span class="toggler-icon"></span>
-                            <span class="toggler-icon"></span>
-                            <span class="toggler-icon"></span>
-                        </button>
-                        <div
-                                class="collapse navbar-collapse sub-menu-bar"
-                                id="navbarSupportedContent"
-                        >
-                            <ul id="nav" class="navbar-nav ms-auto">
-                                <!--                                <li class="nav-item">-->
-                                <!--                                    <a href="info.html" aria-label="Toggle navigation"-->
-                                <!--                                    >Home</a-->
-                                <!--                                    >-->
-                                <!--                                </li>-->
-                                <!--                                <li class="nav-item">-->
-                                <!--                                    <a-->
-                                <!--                                            class="dd-menu collapsed"-->
-                                <!--                                            href="javascript:void(0)"-->
-                                <!--                                            data-bs-toggle="collapse"-->
-                                <!--                                            data-bs-target="#submenu-1-2"-->
-                                <!--                                            aria-controls="navbarSupportedContent"-->
-                                <!--                                            aria-expanded="false"-->
-                                <!--                                            aria-label="Toggle navigation"-->
-                                <!--                                    >Pages</a-->
-                                <!--                                    >-->
-                                <!--                                    <ul class="sub-menu collapse" id="submenu-1-2">-->
-                                <!--                                        <li class="nav-item">-->
-                                <!--                                            <a href="about-us.html">About Us</a>-->
-                                <!--                                        </li>-->
-                                <!--                                        <li class="nav-item"><a href="faq.html">Faq</a></li>-->
-                                <!--                                        <li class="nav-item"><a href="login.html">Login</a></li>-->
-                                <!--                                        <li class="nav-item">-->
-                                <!--                                            <a href="register.html">Register</a>-->
-                                <!--                                        </li>-->
-                                <!--                                        <li class="nav-item">-->
-                                <!--                                            <a href="mail-success.html">Mail Success</a>-->
-                                <!--                                        </li>-->
-                                <!--                                        <li class="nav-item">-->
-                                <!--                                            <a href="404.html">404 Error</a>-->
-                                <!--                                        </li>-->
-                                <!--                                    </ul>-->
-                                <!--                                </li>-->
-                                <!--                                <li class="nav-item">-->
-                                <!--                                    <a-->
-                                <!--                                            class="dd-menu active collapsed"-->
-                                <!--                                            href="javascript:void(0)"-->
-                                <!--                                            data-bs-toggle="collapse"-->
-                                <!--                                            data-bs-target="#submenu-1-3"-->
-                                <!--                                            aria-controls="navbarSupportedContent"-->
-                                <!--                                            aria-expanded="false"-->
-                                <!--                                            aria-label="Toggle navigation"-->
-                                <!--                                    >Shop</a-->
-                                <!--                                    >-->
-                                <!--                                    <ul class="sub-menu collapse" id="submenu-1-3">-->
-                                <!--                                        <li class="nav-item">-->
-                                <!--                                            <a href="product-grids.html">Shop Grid</a>-->
-                                <!--                                        </li>-->
-                                <!--                                        <li class="nav-item">-->
-                                <!--                                            <a href="product-list.html">Shop List</a>-->
-                                <!--                                        </li>-->
-                                <!--                                        <li class="nav-item active">-->
-                                <!--                                            <a href="product-details.html">shop Single</a>-->
-                                <!--                                        </li>-->
-                                <!--                                        <li class="nav-item"><a href="cart.html">Cart</a></li>-->
-                                <!--                                        <li class="nav-item">-->
-                                <!--                                            <a href="checkout.html">Checkout</a>-->
-                                <!--                                        </li>-->
-                                <!--                                    </ul>-->
-                                <!--                                </li>-->
-                                <!--                                <li class="nav-item">-->
-                                <!--                                    <a-->
-                                <!--                                            class="dd-menu collapsed"-->
-                                <!--                                            href="javascript:void(0)"-->
-                                <!--                                            data-bs-toggle="collapse"-->
-                                <!--                                            data-bs-target="#submenu-1-4"-->
-                                <!--                                            aria-controls="navbarSupportedContent"-->
-                                <!--                                            aria-expanded="false"-->
-                                <!--                                            aria-label="Toggle navigation"-->
-                                <!--                                    >Blog</a-->
-                                <!--                                    >-->
-                                <!--                                    <ul class="sub-menu collapse" id="submenu-1-4">-->
-                                <!--                                        <li class="nav-item">-->
-                                <!--                                            <a href="blog-grid-sidebar.html">Blog Grid Sidebar</a>-->
-                                <!--                                        </li>-->
-                                <!--                                        <li class="nav-item">-->
-                                <!--                                            <a href="blog-single.html">Blog Single</a>-->
-                                <!--                                        </li>-->
-                                <!--                                        <li class="nav-item">-->
-                                <!--                                            <a href="blog-single-sidebar.html"-->
-                                <!--                                            >Blog Single Sibebar</a-->
-                                <!--                                            >-->
-                                <!--                                        </li>-->
-                                <!--                                    </ul>-->
-                                <!--                                </li>-->
-                                <!--                                <li class="nav-item">-->
-                                <!--                                    <a href="contact.html" aria-label="Toggle navigation"-->
-                                <!--                                    >Contact Us</a-->
-                                <!--                                    >-->
-                                <!--                                </li>-->
-                            </ul>
-                        </div>
-                        <!-- navbar collapse -->
-                    </nav>
-                    <!-- End Navbar -->
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-12">
-                <!-- Start Nav Social -->
-                <div class="nav-social">
-                    <h5 class="title">Follow Us:</h5>
-                    <ul>
-                        <li>
-                            <a href="javascript:void(0)"
-                            ><i class="lni lni-facebook-filled"></i
-                            ></a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)"
-                            ><i class="lni lni-twitter-original"></i
-                            ></a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)"
-                            ><i class="lni lni-instagram"></i
-                            ></a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)"><i class="lni lni-skype"></i></a>
-                        </li>
-                    </ul>
-                </div>
-                <!-- End Nav Social -->
-            </div>
-        </div>
-    </div>
-    <!-- Start Header Bottom -->
 </header>
 <!-- End Header Area -->
 </body>

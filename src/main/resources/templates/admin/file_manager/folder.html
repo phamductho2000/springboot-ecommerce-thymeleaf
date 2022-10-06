@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Folder</title>
+</head>
+<body>
+<th:block layout:fragment="menu-folder">
+    <li th:each="folder : ${folders}">
+        [[${folder.name}]]
+        <ul th:if="${!#lists.isEmpty(folder.children)}">
+            <th:block
+                    layout:insert="admin/file_manager/folder::menu-folder"
+                    th:with="folders = ${folder.children}">
+            </th:block>
+        </ul>
+        <ul th:unless="${!#lists.isEmpty(folder.children)}"></ul>
+    </li>
+</th:block>
+</body>
+</html>
+
+

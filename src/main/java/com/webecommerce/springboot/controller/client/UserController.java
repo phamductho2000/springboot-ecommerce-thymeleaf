@@ -54,4 +54,18 @@ public class UserController {
         model.addAttribute("menuItems", categoryService.listWithTree());
         return "client/user/location";
     }
+
+    @GetMapping("/quan-ly-don-hang")
+    public String orderPage(Model model) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof MyUserDetails) {
+
+        } else {
+            CustomOAuth2User oAuth2User = (CustomOAuth2User) principal;
+            model.addAttribute("typeUser", "oauth2");
+            model.addAttribute("orders", orderService.findAllByUserEmail(oAuth2User.getEmail()));
+        }
+        model.addAttribute("menuItems", categoryService.listWithTree());
+        return "client/user/order";
+    }
 }
