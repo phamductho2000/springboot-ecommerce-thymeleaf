@@ -26,26 +26,26 @@
 <div class="content" layout:fragment="content">
 
     <!-- start page title -->
-    <div class="row">
-        <div class="col-12">
-            <div class="page-title-box">
-                <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
-                        <li class="breadcrumb-item active">Products</li>
-                    </ol>
-                </div>
-                <h4 class="page-title">Thêm mới</h4>
-            </div>
-        </div>
-    </div>
+<!--    <div class="row">-->
+<!--        <div class="col-12">-->
+<!--            <div class="page-title-box">-->
+<!--                <div class="page-title-right">-->
+<!--                    <ol class="breadcrumb m-0">-->
+<!--                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>-->
+<!--                        <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>-->
+<!--                        <li class="breadcrumb-item active">Products</li>-->
+<!--                    </ol>-->
+<!--                </div>-->
+<!--                <h4 class="page-title">Thêm mới</h4>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
     <!-- end page title -->
-    <div class="row" th:if="${order.status == 1}">
+    <div class="row" th:if="${order.status == 1}" style="margin-top: 30px">
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title mb-3"> Thêm mới hóa đơn</h4>
+                    <h4 class="header-title mb-3"> Cập nhật hóa đơn</h4>
                     <input type="hidden" id="countItem" value="-1">
                     <input type="hidden" id="totalCart" value="0">
                     <input type="hidden" id="feeShip" value="0">
@@ -213,29 +213,32 @@
             </div> <!-- end card-body -->
         </div> <!-- end card-->
     </div>
-    <div class="row" th:unless="${order.status == 1}">
-        <form th:action="@{/admin/order/updateStatus}" method="post">
-            <div class="mb-4 d-flex align-items-end">
-                <div class="me-3">
-                    <label for="statusOrder">Chọn trạng thái đơn hàng</label>
-                    <select class="form-select" name="statusOrder" id="statusOrder">
-                        <option value="0">Đã hủy</option>
-                        <option value="1">Chờ xử lý</option>
-                        <option value="2">Đã tiếp nhận</option>
-                        <option value="3">Đang giao</option>
-                        <option value="4">Đã giao</option>
-                        <option value="5">Hoàn tất</option>
-                    </select>
-                    <input type="hidden" id="orderId" name="orderId" th:value="${order.id}">
-                </div>
-                <div>
-                    <button type="submit" id="btn-update-status" class="btn btn-primary">Cập nhật</button>
-                </div>
-            </div>
-        </form>
+    <div class="row" th:unless="${order.status == 1}" style="margin-top: 30px">
+
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
+                    <h4 class="header-title mb-3"> Cập nhật hóa đơn</h4>
+                    <form th:action="@{/admin/order/updateStatus}" method="post">
+                        <div class="mb-4 d-flex align-items-end">
+<!--                            <label for="statusOrder" class="me-3">Cập nhật trạng thái đơn hàng</label>-->
+                            <div class="me-3">
+                                <select class="form-select mt-1" name="statusOrder" id="statusOrder">
+                                    <option value="1">Chờ xử lý</option>
+                                    <option value="2">Đã tiếp nhận</option>
+                                    <option value="3">Đang giao</option>
+                                    <option value="4">Đã giao</option>
+                                    <option value="5">Hoàn tất</option>
+                                    <option value="6">Đã hủy</option>
+                                </select>
+                                <input type="hidden" id="orderId" name="orderId" th:value="${order.id}">
+                            </div>
+                            <div>
+                                <button type="submit" id="btn-update-status" class="btn btn-primary">Cập nhật</button>
+                            </div>
+                        </div>
+                    </form>
+
                     <ul class="nav nav-tabs nav-bordered mb-3">
                         <li class="nav-item">
                             <a href="#vertical-left-tabs-order" data-bs-toggle="tab" aria-expanded="false"

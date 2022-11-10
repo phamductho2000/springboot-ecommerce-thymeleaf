@@ -1,7 +1,6 @@
 package com.webecommerce.springboot.controller.admin;
 
 import com.webecommerce.springboot.dto.FormAddOrderDTO;
-import com.webecommerce.springboot.dto.TestDTO;
 import com.webecommerce.springboot.service.OrderService;
 import com.webecommerce.springboot.service.ProductService;
 import com.webecommerce.springboot.service.UserService;
@@ -54,7 +53,7 @@ public class OrderController {
     @PostMapping("/save")
     public String add(FormAddOrderDTO formAddOrderDTO, RedirectAttributes atts) {
         orderService.adminSave(formAddOrderDTO);
-        atts.addFlashAttribute("message", "Thêm mới sản phẩm thành công");
+        atts.addFlashAttribute("message", "Thêm mới hóa đơn thành công");
         return "redirect:/admin/order";
     }
 

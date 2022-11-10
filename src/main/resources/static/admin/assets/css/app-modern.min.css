@@ -19258,7 +19258,7 @@ body[data-layout-color="dark"] input[data-switch="dark"]:checked + label {
 }
 
 .table .action-icon {
-    color: #98a6ad;
+    color: #343434;
     font-size: 1.2rem;
     display: inline-block;
     padding: 0 3px;
@@ -25636,6 +25636,10 @@ label.error {
 
 .modal-backdrop.show:nth-of-type(even) {
     z-index: 1051 !important;
+}
+
+.active-img {
+    border: 1px solid blue;
 }
 
 /*# sourceMappingURL=app-modern.min.css.map */

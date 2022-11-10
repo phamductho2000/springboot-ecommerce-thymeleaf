@@ -26,22 +26,22 @@
 <div class="content" layout:fragment="content">
 
     <!-- start page title -->
-    <div class="row">
-        <div class="col-12">
-            <div class="page-title-box">
-                <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
-                        <li class="breadcrumb-item active">Products</li>
-                    </ol>
-                </div>
-                <h4 class="page-title">Thêm mới</h4>
-            </div>
-        </div>
-    </div>
+<!--    <div class="row">-->
+<!--        <div class="col-12">-->
+<!--            <div class="page-title-box">-->
+<!--                <div class="page-title-right">-->
+<!--                    <ol class="breadcrumb m-0">-->
+<!--                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>-->
+<!--                        <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>-->
+<!--                        <li class="breadcrumb-item active">Products</li>-->
+<!--                    </ol>-->
+<!--                </div>-->
+<!--                <h4 class="page-title">Thêm mới</h4>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
     <!-- end page title -->
-    <div class="row">
+    <div class="row" style="margin-top: 30px">
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-body">
@@ -240,6 +240,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             "use strict";
+
             $('#add-new-product').click(function () {
                 if($('#p-quantity').val() <= 0) {
                     alert("Vui lòng nhập vào số lượng");
@@ -315,7 +316,7 @@
                     type: 'POST',
                     data: $('#detailForm').serialize() + '&deliveryAddressId=' + addressId + '&cusId=' + cusId + '&total=' + $('#totalPriceOrder').val() + '&feeShip=' + $('#feeShip').val(),
                     success: function (response) {
-                        window.location.href = '/admin/order';
+                        window.location.href = '/admin/order?status=save';
                     },
                     error: function (error) {
                         console.log(error);

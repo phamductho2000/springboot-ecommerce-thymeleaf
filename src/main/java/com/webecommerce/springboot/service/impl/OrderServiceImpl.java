@@ -1,6 +1,9 @@
 package com.webecommerce.springboot.service.impl;
 
-import com.webecommerce.springboot.dto.*;
+import com.webecommerce.springboot.dto.CartDTO;
+import com.webecommerce.springboot.dto.DetailOrderDTO;
+import com.webecommerce.springboot.dto.FormAddOrderDTO;
+import com.webecommerce.springboot.dto.OrderDTO;
 import com.webecommerce.springboot.entity.DetailOrderEntity;
 import com.webecommerce.springboot.entity.OrderEntity;
 import com.webecommerce.springboot.entity.ProductEntity;
@@ -13,6 +16,7 @@ import com.webecommerce.springboot.service.ProductService;
 import com.webecommerce.springboot.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -58,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDTO> findAll() {
-        return orderRepository.findAll().stream()
+        return orderRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")).stream()
                 .map(o -> mapper.map(o, OrderDTO.class))
                 .collect(Collectors.toList());
     }

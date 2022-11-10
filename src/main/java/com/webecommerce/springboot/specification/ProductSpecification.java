@@ -4,8 +4,6 @@ import com.webecommerce.springboot.entity.*;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
-import javax.persistence.metamodel.EntityType;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 

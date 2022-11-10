@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -50,8 +49,11 @@ public class ImageStorageServiceImpl implements StorageService {
     }
 
     @Override
-    public String storeFile(MultipartFile file) {
+    public List<ImageDTO> storeFile(MultipartFile file, String path) {
         try {
+            path = path.replace("\\", "/");
+            Path destinationFilePath = null;
+            String fileName = file.getOriginalFilename();
             if (file.isEmpty()) {
                 throw new RuntimeException("Failed to store empty file.");
             }
@@ -64,26 +66,28 @@ public class ImageStorageServiceImpl implements StorageService {
             if (fileSizeInMegabytes > 5.0f) {
                 throw new RuntimeException("File must be <= 5Mb");
             }
-            //File must be rename, why ?
-//            String fileExtension = FilenameUtils.getExtension(file.getOriginalFilename());
-//            String generatedFileName = UUID.randomUUID().toString().replace("-", "");
-//            generatedFileName = generatedFileName + "." + fileExtension;
-            Path destinationFilePath = this.storageFolder.resolve(
-                    Paths.get(file.getOriginalFilename()))
-                    .normalize().toAbsolutePath();
-            if (!destinationFilePath.getParent().equals(this.storageFolder.toAbsolutePath())) {
-                throw new RuntimeException(
-                        "Cannot store file outside current directory.");
+            // check file exist
+            if (countFileNameDuplicate(file.getOriginalFilename(), path) > 0) {
+                fileName = FilenameUtils.getBaseName(file.getOriginalFilename())
+                        .concat(String.format("(%d)", countFileNameDuplicate(file.getOriginalFilename(), path)));
+                fileName = fileName.concat(".").concat(FilenameUtils.getExtension(file.getOriginalFilename()));
             }
+            if (path == null || path.isEmpty()) {
+                destinationFilePath = this.storageFolder.resolve(Paths.get(fileName)).normalize();
+            } else {
+                destinationFilePath = Paths.get(path).resolve(Paths.get(fileName)).normalize();
+            }
+
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, destinationFilePath, StandardCopyOption.REPLACE_EXISTING);
             }
             ImageEntity newImageEntity = new ImageEntity();
-            newImageEntity.setUrl("/uploads/" + file.getOriginalFilename());
-            newImageEntity.setName(file.getOriginalFilename());
+            newImageEntity.setUrl(destinationFilePath.toString().replace("\\", "/"));
+            newImageEntity.setName(fileName);
             newImageEntity.setSize(fileSizeInMegabytes);
+            newImageEntity.setParentPath(path);
             imageRepository.save(newImageEntity);
-            return file.getOriginalFilename();
+            return loadAllFromDbByFolder(path);
         } catch (IOException exception) {
             throw new RuntimeException("Failed to store file.", exception);
         }
@@ -183,7 +187,12 @@ public class ImageStorageServiceImpl implements StorageService {
     }
 
     public String[] getParentPath(String fullPath) {
-        int lastIndex = fullPath.lastIndexOf("\\");
+        int lastIndex = 0;
+        if (fullPath.contains("/")) {
+            lastIndex = fullPath.lastIndexOf("/");
+        } else {
+            lastIndex = fullPath.lastIndexOf("\\");
+        }
         if (lastIndex != -1) {
             String folderName = fullPath.substring(lastIndex + 1, fullPath.length());
             String parenPath = fullPath.substring(0, lastIndex);
@@ -195,7 +204,11 @@ public class ImageStorageServiceImpl implements StorageService {
     @Override
     public void createSubFolder(String parentPath, String folderName) {
         try {
-            String newPathFolder = parentPath.replace("\\", "/").concat("/".concat(folderName));
+            String formatFolderName = folderName;
+            if(folderName.contains(" ")) {
+                formatFolderName = folderName.replace(" ", "_");
+            }
+            String newPathFolder = parentPath.replace("\\", "/").concat("/".concat(formatFolderName));
 
             Path path = Paths.get(newPathFolder);
 
@@ -206,5 +219,67 @@ public class ImageStorageServiceImpl implements StorageService {
         } catch (IOException e) {
             System.err.println("Failed to create directory!" + e.getMessage());
         }
+    }
+
+    @Override
+    public void editImg(String imgName, Long imgId, String imgPath) {
+        String parentPath = getParentPath(imgPath)[1];
+        Path originFile = Paths.get(imgPath);
+        Path newFile = Paths.get(parentPath.concat("/".concat(imgName)));
+        try {
+            //update img local
+            Files.move(originFile, newFile, StandardCopyOption.REPLACE_EXISTING);
+            //update img db
+            ImageEntity imageEntity = findByIdFromDb(imgId);
+            imageEntity.setUrl(newFile.toString());
+            imageRepository.save(imageEntity);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public List<ImageDTO> loadAllFromDbByFolder(String path) {
+        return imageRepository.findAllByParentPath(path.replace("\\", "/")).stream()
+                .map(i -> mapper.map(i, ImageDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ImageDTO deleteImg(Long id, String path) {
+        Path originFile = Paths.get(path);
+        try {
+            Files.delete(originFile);
+            Optional<ImageEntity> image = imageRepository.findById(id);
+            if (image.isPresent()) {
+                imageRepository.delete(image.get());
+            }
+            return mapper.map(image, ImageDTO.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public ImageDTO moveImg(Long id, String oldPath, String newPath) {
+        String fileName = getParentPath(oldPath)[0];
+        Path destinationFilePath = Paths.get(newPath).resolve(Paths.get(fileName)).normalize();
+        try {
+            Files.move(Paths.get(oldPath).normalize(), destinationFilePath);
+            Optional<ImageEntity> image = imageRepository.findById(id);
+            if (image.isPresent()) {
+                image.get().setParentPath(newPath.replace("\\", "/"));
+                image.get().setUrl(destinationFilePath.toString().replace("\\", "/"));
+                return mapper.map(imageRepository.save(image.get()), ImageDTO.class);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Long countFileNameDuplicate(String fileName, String parentPath) {
+        return imageRepository.countAllByNameEqualsAndParentPathEquals(fileName, parentPath);
     }
 }

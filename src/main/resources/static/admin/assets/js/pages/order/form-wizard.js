@@ -1,10 +1,10 @@
 $(function () {
     "use strict";
 
-    const tab1 = document.querySelector('#myTab #cus-tab')
-    const tab2 = document.querySelector('#myTab #address-tab')
-    const tab3 = document.querySelector('#myTab #detail-tab')
-    const tab4 = document.querySelector('#myTab #total-tab')
+    const tab1 = document.querySelector('#myTab #cus-tab');
+    const tab2 = document.querySelector('#myTab #address-tab');
+    const tab3 = document.querySelector('#myTab #detail-tab');
+    const tab4 = document.querySelector('#myTab #total-tab');
 
     var step = 1;
 
@@ -12,17 +12,21 @@ $(function () {
         let feeShip = Number($('#feeShip').val());
         let totalCart = 0;
         $('#table-detail-order tbody tr').each(function (index) {
-            totalCart += Number($(this).find('.product-total').val())
+            totalCart += Number($(this).find('.product-total').val());
         })
         $('#totalCart').val(totalCart);
-        $('#totalPriceOrder').val(totalCart + Number(feeShip))
+        $('#totalPriceOrder').val(totalCart + Number(feeShip));
 
         $('#total-cart').text(formatToCurrency(totalCart) + ' đ');
         $('#total-price-order').text(formatToCurrency($('#totalPriceOrder').val()) + ' đ');
     }
 
     $('#btn-next').on('click', function () {
-        if (step == 1 && $('#customerForm').valid()) {
+        if (step == 1) {
+            if (!$('#customerForm').valid()) {
+                alert('Vui lòng chọn thông tin khách hàng');
+                return;
+            }
             step = 2;
             let userId = $("#customerId").val();
             renderAddressesByUserId(userId);
@@ -32,9 +36,13 @@ $(function () {
             return;
         }
         if (step == 2) {
-            step = 3
-            var thirdTab = new bootstrap.Tab(tab3)
-            thirdTab.show()
+            if (!checkAddressChecked()) {
+                alert('Vui lòng chọn địa chỉ giao hàng');
+                return;
+            }
+            step = 3;
+            var thirdTab = new bootstrap.Tab(tab3);
+            thirdTab.show();
             $('#btn-next').css('display', 'none');
             $('#btn-save').css('display', 'block');
             return;
@@ -42,32 +50,26 @@ $(function () {
     })
 
     function checkAddressChecked() {
-        var existAddressId = $('#checkedAddress').val();
-        if (existAddressId != 0) {
-            $('.radio-address').each(function (index) {
-                console.log($(this).val())
-                if($(this).val() == existAddressId) {
-                    $(this).prop('checked', true);
-                    return false;
-                }
-            })
-        }
+        return $('input[type=radio]:checked').length > 0
     }
 
     $('#btn-back').on('click', function () {
         if (step == 3) {
             step = 2;
-            var secondTab = new bootstrap.Tab(tab2)
-            secondTab.show()
+            var secondTab = new bootstrap.Tab(tab2);
+            secondTab.show();
             $('#btn-next').css('display', 'block');
             $('#btn-save').css('display', 'none');
             return;
         }
         if (step == 2) {
             step = 1;
-            var firstTab = new bootstrap.Tab(tab1)
-            firstTab.show()
+            var firstTab = new bootstrap.Tab(tab1);
+            firstTab.show();
             return;
+        }
+        if (step == 1) {
+            window.location.pathname = '/admin/order';
         }
     })
 
@@ -88,7 +90,7 @@ $(function () {
     })
 
     $('#customerId').on('change', function () {
-        renderInfoUserByUserId($(this).val())
+        renderInfoUserByUserId($(this).val());
     })
 
     $('#productId').on('change', function () {
@@ -124,8 +126,7 @@ $(function () {
                 var existAddressId = $('#checkedAddress').val();
                 if (existAddressId != 0) {
                     $('.radio-address').each(function (index) {
-                        console.log($(this).val())
-                        if($(this).val() == existAddressId) {
+                        if ($(this).val() == existAddressId) {
                             $(this).prop('checked', true);
                             return false;
                         }

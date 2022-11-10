@@ -7,8 +7,10 @@
 </head>
 <body>
 <th:block layout:fragment="menu-folder">
-    <li th:each="folder : ${folders}">
-        [[${folder.name}]]
+    <li data-jstree='{ "type" : "link" }' th:each="folder : ${folders}" onclick="showActionFolder()">
+        <a th:data-path="${folder.path}" onclick="getImgs(this)">
+            [[${folder.name}]]
+        </a>
         <ul th:if="${!#lists.isEmpty(folder.children)}">
             <th:block
                     layout:insert="admin/file_manager/folder::menu-folder"

@@ -1,6 +1,5 @@
 package com.webecommerce.springboot.controller.admin;
 
-import com.webecommerce.springboot.dto.CategoryDTO;
 import com.webecommerce.springboot.dto.TypeProductDTO;
 import com.webecommerce.springboot.service.AttributeService;
 import com.webecommerce.springboot.service.TypeProductService;

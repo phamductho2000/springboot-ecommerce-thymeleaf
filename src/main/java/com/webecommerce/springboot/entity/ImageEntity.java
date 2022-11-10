@@ -22,6 +22,9 @@ public class ImageEntity {
 
     private double size;
 
+    @Column(name = "parent_path")
+    private String parentPath;
+
     @ManyToMany(mappedBy = "images")
     List<ProductEntity> productEntities;
 

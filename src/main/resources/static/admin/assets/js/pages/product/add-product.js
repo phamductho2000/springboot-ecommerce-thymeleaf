@@ -142,32 +142,32 @@ $(document).ready(function () {
     // })
 
     $('#show-upload-images').click(function () {
-        $('#body-modal-file-manager').load("/admin/upload/test", function() {
+        $('#body-modal-file-manager').load("/admin/file-manager/home", function () {
             var myModal = new bootstrap.Modal(document.getElementById('modal-show-upload-images'));
             myModal.show();
         })
     })
 
     $('#add-image').click(function () {
-        $('.item-image').each(function (index, item) {
-            if ($(item).hasClass('border border-primary')) {
+        $('.container-img').each(function (index) {
+            if ($(this).hasClass('active-img')) {
                 let count = $('#countImg').val();
                 count++;
                 $('#countImg').val(count);
                 $('#render-upload-image').append(
                     `<div class='img-container'>
-                        <img src='${$(item).find('img').attr('src')}'
+                        <img src='${$(this).find('img').attr('src')}'
                             width='150' height='150' class='hover-image img-thumbnail me-2' alt='...'>
                              <div class='hover-middle'>
                                 <button type="button" class='btn btn-danger btn-remove-img'>Xóa</button>
                              </div>
-                        <input type='hidden' name='images[${count}].id' value='${$(item).find('input').val()}'>
+                        <input type='hidden' name='images[${count}].id' value='${$(this).find('input').val()}'>
                     </div>`
                 )
-                alert("Thêm thành công");
             }
         })
-        // $.getScript('/admin/assets/js/pages/product/add-product.js')
+        var myModal = new bootstrap.Modal(document.getElementById('modal-show-upload-images'));
+        myModal.hide();
     })
 
     $(document).on('change', '#select-categories', function () {

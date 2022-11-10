@@ -29,9 +29,8 @@
         /* The Modal (background) */
         .modal1 {
             display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
-            padding-top: 100px; /* Location of the box */
+            position: absolute; /* Stay in place */
+            z-index: 10; /* Sit on top */
             left: 0;
             top: 0;
             width: 100%; /* Full width */
@@ -78,21 +77,32 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body p-0">
-                <div class="d-flex justify-content-between">
+                <div class="d-flex">
                     <div>
-                        <label for="input-upload-file" class="list-group-item border-0">
-                            <i class="mdi mdi-upload font-18 align-middle me-2"></i> Choose
-                            File</label>
-                        <input class="form-control" name="file" type="file" id="input-upload-file"
-                               hidden="true">
+                        <label role="button" for="input-upload-file" class="list-group-item border-0">
+                            <i class="mdi mdi-upload font-18 align-middle me-2"></i>Tải lên</label>
+                        <input class="form-control" name="file" type="file" id="input-upload-file" hidden="true">
                     </div>
-                    <a href="#" class="list-group-item border-0"><i
-                            class="mdi mdi-upload font-18 align-middle me-2"></i>Tải lên</a>
-                    <a href="#" class="list-group-item border-0" id="create-sub-folder"><i
-                            class="mdi mdi-folder-plus-outline font-18 align-middle me-2"></i>Tạo thư mục
-                        con</a>
-                    <a href="#" class="list-group-item border-0"><i
-                            class="mdi mdi-delete font-18 align-middle me-2"></i>Xóa</a>
+                    <div id="action-folder" style="display: none">
+                        <a role="button" class="list-group-item border-0" id="create-sub-folder">
+                            <i class="mdi mdi-folder-plus-outline font-18 align-middle me-2">
+                            </i>Tạo thư mục con
+                        </a>
+                    </div>
+                    <div id="action-img" style="display: none">
+                        <a role="button" class="list-group-item border-0 pointer">
+                            <i class="mdi mdi-file-eye font-18 align-middle me-2"></i>Xem
+                        </a>
+                        <a role="button" class="list-group-item border-0" id="edit-name-img">
+                            <i class="mdi mdi-file-edit font-18 align-middle me-2"></i>Đổi tên
+                        </a>
+                        <a role="button" class="list-group-item border-0" id="move-img" onclick="showModalMove()">
+                            <i class="mdi mdi-file-move font-18 align-middle me-2"></i>Di chuyển
+                        </a>
+                        <a role="button" class="list-group-item border-0" id="delete-img">
+                            <i class="mdi mdi-delete font-18 align-middle me-2"></i>Xóa
+                        </a>
+                    </div>
                 </div>
                 <div style="border-top: 1px solid #eeeeee;">
                     <!-- Left sidebar -->
@@ -107,7 +117,6 @@
                     <!-- End Left sidebar -->
 
                     <div class="page-aside-right" style="height:350px; overflow-x: hidden; overflow-y: scroll">
-
                         <div class="d-lg-flex justify-content-between align-items-center">
                             <div class="app-search">
                                 <form>
@@ -128,22 +137,26 @@
                             </div>
                         </div>
 
-                        <div class="mt-3">
-
+                        <div class="mt-3 position-relative">
                             <div class="row mx-n1 g-0 modal-dialog-scrollable">
-
-                                <div class="card me-2" style="width: 11rem;" th:each="image : ${listImages}">
-                                    <img th:src="@{${'/uploads/'+image.url}}"
-                                         class="card-img-top" alt="...">
+                                <div id="loadingImgs" class="position-fixed"
+                                     style="display: none; top: 50%; left: 57%; z-index: 99;">
+                                    <div class="spinner-border text-info" role="status"></div>
+                                </div>
+                                <!--                                <div id="container-imgs">-->
+                                <div class="card me-2 container-img" style="width: 11rem;"
+                                     th:each="image : ${listImages}"
+                                     onclick="showActionImg(this)" th:data-name-img="${image.name}"
+                                     th:data-img-id="${image.id}" th:data-img-path="${image.url}">
+                                    <img th:src="@{'/'+${image.url}}" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <p class="card-text" th:text="${image.name}">file name</p>
                                         <p class="card-text"
                                            th:text="${#numbers.formatDecimal(image.size, 1, 2, 'POINT') + ' KB'}">
-                                            size
-                                            image</p>
+                                        </p>
                                     </div>
                                 </div>
-
+                                <!--                                </div>-->
                             </div> <!-- end row-->
                         </div> <!-- end .mt-3-->
                     </div>
@@ -153,61 +166,152 @@
             <!-- end card-body -->
             <div class="clearfix"></div>
         </div> <!-- end card-box -->
-    </div><!-- End row -->
-
-    <div id="myModal" class="modal1">
-
-        <!-- Modal content -->
-        <div class="modal-content1">
-            <span class="close">&times;</span>
-            <p>Some text in the Modal..</p>
+        <div id="myModal" class="modal1">
+            <div class="modal-dialog">
+                <div class="modal-content" style="width: 350px">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="title-modal">Thêm mới</h5>
+                        <button type="button" class="btn-close" onclick="closeModal()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="input-value" class="form-label" id="label-input">Tên thư mục mới</label>
+                        <input type="text" id="input-value" class="form-control">
+                        <input type="text" id="input-ele-id" class="form-control" hidden>
+                        <input type="text" id="input-ele-path" class="form-control" hidden>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-light btn-sm" onclick="closeModal()">Hủy</a>
+                        <button type="button" id="btn-save" class="btn btn-primary btn-sm">Lưu</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
         </div>
 
-    </div>
+        <!--        modal delete-->
+        <div id="modal-delete" class="modal1">
+            <div class="modal-dialog">
+                <div class="modal-content" style="width: 350px">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="title-modal">Thông tin</h5>
+                        <button type="button" class="btn-close" onclick="closeModalDelete()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="content">Bạn có chắc chắn muốn xóa tập tin?</p>
+                        <input type="text" id="input-ele-dele-id" class="form-control" hidden>
+                        <input type="text" id="input-ele-dele-path" class="form-control" hidden>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-light btn-sm" onclick="closeModalDelete()">Hủy</a>
+                        <button type="button" id="btn-delete" class="btn btn-primary btn-sm" onclick="deleteImg()">Xóa
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+
+        <!--        modal move-->
+        <div id="modal-move" class="modal1">
+            <div class="modal-dialog">
+                <div class="modal-content" style="width: 350px">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="title-modal">Di chuyển tập tin đến...</h5>
+                        <button type="button" class="btn-close" onclick="closeModalMove()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="container-folder-tree">
+                        </div>
+                        <input type="text" id="input-ele-move-id" class="form-control" hidden>
+                        <input type="text" id="input-ele-path" class="form-control" hidden>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-light btn-sm" onclick="closeModalMove()">Hủy</a>
+                        <button type="button" id="btn-move-file" class="btn btn-primary btn-sm" onclick="moveImg()">Di
+                            chuyển
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+    </div><!-- End row -->
 
     <script type="text/javascript" th:src="@{/admin/assets/js/vendor.min.js}"></script>
     <script type="text/javascript" th:src="@{/admin/assets/js/app.min.js}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
             integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script type="text/javascript" th:src="@{/admin/assets/js/jquery.validate.min.js}"></script>
-    <script type="text/javascript" th:src="@{/admin/assets/js/jquery.toast.min.js}"></script>
-    <script type="text/javascript" th:src="@{/admin/assets/js/custom.js}"></script>
     <script type="text/javascript" th:src="@{/admin/assets/js/vendor/jstree/jstree.min.js}"></script>
     <script type="text/javascript" th:src="@{/admin/assets/js/pages/file_manager/file.manager.js}"></script>
+    <script type="text/javascript" th:src="@{/admin/assets/js/pages/file_manager/index.js}"></script>
     <script th:inline="javascript">
-        /*<![CDATA[*/
         $(document).ready(function () {
-            $('#input-upload-file').change(function (e) {
-                var data = new FormData();
-                data.append('file', e.target.files[0]);
-                $.ajax({
-                    type: "POST",
-                    enctype: 'multipart/form-data',
-                    url: "/admin/upload/test-upload",
-                    data: data,
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    timeout: 600000,
-                    success: function (data) {
-                    },
-                    error: function (e) {
-
-                    }
-                });
-            });
+            "use strict";
+            document.getElementById('j1_1_anchor').click();
         })
-
-        // $('#show-modal-file-manager').on('click', function () {
-        //     var myModal = new bootstrap.Modal(document.getElementById('create-sub-folder'));
-        //     myModal.show();
+        /*<![CDATA[*/
+        // $(document).ready(function () {
+        //     $('#input-upload-file').change(function (e) {
+        //         var data = new FormData();
+        //         data.append('file', e.target.files[0]);
+        //         $.ajax({
+        //             type: "POST",
+        //             enctype: 'multipart/form-data',
+        //             url: "/admin/upload/test-upload",
+        //             data: data,
+        //             processData: false,
+        //             contentType: false,
+        //             cache: false,
+        //             timeout: 600000,
+        //             success: function (data) {
+        //             },
+        //             error: function (e) {
+        //
+        //             }
+        //         });
+        //     });
         // })
-
-        $('#create-sub-folder').on('click', function () {
-            $('#myModal').css('display', 'block');
-        })
-
+        //
+        // $('#create-sub-folder').on('click', function () {
+        //     $('#myModal').css('display', 'flex');
+        //     $('#myModal').css('justify-content', 'center');
+        //     $('#myModal').css('align-items', 'center');
+        // })
+        //
+        // function closeModal() {
+        //     $('#myModal').css('display', 'none');
+        // }
+        //
+        // function getParentPath() {
+        //     let path = '';
+        //     $('.jstree-anchor').each(function (i) {
+        //         if ($(this).hasClass('jstree-clicked')) {
+        //             path = $(this).attr('data-path');
+        //             return;
+        //         }
+        //     })
+        //     return path;
+        // }
+        //
+        // $('#file-manager-save').on('click', function () {
+        //     var value = $('#input-value').val();
+        //     var parentPath = getParentPath();
+        //     $.ajax({
+        //         type: "POST",
+        //         url: "/admin/upload/create-sub-folder",
+        //         data: {
+        //             'parentPath': parentPath !== '' ? parentPath : 'uploads',
+        //             'folderName': value
+        //         },
+        //         success: function (response) {
+        //             closeModal();
+        //             $('.page-aside-left').replaceWith($(response).find('.page-aside-left'));
+        //             $.getScript('/admin/assets/js/vendor/jstree/jstree.min.js');
+        //             $.getScript('/admin/assets/js/pages/file_manager/file.manager.js');
+        //         },
+        //         error: function (e) {
+        //
+        //         }
+        //     });
+        // })
 
         /*]]>*/
     </script>

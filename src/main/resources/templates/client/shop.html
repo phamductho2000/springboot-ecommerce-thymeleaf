@@ -195,7 +195,7 @@
                                             <div class="product-image">
                                                 <input class="product-id" type="hidden" th:value="${product.id}">
                                                 <img th:if="${product.images.size() > 0}"
-                                                     th:src="@{${product.images[0].url}}"
+                                                     th:src="@{'/'+${product.images[0].url}}"
                                                      alt="#"
                                                 />
                                                 <div th:if="${product.status == 1}" class="button btn-add-to-cart">

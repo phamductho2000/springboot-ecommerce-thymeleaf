@@ -3,7 +3,6 @@ package com.webecommerce.springboot.configuration;
 import com.webecommerce.springboot.security.CustomAccessDeniedHandler;
 import com.webecommerce.springboot.security.oauth.CustomOAuth2UserService;
 import com.webecommerce.springboot.security.oauth.OAuth2LoginSuccessHandler;
-import com.webecommerce.springboot.service.RoleService;
 import com.webecommerce.springboot.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,14 +17,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
@@ -62,6 +53,7 @@ public class WebSecurityConfiguration {
 
                     .and()
                     .logout()
+                    .logoutUrl("/admin/admin_logout")
                     .logoutSuccessUrl("/login")
                     .deleteCookies("JSESSIONID")
 

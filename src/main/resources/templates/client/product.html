@@ -73,7 +73,7 @@
                         <div class="d-flex">
                             <ul id="thumbnails" class="thumbnails">
                                 <li class="thumbnail" th:each="img : ${product.images}">
-                                    <img th:src="@{${img.url}}" alt="">
+                                    <img th:src="@{'/'+${img.url}}" alt="">
                                 </li>
                             </ul>
 
@@ -81,7 +81,7 @@
                                 <div class="splide__track">
                                     <ul class="splide__list">
                                         <li class="splide__slide" th:each="img : ${product.images}">
-                                            <img th:src="@{${img.url}}" alt="">
+                                            <img th:src="@{'/'+${img.url}}" alt="">
                                         </li>
                                     </ul>
                                 </div>

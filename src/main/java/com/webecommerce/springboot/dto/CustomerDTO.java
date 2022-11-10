@@ -1,7 +1,5 @@
 package com.webecommerce.springboot.dto;
 
-import com.webecommerce.springboot.entity.DeliveryAddressEntity;
-import com.webecommerce.springboot.entity.OrderEntity;
 import lombok.Getter;
 import lombok.Setter;
 

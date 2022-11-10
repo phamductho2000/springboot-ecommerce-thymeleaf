@@ -26,30 +26,30 @@
 <div class="content" layout:fragment="content">
 
     <!-- start page title -->
-    <div class="row">
-        <div class="col-12">
-            <div class="page-title-box">
-                <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
-                        <li class="breadcrumb-item active">Products</li>
-                    </ol>
-                </div>
-                <h4 class="page-title">Products</h4>
-            </div>
-        </div>
-    </div>
+<!--    <div class="row">-->
+<!--        <div class="col-12">-->
+<!--            <div class="page-title-box">-->
+<!--                <div class="page-title-right">-->
+<!--                    <ol class="breadcrumb m-0">-->
+<!--                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>-->
+<!--                        <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>-->
+<!--                        <li class="breadcrumb-item active">Products</li>-->
+<!--                    </ol>-->
+<!--                </div>-->
+<!--                <h4 class="page-title">Products</h4>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
     <!-- end page title -->
 
-    <div class="row">
+    <div class="row" style="margin-top: 30px">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="alert alert-success alert-dismissible bg-success text-white border-0 fade show" role="alert" th:if="${message}">
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
-                        <strong>Success - </strong> [[${message}]]
-                    </div>
+                    <!--                    <div class="alert alert-success alert-dismissible bg-success text-white border-0 fade show" role="alert" th:if="${message}">-->
+                    <!--                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>-->
+                    <!--                        <strong>Success - </strong> [[${message}]]-->
+                    <!--                    </div>-->
                     <div class="row mb-2">
                         <div class="col-sm-5">
                             <a th:href="@{/admin/order/add}" class="btn btn-danger mb-2"><i
@@ -80,7 +80,7 @@
                                 <th>Trạng thái</th>
                                 <th>Tổng</th>
                                 <th>Ngày đặt hàng</th>
-                                <th style="width: 85px;">Action</th>
+                                <th style="width: 85px;">Thao tác</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -100,13 +100,12 @@
                                     Khách hàng
                                 </td>
                                 <td>
-                                    <span th:if="${order.status == 0}" class="badge bg-danger">Đã hủy</span>
                                     <span th:if="${order.status == 1}" class="badge bg-dark">Chờ xử lý</span>
                                     <span th:if="${order.status == 2}" class="badge bg-info">Đã tiếp nhận</span>
                                     <span th:if="${order.status == 3}" class="badge bg-warning">Đang giao</span>
                                     <span th:if="${order.status == 4}" class="badge bg-primary">Đã giao</span>
                                     <span th:if="${order.status == 5}" class="badge bg-success">Hoàn tất</span>
-
+                                    <span th:if="${order.status == 6}" class="badge bg-danger">Đã hủy</span>
                                 </td>
                                 <td th:text="${#numbers.formatCurrency(order.total)}">
                                     Tổng
@@ -115,11 +114,17 @@
                                     Created at
                                 </td>
                                 <td class="table-action">
-                                    <a th:href="@{'/admin/order/view/'+${order.id}}" class="action-icon"> <i class="mdi mdi-eye"></i></a>
-                                    <a th:if="${order.status != 5}"  th:href="@{'/admin/order/edit/'+${order.id}}" class="action-icon"> <i
-                                            class="mdi mdi-square-edit-outline"></i></a>
-                                    <a href="javascript:void(0);" class="action-icon"> <i
-                                            class="mdi mdi-delete"></i></a>
+                                    <a th:href="@{'/admin/order/view/'+${order.id}}" class="action-icon"> <i
+                                            class="mdi mdi-eye"></i></a>
+                                    <a th:if="${order.status < 3}" th:href="@{'/admin/order/edit/'+${order.id}}"
+                                       class="action-icon"><i class="mdi mdi-square-edit-outline"></i>
+                                    </a>
+                                    <a th:if="${order.status > 3}" class="action-icon" style="color: #dadada !important;">
+                                        <i class="mdi mdi-square-edit-outline"></i>
+                                    </a>
+                                    <a href="javascript:void(0);" class="action-icon">
+                                        <i class="mdi mdi-close-circle"></i>
+                                    </a>
                                 </td>
                             </tr>
 
@@ -145,6 +150,26 @@
     <!-- demo app -->
     <script type="text/javascript" th:src="@{/admin/assets/js/pages/order/orders.js}"></script>
     <!-- end demo js-->
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        $(document).ready(function () {
+            "use strict";
+            let searchParams = new URLSearchParams(window.location.search)
+            if (searchParams.has('status') && searchParams.get('status') === 'save') {
+                $.toast({
+                    heading: 'Thành công',
+                    text: 'Thêm mới hóa đơn thành công',
+                    icon: 'info',
+                    loader: true,
+                    loaderBg: 'rgba(0,0,0,0.2)',
+                    position: 'mid-center'
+                })
+                window.history.replaceState('', '', '/admin/order');
+            }
+        })
+        /*]]>*/
+    </script>
 </th:block>
 </body>
 </html>

@@ -6,11 +6,10 @@ import com.webecommerce.springboot.entity.ImageEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 
 public interface StorageService {
-    String storeFile(MultipartFile file);
+    List<ImageDTO> storeFile(MultipartFile file, String path);
 
     List<ImageDTO> loadAll(); //load all file inside a
 
@@ -25,4 +24,12 @@ public interface StorageService {
     List<UploadFoldersDTO> loadAllFolders() throws IOException;
 
     void createSubFolder(String parentPath, String folderName);
+
+    void editImg(String imgName, Long imgId, String imgPath);
+
+    List<ImageDTO> loadAllFromDbByFolder(String path);
+
+    ImageDTO deleteImg(Long id, String path);
+
+    ImageDTO moveImg(Long id, String oldPath, String newPath);
 }

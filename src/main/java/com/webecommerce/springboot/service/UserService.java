@@ -6,7 +6,6 @@ import com.webecommerce.springboot.dto.UserDTO;
 import com.webecommerce.springboot.entity.AuthenticationProvider;
 import com.webecommerce.springboot.entity.UserEntity;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 

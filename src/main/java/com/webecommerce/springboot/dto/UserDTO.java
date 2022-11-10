@@ -1,6 +1,5 @@
 package com.webecommerce.springboot.dto;
 
-import com.webecommerce.springboot.entity.RoleEntity;
 import lombok.Getter;
 import lombok.Setter;
 
