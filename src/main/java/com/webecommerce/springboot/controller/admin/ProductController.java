@@ -1,11 +1,9 @@
 package com.webecommerce.springboot.controller.admin;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.webecommerce.springboot.dto.CategoryDTO;
 import com.webecommerce.springboot.dto.ProductDTO;
-import com.webecommerce.springboot.service.AttributeService;
-import com.webecommerce.springboot.service.CategoryService;
-import com.webecommerce.springboot.service.ProductService;
-import com.webecommerce.springboot.service.TypeProductService;
+import com.webecommerce.springboot.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,8 +28,12 @@ public class ProductController {
     @Autowired
     TypeProductService typeProductService;
 
+    @Autowired
+    SavedIdService savedIdService;
+
     @GetMapping("")
     public String indexPage(Model model) {
+        savedIdService.generateNewId("OD");
         model.addAttribute("listProducts", productService.findAllProducts());
         return "admin/product/index";
     }
@@ -46,14 +48,14 @@ public class ProductController {
     }
 
     @PostMapping("/add")
-    public String add(ProductDTO product, RedirectAttributes atts) {
+    public String add(ProductDTO product, RedirectAttributes atts) throws JsonProcessingException {
         productService.save(product);
         atts.addFlashAttribute("message", "Thêm mới sản phẩm thành công");
         return "redirect:/admin/product";
     }
 
     @GetMapping("/edit/{id}")
-    public String showEditPage(@PathVariable Long id, Model model) {
+    public String showEditPage(@PathVariable String id, Model model) throws JsonProcessingException {
         model.addAttribute("product", productService.findById(id));
         List<CategoryDTO> listCate  = categoryService.loadCategory(categoryService.findAll(), 0L, 0, "");
         model.addAttribute("listAttributes", attributeService.findAll());
@@ -63,14 +65,14 @@ public class ProductController {
     }
 
     @PostMapping("/update")
-    public String edit(ProductDTO product, RedirectAttributes atts) {
+    public String edit(ProductDTO product, RedirectAttributes atts) throws JsonProcessingException {
         productService.save(product);
         atts.addFlashAttribute("message", "Cập nhật sản phẩm thành công");
         return "redirect:/admin/product";
     }
 
     @GetMapping("/remove/{id}")
-    public String remove(@PathVariable Long id, RedirectAttributes atts) {
+    public String remove(@PathVariable String id, RedirectAttributes atts) {
         productService.remove(id);
         atts.addFlashAttribute("message", "Xóa sản phẩm thành công");
         return "redirect:/admin/product";
@@ -84,7 +86,25 @@ public class ProductController {
 
     @GetMapping("/api/getInfo/{id}")
     @ResponseBody
-    public ProductDTO getInfo(@PathVariable Long id) {
+    public ProductDTO getInfo(@PathVariable String id) throws JsonProcessingException {
         return productService.findById(id);
+    }
+
+    @GetMapping("/get-table-products")
+    public String tableProductsPage(Model model) {
+        model.addAttribute("listProducts", productService.findAllProducts());
+        return "admin/product/table-product";
+    }
+
+    @PostMapping("/api/get-all-by-ids")
+    @ResponseBody
+    public List<ProductDTO> getAllByIds(@RequestBody List<String> ids) {
+        return productService.findAllProductsByIds(ids);
+    }
+
+    @PostMapping("/api/get-all-by-slug-seo")
+    @ResponseBody
+    public List<ProductDTO> getAllBySlugSeo(@RequestBody String slugSeo) {
+        return productService.findAllBySlugSeo(slugSeo);
     }
 }

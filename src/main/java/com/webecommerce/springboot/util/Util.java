@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Util {
-
     public static Map<String, String> getSearchParams(Map<String, String> params) {
         return params.entrySet().stream()
                 .filter(p -> !p.getKey().equalsIgnoreCase("page")

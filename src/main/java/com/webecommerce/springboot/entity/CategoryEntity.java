@@ -5,10 +5,7 @@ import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -17,7 +14,10 @@ import java.util.List;
 @Table(name = "tbl_category")
 @SQLDelete(sql = "UPDATE tbl_category SET deleted = true WHERE id=?")
 @Where(clause = "deleted = false")
-public class CategoryEntity extends BaseEntity  {
+public class CategoryEntity extends BaseEntity {
+
+    @Id
+    private Long id;
 
     private String name;
 

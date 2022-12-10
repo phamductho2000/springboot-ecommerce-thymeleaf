@@ -9,6 +9,8 @@ import java.util.List;
 @Setter
 public class CustomerDTO extends AbstractDTO {
 
+    private String id;
+
     private String name;
 
     private String email;

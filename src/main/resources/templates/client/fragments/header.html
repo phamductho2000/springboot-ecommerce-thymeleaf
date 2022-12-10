@@ -134,11 +134,11 @@
                                     </div>
                                     <ul class="shopping-list" th:with="cart=${session.CART}">
                                         <li th:each="item : ${cart}">
-                                            <p
-                                                    th:onclick="'removeItemFromCart('+${item.value.product.id}+')'"
-                                                    href="javascript:void(0)"
-                                                    class="remove"
-                                                    title="Remove this item">
+                                            <p th:data-pro-id="${item.value.product.id}"
+                                               onclick="removeItemFromCart(this.getAttribute('data-pro-id'))"
+                                               href="javascript:void(0)"
+                                               class="remove"
+                                               title="Remove this item">
                                                 <i class="lni lni-close"></i>
                                             </p>
                                             <div class="cart-img-head">

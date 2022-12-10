@@ -19,9 +19,9 @@ public interface UserService {
 
     List<UserDTO> findAllAccount();
 
-    UserDTO findById(Long id);
+    UserDTO findById(String id);
 
-    UserEntity findEntityById(Long id);
+    UserEntity findEntityById(String id);
 
     UserDTO findOneByUsernameAndStatus(String username, boolean status);
 
@@ -37,5 +37,5 @@ public interface UserService {
 
     void registerUser(String user, String pass, String email);
 
-    void remove(Long id);
+    void remove(String id);
 }

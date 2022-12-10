@@ -1,6 +1,8 @@
 $(document).ready(function () {
     "use strict";
 
+    var idGroupProducts = [];
+
     // renderAllTypeProduct();
 
     var categoryStore = [];
@@ -147,6 +149,7 @@ $(document).ready(function () {
             myModal.show();
         })
     })
+
 
     $('#add-image').click(function () {
         $('.container-img').each(function (index) {
@@ -324,4 +327,121 @@ $(document).ready(function () {
         })
     }
 
+    $('#show-table-group').click(function () {
+        $('#body-modal-group-products').load("/admin/product/get-table-products", function () {
+            showModalGroupProducts();
+        })
+    })
+
+    $('#add-products').click(function () {
+        const ids = getGroupIdsSelected();
+        var myJsonString = JSON.stringify(ids);
+        $.ajax({
+            url: '/admin/product/api/get-all-by-ids',
+            type: 'POST',
+            data: myJsonString,
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+                renderGroupProductSelected(response);
+                hideModalGroupProducts();
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
+    })
+
+    function getGroupIdsSelected() {
+        let ids = [];
+        $('input[name="group-products-check"]').each(function (i, item) {
+            if ($(item).is(':checked')) {
+                ids.push($(item).attr('data-product-id'));
+            }
+        })
+        return ids;
+    }
+
+    function renderGroupProductSelected(products) {
+        let ids = [];
+        products.forEach(product => ids.push(product.id));
+        if(checkGroupProductSelectedExist(ids)) {
+            idGroupProducts = idGroupProducts.concat(ids);
+            products.forEach(function (product, index) {
+                var column1 = `<td><img src="/${product.images[0].url}" alt="contact-img" title="contact-img" class="rounded me-3" height="150"/></td>`
+                var renderAttrs =
+                    `
+                    <p>${product.name}</p>
+                    <p>${product.price}</p>
+                `;
+                if (product.attributes.length > 4) {
+                    let li = [];
+                    product.attributes.slice(0, 4).forEach(function (attr) {
+                        li.push(`<li>${attr.attrValue.value}</li>`);
+                    })
+                    li.push('<li>...</li>');
+                    renderAttrs = renderAttrs + '<ul>' + li.join('') + '</ul>';
+                } else {
+                    let li = [];
+                    product.attributes.forEach(function (attr) {
+                        li.push(`<li>${attr.attrValue.value}</li>`);
+                    })
+                    renderAttrs = renderAttrs + '<ul>' + li.join('') + '</ul>';
+                }
+                var column2 = '<td>' + renderAttrs + '</td>';
+                var column3 = `<td><a href="javascript:void(0);" class="action-icon">
+                                <i class="mdi mdi-delete" onclick="removeGroupProduct(${product.id})"></i>
+                            </a></td>`
+                $('#content-group-products tbody').append(`<tr data-row-id="${product.id}">${column1 + column2 + column3}</tr>`);
+                $('#input-group-ids-submit').append(`<input class="input-group-ids" type='hidden' name='groupProducts[${idGroupProducts.indexOf(product.id)}].id' value='${product.id}'>`)
+            })
+        }
+    }
+
+    window.removeGroupProduct = function (id) {
+        $('#content-group-products tbody tr').each(function () {
+            if ($(this).attr('data-row-id') == id) {
+                $(this).remove();
+            }
+        })
+
+        $('.input-group-ids').each(function () {
+            if ($(this).val() == id) {
+                $(this).remove();
+                idGroupProducts = idGroupProducts.filter(idGroup => idGroup != id);
+            }
+        })
+
+        $('.input-group-ids').each(function (index) {
+            $(this).attr('name', `groupProducts[${index}].id`);
+        })
+    }
+
+    function checkGroupProductSelectedExist(groupIds) {
+        if(idGroupProducts.length === 0) {
+            return true;
+        }
+        return groupIds.every(function (id) {
+            if(idGroupProducts.includes(id)) {
+                alert(`Sản phẩm với id: ${id} đã được chọn. Vui lòng chọn lại`);
+                return false;
+            }
+            return true;
+        })
+    }
+
+    window.renderGroups = function renderGroups(groups) {
+        // $('#countCate').val(cates.length - 1);
+        renderGroupProductSelected(groups);
+    }
+
+    function showModalGroupProducts() {
+        var myModal = new bootstrap.Modal(document.getElementById('modal-show-group-products'));
+        myModal.show();
+    }
+
+    function hideModalGroupProducts() {
+        var myModal = new bootstrap.Modal(document.getElementById('modal-show-group-products'));
+        myModal.hide();
+    }
 })

@@ -1,5 +1,8 @@
 package com.webecommerce.springboot.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webecommerce.springboot.dto.*;
 import com.webecommerce.springboot.entity.AttributeValueEntity;
 import com.webecommerce.springboot.entity.CategoryEntity;
@@ -10,16 +13,16 @@ import com.webecommerce.springboot.service.AttributeValueService;
 import com.webecommerce.springboot.service.CategoryService;
 import com.webecommerce.springboot.service.ProductService;
 import com.webecommerce.springboot.service.StorageService;
+import com.webecommerce.springboot.specification.ProductSpecificationsBuilder;
+import com.webecommerce.springboot.util.Util;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -79,7 +82,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<ProductDTO> findAllProductsByCate(Pageable pageable, String cateSlug) {
-        return convertListToPage(productRepository.findAll().stream()
+        return convertListToPage(productRepository.findAll(pageable).stream()
                 .filter(p -> existsProductByCateSlug(p.getCategories(), cateSlug))
                 .map(p -> {
                     List<AttributeAndValueDTO> attributeAndValueDTOS = getAttrAndValueById(p.getId());
@@ -90,7 +93,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<AttributeAndValueDTO> getAttrAndValueById(Long productId) {
+    public List<AttributeAndValueDTO> getAttrAndValueById(String productId) {
         if (productRepository.getAttrAndValueByProductId(productId).size() > 0) {
             return productRepository.getAttrAndValueByProductId(productId).stream()
                     .map(o -> new AttributeAndValueDTO(new AttributeDTO((Long) o[0], (String) o[1], (String) o[2], null),
@@ -101,7 +104,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO save(ProductDTO productDTO) {
+    public ProductDTO save(ProductDTO productDTO) throws JsonProcessingException {
         ProductEntity newProduct = mapper.map(productDTO, ProductEntity.class);
         if (productDTO.getAttributes() != null) {
             List<AttributeValueEntity> attributeValueEntities =
@@ -122,23 +125,37 @@ public class ProductServiceImpl implements ProductService {
                             .collect(Collectors.toList());
             newProduct.setImages(imageEntities);
         }
-        productRepository.save(newProduct);
+        ProductEntity resultSave = productRepository.save(newProduct);
+        if (!productDTO.getGroupProducts().isEmpty()) {
+            ObjectMapper convertJson = new ObjectMapper();
+            List<String> groupIds = productDTO.getGroupProducts().stream().map(pro -> pro.getId()).collect(Collectors.toList());
+            groupIds.add(resultSave.getId());
+            resultSave.setGroupId(convertJson.writeValueAsString(groupIds));
+            productRepository.save(resultSave);
+            updateGroupId(groupIds);
+        }
         return productDTO;
     }
 
     @Override
-    public ProductDTO findById(Long id) {
+    public ProductDTO findById(String id) throws JsonProcessingException {
         Optional<ProductEntity> foundProduct = productRepository.findById(id);
         if (!foundProduct.isPresent()) {
             return null;
         }
         ProductDTO product = mapper.map(foundProduct.get(), ProductDTO.class);
         product.setAttributes(getAttrAndValueById(id));
+        if (foundProduct.get().getGroupId() != null && !foundProduct.get().getGroupId().isEmpty()) {
+            ObjectMapper convertJson = new ObjectMapper();
+            List<String> groupIds = convertJson.readValue(foundProduct.get().getGroupId(), new TypeReference<List<String>>() {
+            });
+            product.setGroupProducts(findAllProductsByIds(groupIds));
+        }
         return product;
     }
 
     @Override
-    public ProductEntity findEntityById(Long id) {
+    public ProductEntity findEntityById(String id) {
         Optional<ProductEntity> foundProduct = productRepository.findById(id);
         return foundProduct.orElseThrow(() -> new IllegalArgumentException("Not found"));
     }
@@ -148,8 +165,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductDTO> search(Specification<ProductEntity> spec, Pageable pageable, String cateSlug) {
-        return convertListToPage(productRepository.findAll(spec).stream()
+    public Page<ProductDTO> filterProduct(Specification<ProductEntity> spec, Pageable pageable, String cateSlug) {
+        return convertListToPage(productRepository.findAll(spec, pageable).stream()
                 .filter(p -> existsProductByCateSlug(p.getCategories(), cateSlug))
                 .map(p -> {
                     List<AttributeAndValueDTO> attributeAndValueDTOS = getAttrAndValueById(p.getId());
@@ -160,8 +177,69 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void remove(Long id) {
+    public Page<ProductDTO> search(Map<String, String> params, Optional<Integer> page,
+                                   Optional<Integer> limit, Optional<String> sort, String path) {
+        Map<String, String> searchParams = Util.getSearchParams(params);
+        String fieldSort = "name";
+        String valueSort = "ASC";
+        if (sort.isPresent()) {
+            fieldSort = sort.get().split("-")[0];
+            valueSort = sort.get().split("-")[1].toUpperCase();
+        }
+        if (!searchParams.isEmpty()) {
+            ProductSpecificationsBuilder builder = new ProductSpecificationsBuilder();
+            searchParams.entrySet().stream()
+                    .forEach(p -> builder.with(p.getKey(), "=", p.getValue()));
+            Specification<ProductEntity> spec = builder.build();
+            return filterProduct(spec, PageRequest.of(
+                    page.orElse(1) - 1,
+                    limit.orElse(9),
+                    Sort.by(Sort.Direction.valueOf(valueSort), fieldSort)), path
+            );
+        } else {
+            return findAllProductsByCate(
+                    PageRequest.of(page.orElse(1) - 1,
+                            limit.orElse(9),
+                            Sort.by(Sort.Direction.valueOf(valueSort), fieldSort)),
+                    path
+            );
+        }
+    }
+
+    @Override
+    public void remove(String id) {
         productRepository.deleteById(id);
+    }
+
+    @Override
+    public List<ProductDTO> findAllProductsByIds(List<String> ids) {
+        return productRepository.findAllById(ids).stream().map(p -> {
+            List<AttributeAndValueDTO> attributeAndValueDTOS = getAttrAndValueById(p.getId());
+            ProductDTO productDTO = mapper.map(p, ProductDTO.class);
+            productDTO.setAttributes(attributeAndValueDTOS);
+            return productDTO;
+        }).collect(Collectors.toList());
+    }
+
+    public void updateGroupId(List<String> groupIds) {
+        List<ProductEntity> products = productRepository.findAllById(groupIds);
+        products.stream().forEach(pro -> {
+            ObjectMapper convertJson = new ObjectMapper();
+            try {
+                pro.setGroupId(convertJson.writeValueAsString(groupIds));
+                productRepository.save(pro);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    @Override
+    public List<ProductDTO> findAllBySlugSeo(String slug) {
+       return productRepository.findAllBySlugSeo(slug)
+               .stream()
+               .map(p -> mapper.map(p, ProductDTO.class))
+               .collect(Collectors.toList());
     }
 
     public <T> Page<T> convertListToPage(List<T> list, Pageable pageable) {

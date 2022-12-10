@@ -33,81 +33,98 @@
     </div>
     <!-- End Breadcrumbs -->
     <div class="section" style="background-color: #f9f9f9">
-        <div class="container t-card p-3">
-            <h5 class="mt-3 mb-3">Thông tin tài khoản</h5>
-            <div class="row" th:if="${typeUser.equals('oauth2')}">
-                <div class="col-md-6 mt-3 mb-3">
-                    <div class="single-form form-default">
-                        <label class="form-label">Họ và tên</label>
-                        <input type="text" class="form-control" placeholder="Họ và tên"
-                               th:value="${userInfo.name}"
-                               id="customer_name" disabled/>
-                    </div>
-                </div>
-                <div class="col-md-6 mt-3 mb-3">
-                    <div class="single-form form-default">
-                        <label class="form-label">Địa chỉ email</label>
-                        <input class="form-control" type="text" placeholder="Nhập email"
-                               th:value="${userInfo.email}"/>
-                    </div>
-                </div>
-                <div class="col-md-6 mt-3 mb-3">
-                    <div class="single-form form-default">
-                        <label class="form-label">Số điện thoại</label>
-                        <input type="text" class="form-control" placeholder="Nhập số điện thoại"
-                               th:value="${userInfo.phone}"
-                               id="customer_phone"/>
-                    </div>
-                </div>
-                <div class="col-md-6 mt-3 mb-3">
-                    <div class="single-form form-default">
-                        <label class="form-label">Ngày sinh</label>
-                        <input type="text" class="form-control" placeholder="Nhập số điện thoại"
-                               th:value="${userInfo.phone}"
-                               id="customer_birthday"/>
-                    </div>
-                </div>
+        <div class="row">
+            <div class="col-md-3" style="padding-left: 100px">
+                <ul>
+                    <li style="margin: 20px">
+                        <a th:href="@{/tai-khoan/thong-tin-tai-khoan}">Tài khoản</a>
+                    </li>
+                    <li style="margin: 20px">
+                        <a th:href="@{/tai-khoan/thong-tin-lien-he}">Thông tin liên hệ và địa chỉ</a>
+                    </li>
+                    <li style="margin: 20px">
+                        <a th:href="@{/tai-khoan/quan-ly-don-hang}">Đơn hàng</a>
+                    </li>
+                </ul>
             </div>
-            <div th:unless="${typeUser.equals('oauth2')}">
-                <div class="col-md-12">
-                    <div class="single-form form-default">
-                        <label class="form-label">Họ và tên</label>
-                        <div class="col-md-12 form-input form">
-                            <input type="text" class="form-control" placeholder="Họ và tên"
-                                   id="customer_name"/>
+            <div class="col-md-9" style="padding-right: 50px">
+                <div class="container t-card p-3">
+                    <h5 class="mt-3 mb-3">Thông tin tài khoản</h5>
+                    <div class="row" th:if="${typeUser.equals('oauth2')}">
+                        <div class="col-md-6 mt-3 mb-3">
+                            <div class="single-form form-default">
+                                <label class="form-label">Họ và tên</label>
+                                <input type="text" class="form-control" placeholder="Họ và tên"
+                                       th:value="${userInfo.name}"
+                                       id="customer_name" disabled/>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-3 mb-3">
+                            <div class="single-form form-default">
+                                <label class="form-label">Địa chỉ email</label>
+                                <input class="form-control" type="text" placeholder="Nhập email"
+                                       th:value="${userInfo.email}"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-3 mb-3">
+                            <div class="single-form form-default">
+                                <label class="form-label">Số điện thoại</label>
+                                <input type="text" class="form-control" placeholder="Nhập số điện thoại"
+                                       th:value="${userInfo.phone}"
+                                       id="customer_phone"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-3 mb-3">
+                            <div class="single-form form-default">
+                                <label class="form-label">Ngày sinh</label>
+                                <input type="text" class="form-control" placeholder="Nhập số điện thoại"
+                                       th:value="${userInfo.phone}"
+                                       id="customer_birthday"/>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6 mt-3 mb-3">
-                    <div class="single-form form-default">
-                        <label class="form-label">Địa chỉ email</label>
-                        <input class="form-control" type="text" placeholder="Nhập email"/>
+                    <div th:unless="${typeUser.equals('oauth2')}">
+                        <div class="col-md-12">
+                            <div class="single-form form-default">
+                                <label class="form-label">Họ và tên</label>
+                                <div class="col-md-12 form-input form">
+                                    <input type="text" class="form-control" placeholder="Họ và tên"
+                                           id="customer_name"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-3 mb-3">
+                            <div class="single-form form-default">
+                                <label class="form-label">Địa chỉ email</label>
+                                <input class="form-control" type="text" placeholder="Nhập email"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-3 mb-3">
+                            <div class="single-form form-default">
+                                <label class="form-label">Số điện thoại</label>
+                                <input type="text" class="form-control" placeholder="Nhập số điện thoại"
+                                       id="customer_phone"/>
+                            </div>
+                        </div>
+                        <h5 class="mt-3">Đổi mật khẩu</h5>
+                        <div class="col-md-6 mt-3 mb-3">
+                            <div class="single-form form-default">
+                                <label class="form-label">Mật khẩu hiện tại</label>
+                                <input class="form-control" type="text" placeholder="Nhập email"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-3 mb-3">
+                            <div class="single-form form-default">
+                                <label class="form-label">Mật khẩu mới</label>
+                                <input type="text" class="form-control" placeholder="Nhập số điện thoại"
+                                       id="customer_phone"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mt-3 mb-3">
+                        <button class="btn btn-primary mb-3">Lưu thay đổi</button>
                     </div>
                 </div>
-                <div class="col-md-6 mt-3 mb-3">
-                    <div class="single-form form-default">
-                        <label class="form-label">Số điện thoại</label>
-                        <input type="text" class="form-control" placeholder="Nhập số điện thoại"
-                               id="customer_phone"/>
-                    </div>
-                </div>
-                <h5 class="mt-3">Đổi mật khẩu</h5>
-                <div class="col-md-6 mt-3 mb-3">
-                    <div class="single-form form-default">
-                        <label class="form-label">Mật khẩu hiện tại</label>
-                        <input class="form-control" type="text" placeholder="Nhập email"/>
-                    </div>
-                </div>
-                <div class="col-md-6 mt-3 mb-3">
-                    <div class="single-form form-default">
-                        <label class="form-label">Mật khẩu mới</label>
-                        <input type="text" class="form-control" placeholder="Nhập số điện thoại"
-                               id="customer_phone"/>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mt-3 mb-3">
-                <button class="btn btn-primary mb-3">Lưu thay đổi</button>
             </div>
         </div>
     </div>

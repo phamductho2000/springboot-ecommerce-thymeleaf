@@ -1,5 +1,6 @@
 package com.webecommerce.springboot.service.impl;
 
+import com.webecommerce.springboot.AppConstants;
 import com.webecommerce.springboot.dto.CartDTO;
 import com.webecommerce.springboot.dto.DetailOrderDTO;
 import com.webecommerce.springboot.dto.FormAddOrderDTO;
@@ -14,11 +15,23 @@ import com.webecommerce.springboot.service.DeliveryAddressService;
 import com.webecommerce.springboot.service.OrderService;
 import com.webecommerce.springboot.service.ProductService;
 import com.webecommerce.springboot.service.UserService;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -60,6 +73,10 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     ModelMapper mapper;
 
+    private XSSFWorkbook workbook;
+
+    private XSSFSheet sheet;
+
     @Override
     public List<OrderDTO> findAll() {
         return orderRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")).stream()
@@ -68,7 +85,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO findById(Long id) {
+    public OrderDTO findById(String id) {
         Optional<OrderEntity> foundOrder = orderRepository.findById(id);
         if (!foundOrder.isPresent()) {
             throw new RuntimeException("");
@@ -77,7 +94,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO save(String userEmail, Long addressId, HashMap<Long, CartDTO> cart, long totalOrderPrice, long feeShip) {
+    public OrderDTO save(String userEmail, Long addressId, HashMap<String, CartDTO> cart, long totalOrderPrice, long feeShip) {
         OrderEntity newOrder = new OrderEntity();
         newOrder.setDeliveryAddress(
                 deliveryAddressService.findEntityById(addressId)
@@ -127,7 +144,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void updateStatus(Long id, int status) {
+    public void updateStatus(String id, int status) {
         OrderEntity orderEntity = findEntityById(id);
         orderEntity.setStatus(status);
         if (status == HOAN_TAT) {
@@ -152,7 +169,7 @@ public class OrderServiceImpl implements OrderService {
         ).collect(Collectors.toList());
     }
 
-    public OrderEntity findEntityById(Long id) {
+    public OrderEntity findEntityById(String id) {
         return orderRepository.findById(id).orElse(null);
     }
 
@@ -170,7 +187,7 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
     }
 
-    public List<DetailOrderEntity> saveDetail(OrderEntity order, HashMap<Long, CartDTO> cart) {
+    public List<DetailOrderEntity> saveDetail(OrderEntity order, HashMap<String, CartDTO> cart) {
         return cart.entrySet().stream()
                 .map(c -> {
                     DetailOrderEntity detailOrder = new DetailOrderEntity();
@@ -182,5 +199,114 @@ public class OrderServiceImpl implements OrderService {
                     return detailOrderRepository.save(detailOrder);
                 })
                 .collect(Collectors.toList());
+    }
+
+    public List<OrderDTO> findAllByIds(List<String> ids) {
+        return orderRepository.findAllById(ids).stream()
+                .map(o -> mapper.map(o, OrderDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void exportExcel(HttpServletResponse response, List<String> ids) throws IOException {
+        workbook = new XSSFWorkbook();
+        List<OrderDTO> orders = null;
+        if(ids != null && !ids.isEmpty()) {
+            orders = findAllByIds(ids);
+        } else {
+            orders = findAll();
+        }
+        writeHeaderLine();
+        writeDataLines(orders);
+
+        ServletOutputStream outputStream = response.getOutputStream();
+        workbook.write(outputStream);
+        workbook.close();
+
+        outputStream.close();
+    }
+
+    private void writeHeaderLine() {
+        sheet = workbook.createSheet("Hóa đơn");
+
+        Row row = sheet.createRow(0);
+
+        CellStyle style = workbook.createCellStyle();
+        XSSFFont font = workbook.createFont();
+        font.setBold(true);
+        font.setFontHeight(16);
+        style.setFont(font);
+
+        createCell(row, 0, "Mã đơn hàng", style);
+        createCell(row, 1, "Khách hàng", style);
+        createCell(row, 2, "Trạng thái đơn hàng", style);
+        createCell(row, 3, "Tổng tiền", style);
+        createCell(row, 4, "Ngày tạo hóa đơn", style);
+
+    }
+
+    private void createCell(Row row, int columnCount, Object value, CellStyle style) {
+        sheet.autoSizeColumn(columnCount);
+        Cell cell = row.createCell(columnCount);
+        if (value instanceof Integer) {
+            cell.setCellValue((Integer) value);
+        } else if (value instanceof Boolean) {
+            cell.setCellValue((Boolean) value);
+        } else if(value instanceof Long) {
+            cell.setCellValue((Long) value);
+        } else if(value instanceof Timestamp) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+            Date dt = new Date(((Timestamp) value).getTime());
+            cell.setCellValue(simpleDateFormat.format(dt));
+        }else {
+            cell.setCellValue((String) value);
+        }
+        cell.setCellStyle(style);
+    }
+
+    private void writeDataLines(List<OrderDTO> orders) {
+        int rowCount = 1;
+
+        CellStyle style = workbook.createCellStyle();
+        XSSFFont font = workbook.createFont();
+        font.setFontHeight(14);
+        style.setFont(font);
+
+        for (OrderDTO order : orders) {
+            Row row = sheet.createRow(rowCount++);
+            int columnCount = 0;
+
+            createCell(row, columnCount++, order.getId(), style);
+            createCell(row, columnCount++, order.getUser().getName(), style);
+            createCell(row, columnCount++, transferOrderStatus(order.getStatus()), style);
+            createCell(row, columnCount++, order.getTotal(), style);
+            createCell(row, columnCount++, order.getCreatedAt(), style);
+
+        }
+    }
+
+    private String transferOrderStatus(int status) {
+        String result = "";
+        switch (status) {
+            case AppConstants.CHO_XU_LY:
+                result = "Chờ xử lý";
+                break;
+            case AppConstants.DA_TIEP_NHAN:
+                result = "Đã tiếp nhận";
+                break;
+            case AppConstants.ORDER_SHIPPING:
+                result = "Đang giao hàng";
+                break;
+            case AppConstants.DA_GIAO:
+                result = "Đã giao hàng";
+                break;
+            case AppConstants.ORDER_DONE:
+                result = "Hoàn thành";
+                break;
+            default:
+                result = "Đã hủy";
+                break;
+        }
+        return result;
     }
 }

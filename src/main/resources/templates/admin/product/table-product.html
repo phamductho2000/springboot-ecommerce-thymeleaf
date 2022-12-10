@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="utf-8"/>
+    <title>Quản lý sản phẩm</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta
+            content="A fully featured admin theme which can be used to build CRM, CMS, etc."
+            name="description"
+    />
+    <meta content="Coderthemes" name="author"/>
+    <th:block layout:fragment="css">
+        <link th:href="@{/admin/assets/css/vendor/dataTables.bootstrap5.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{/admin/assets/css/vendor/responsive.bootstrap5.css}" rel="stylesheet" type="text/css"/>
+    </th:block>
+</head>
+
+<body
+        class="loading"
+        data-layout-color="light"
+        data-layout="detached"
+        data-rightbar-onstart="true"
+>
+<div class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card" style="margin-bottom: 0px !important;">
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h4 class="page-title">Nhóm sản phẩm</h4>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-centered w-100 dt-responsive nowrap" id="group-products-datatable">
+                            <thead class="table-light">
+                            <tr>
+                                <th class="all" style="width: 20px;">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="customCheck1">
+                                        <label class="form-check-label" for="customCheck1">&nbsp;</label>
+                                    </div>
+                                </th>
+                                <th class="all">Sản phẩm</th>
+                                <th>Danh mục</th>
+                                <th>Đơn giá</th>
+                                <th>Số lượng</th>
+                                <th>Trạng thái</th>
+                                <th>Ngày tạo</th>
+                                <th>Ngày chỉnh sửa</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="product, iStat : ${listProducts}">
+                                <td>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="group-products-check"
+                                               th:id="'customCheck'+${iStat.index + 1}"
+                                               th:data-product-id="${product.id}">
+                                        <label class="form-check-label"
+                                               th:for="'customCheck'+${iStat.index + 1}">&nbsp;</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <img th:if="${product.images.size() > 0}" th:src="@{'/'+${product.images[0].url}}"
+                                         alt="contact-img"
+                                         title="contact-img" class="rounded me-3" height="48"/>
+                                    <p class="m-0 d-inline-block align-middle font-16">
+                                        <a href="apps-ecommerce-products-details.html" class="text-body"
+                                           th:text="${product.name}">Product name</a>
+                                        <!--                                        <br/>-->
+                                        <!--                                        <span class="text-warning mdi mdi-star"></span>-->
+                                        <!--                                        <span class="text-warning mdi mdi-star"></span>-->
+                                        <!--                                        <span class="text-warning mdi mdi-star"></span>-->
+                                        <!--                                        <span class="text-warning mdi mdi-star"></span>-->
+                                        <!--                                        <span class="text-warning mdi mdi-star"></span>-->
+                                    </p>
+                                </td>
+                                <td>
+                                    <span th:each="cate : ${product.categories}" th:text="${cate.name}+', '"></span>
+                                </td>
+                                <td th:text="${#numbers.formatCurrency(product.price)}">
+                                    Price
+                                </td>
+                                <td th:text="${product.quantity}">
+                                    Quantity
+                                </td>
+                                <td>
+                                    <span th:if="${product.status == 1}" class="badge bg-success">Còn hàng</span>
+                                    <span th:unless="${product.status == 1}" class="badge bg-danger">Hết hàng</span>
+                                </td>
+                                <td th:text="${#dates.format(product.createdAt, 'dd-MM-yyyy HH:mm')}">
+                                    Created at
+                                </td>
+                                <td th:text="${#dates.format(product.updatedAt, 'dd-MM-yyyy HH:mm')}">
+                                    Updated at
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+        </div> <!-- end col -->
+    </div>
+    <!-- end row -->
+</div> <!-- End Content -->
+<th:block layout:fragment="script">
+    <!-- third party js -->
+    <script type="text/javascript" th:src="@{/admin/assets/js/vendor/jquery.dataTables.min.js}"></script>
+    <script type="text/javascript" th:src="@{/admin/assets/js/vendor/dataTables.bootstrap5.js}"></script>
+    <script type="text/javascript" th:src="@{/admin/assets/js/vendor/dataTables.responsive.min.js}"></script>
+    <script type="text/javascript" th:src="@{/admin/assets/js/vendor/responsive.bootstrap5.min.js}"></script>
+    <script type="text/javascript" th:src="@{/admin/assets/js/vendor/dataTables.checkboxes.min.js}"></script>
+    <!-- third party js ends -->
+
+    <!-- demo app -->
+    <script type="text/javascript" th:src="@{/admin/assets/js/pages/product/products.js}"></script>
+    <script type="text/javascript" th:src="@{/admin/assets/js/pages/product/group-products.js}"></script>
+    <!-- end demo js-->
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        $(document).ready(function () {
+            "use strict";
+
+        })
+        /*]]>*/
+    </script>
+</th:block>
+</body>
+</html>

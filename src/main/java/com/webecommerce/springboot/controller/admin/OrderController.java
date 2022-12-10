@@ -10,6 +10,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 @Controller
 @RequestMapping("/admin/order")
 public class OrderController {
@@ -30,7 +37,7 @@ public class OrderController {
     }
 
     @GetMapping("/view/{id}")
-    public String viewPage(@PathVariable Long id, Model model) {
+    public String viewPage(@PathVariable String id, Model model) {
         model.addAttribute("order", orderService.findById(id));
         return "admin/order/view";
     }
@@ -43,7 +50,7 @@ public class OrderController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editPage(Model model, @PathVariable Long id) {
+    public String editPage(Model model, @PathVariable String id) {
         model.addAttribute("users", userService.findAll());
         model.addAttribute("products", productService.findAllProducts());
         model.addAttribute("order", orderService.findById(id));
@@ -65,9 +72,35 @@ public class OrderController {
     }
 
     @PostMapping("/updateStatus")
-    public String updateStatus(@RequestParam("orderId") Long id, @RequestParam("statusOrder") int status, RedirectAttributes atts) {
+    public String updateStatus(@RequestParam("orderId") String id, @RequestParam("statusOrder") int status, RedirectAttributes atts) {
         orderService.updateStatus(id, status);
         atts.addFlashAttribute("message", "Cập nhật trạng thái đơn hàng thành công");
         return "redirect:/admin/order";
+    }
+
+    @GetMapping("/export/excel")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        response.setContentType("application/octet-stream");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=BaoCaoHoaDon_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        orderService.exportExcel(response, null);
+    }
+
+    @PostMapping ("/export/excel")
+    public void exportToExcelIds(HttpServletResponse response, @RequestBody List<String> ids) throws IOException {
+        response.setContentType("application/octet-stream");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=BaoCaoHoaDon_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        orderService.exportExcel(response, ids);
     }
 }

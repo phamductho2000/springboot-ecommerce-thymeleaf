@@ -4,9 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -15,6 +13,10 @@ import java.util.List;
 @Table(name = "tbl_type_product")
 @SQLDelete(sql = "UPDATE tbl_type_product SET deleted = true WHERE id=?")
 public class TypeProductEntity extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     private String name;
 

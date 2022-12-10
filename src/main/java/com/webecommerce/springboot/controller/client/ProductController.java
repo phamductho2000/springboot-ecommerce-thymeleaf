@@ -1,5 +1,6 @@
 package com.webecommerce.springboot.controller.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.webecommerce.springboot.dto.ProductDTO;
 import com.webecommerce.springboot.service.AttributeService;
 import com.webecommerce.springboot.service.CategoryService;
@@ -9,6 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Map;
 
 @Controller
 public class ProductController {
@@ -22,11 +26,10 @@ public class ProductController {
     @Autowired
     AttributeService attributeService;
 
-    @GetMapping("/san-pham/{id}")
-    public String index(@PathVariable Long id, Model model) {
-        ProductDTO p = productService.findById(id);
+    @GetMapping("/san-pham/{name}")
+    public String index(@PathVariable String name, Model model, @RequestParam Map<String, String> params) throws JsonProcessingException {
         model.addAttribute("menuItems", categoryService.listWithTree());
-        model.addAttribute("product", productService.findById(id));
+        model.addAttribute("product", productService.findById(params.get("id")));
         return "client/product";
     }
 

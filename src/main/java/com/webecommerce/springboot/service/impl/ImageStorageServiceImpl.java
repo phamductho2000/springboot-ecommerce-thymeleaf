@@ -5,6 +5,7 @@ import com.webecommerce.springboot.dto.UploadFoldersDTO;
 import com.webecommerce.springboot.entity.ImageEntity;
 import com.webecommerce.springboot.repository.ImageRepository;
 import com.webecommerce.springboot.service.StorageService;
+import lombok.Synchronized;
 import org.apache.commons.io.FilenameUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,7 @@ public class ImageStorageServiceImpl implements StorageService {
     }
 
     @Override
+    @Synchronized
     public List<ImageDTO> storeFile(MultipartFile file, String path) {
         try {
             path = path.replace("\\", "/");

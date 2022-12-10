@@ -11,7 +11,7 @@ $(document).ready(function () {
   // });
 
   "use strict";
-  $("#products-datatable").DataTable({
+  $("#group-products-datatable").DataTable({
     language: {
       paginate: {
         previous: "<i class='mdi mdi-chevron-left'>",
@@ -23,23 +23,6 @@ $(document).ready(function () {
     },
     pageLength: 5,
     columns: [
-      {
-        orderable: !1,
-        targets: 0,
-        render: function (e, l, a, o) {
-          return (
-            "display" === l &&
-              (e =
-                '<div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes"><label class="form-check-label">&nbsp;</label></div>'),
-            e
-          );
-        },
-        checkboxes: {
-          selectRow: !0,
-          selectAllRender:
-            '<div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes"><label class="form-check-label">&nbsp;</label></div>',
-        },
-      },
       { orderable: !0 },
       { orderable: !0 },
       { orderable: !0 },
@@ -47,7 +30,7 @@ $(document).ready(function () {
       { orderable: !0 },
       { orderable: !0 },
       { orderable: !0 },
-      { orderable: !1 },
+      { orderable: !0 },
     ],
     select: { style: "multi" },
     drawCallback: function () {

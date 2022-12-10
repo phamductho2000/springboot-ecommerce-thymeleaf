@@ -11,6 +11,10 @@ import javax.persistence.*;
 @Table(name = "tbl_detail_order")
 public class DetailOrderEntity extends BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     private long total;
 
     private int quantity;

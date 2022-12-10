@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,7 +74,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     private List<CategoryFrontDTO> getChildren(CategoryFrontDTO root, List<CategoryFrontDTO> all) {
         return all.stream().filter(categoryEntity ->
-                categoryEntity.getParentId() == root.getId())
+                        categoryEntity.getParentId() == root.getId())
                 .map(categoryEntity -> {
                     categoryEntity.setChildren(getChildren(categoryEntity, all));
                     return categoryEntity;
@@ -89,12 +90,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryEntity save(CategoryDTO categoryDTO) {
-        if(categoryDTO.getParentId() == null) {
+        if (categoryDTO.getParentId() == null) {
             categoryDTO.setParentId(0L);
         }
-        if(categoryDTO.getId() != 0) {
+        if (categoryDTO.getId() != 0) {
             CategoryEntity updateCate = findEntityById(categoryDTO.getId());
-            updateCate = mapper.map(categoryDTO,CategoryEntity.class);
+            updateCate = mapper.map(categoryDTO, CategoryEntity.class);
             return categoryRepository.save(updateCate);
         }
         categoryDTO.setStatus(true);
@@ -104,5 +105,33 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void remove(Long id) {
         categoryRepository.deleteById(id);
+    }
+
+    public List<CategoryDTO> findAllDTO() {
+        return categoryRepository.findAll().stream()
+                .map(c -> mapper.map(c, CategoryDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CategoryDTO> findAllParentByChild(String childName) {
+        List<CategoryDTO> categories = findAllDTO();
+        List<CategoryDTO> parentCates = new ArrayList<>();
+        CategoryDTO cate = mapper.map(categoryRepository.findByNameEquals(childName), CategoryDTO.class);
+        parentCates.add(cate);
+        parentCates.addAll(getParent(cate, categories));
+        Collections.reverse(parentCates);
+        return parentCates;
+    }
+
+    public List<CategoryDTO> getParent(CategoryDTO root, List<CategoryDTO> categories) {
+        List<CategoryDTO> parentCates = new ArrayList<>();
+        categories.forEach(cate -> {
+            if (cate.getId() == root.getParentId()) {
+                parentCates.add(cate);
+                parentCates.addAll(getParent(cate, categories));
+            }
+        });
+        return parentCates;
     }
 }

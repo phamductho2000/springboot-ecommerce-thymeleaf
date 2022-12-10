@@ -9,6 +9,8 @@ import java.util.List;
 @Setter
 public class OrderDTO extends AbstractDTO {
 
+    private String id;
+
     private int status;
 
     private int payment_status;

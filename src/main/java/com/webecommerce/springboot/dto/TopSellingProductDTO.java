@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TopSellingProductDTO {
 
-    private Long productId;
+    private String productId;
 
     private String name;
 

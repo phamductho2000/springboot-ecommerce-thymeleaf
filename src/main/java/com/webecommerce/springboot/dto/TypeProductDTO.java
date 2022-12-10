@@ -11,6 +11,8 @@ import java.util.List;
 @ToString
 public class TypeProductDTO extends AbstractDTO {
 
+    private Long id;
+
     private String name;
 
     List<AttributeDTO> attributes;

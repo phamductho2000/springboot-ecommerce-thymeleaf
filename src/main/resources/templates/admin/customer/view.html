@@ -105,7 +105,28 @@
 
                         <div class="tab-pane" id="vertical-left-tabs-products">
                             <table class="table table-bordered">
-                                <thead>
+                                <tbody>
+                                <tr>
+                                    <td>Tổng chi tiêu:</td>
+                                    <td th:text="${customer.name}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Tổng SL đơn hàng:</td>
+                                    <td th:text="${customer.email}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Tổng SL sản phẩm đã mua:</td>
+                                    <td th:text="${customer.phone}"> nguyên</td>
+                                </tr>
+                                <tr>
+                                    <td>Ngày cuối cùng mua hàng:</td>
+                                    <td th:text="${customer.username}"> nguyên</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <table class="table table-bordered">
+                                <thead class="table-secondary">
                                 <tr>
                                     <th scope="col">Mã đơn hàng</th>
                                     <th scope="col">Trạng thái</th>

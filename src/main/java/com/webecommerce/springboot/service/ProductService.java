@@ -1,5 +1,6 @@
 package com.webecommerce.springboot.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.webecommerce.springboot.dto.AttributeAndValueDTO;
 import com.webecommerce.springboot.dto.MinAndMaxPriceDTO;
 import com.webecommerce.springboot.dto.ProductDTO;
@@ -9,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public interface ProductService {
 
@@ -22,16 +25,23 @@ public interface ProductService {
 
     Page<ProductDTO> findAllProductsByCate(Pageable pageable, String cateSlug);
 
-    List<AttributeAndValueDTO> getAttrAndValueById(Long productId);
+    List<AttributeAndValueDTO> getAttrAndValueById(String productId);
 
 //    @PreAuthorize("hasPermission('ProductEntity', 'EDIT')")
-    ProductDTO save(ProductDTO productDTO);
+    ProductDTO save(ProductDTO productDTO) throws JsonProcessingException;
 
-    ProductDTO findById(Long id);
+    ProductDTO findById(String id) throws JsonProcessingException;
 
-    ProductEntity findEntityById(Long id);
+    ProductEntity findEntityById(String id);
 
-    Page<ProductDTO> search(Specification<ProductEntity> spec, Pageable pageable, String cateSlug);
+    Page<ProductDTO> filterProduct(Specification<ProductEntity> spec, Pageable pageable, String cateSlug);
 
-    void remove(Long id);
+    Page<ProductDTO> search(Map<String, String> params, Optional<Integer> page,
+                            Optional<Integer> limit, Optional<String> sort, String path);
+
+    void remove(String id);
+
+    List<ProductDTO> findAllProductsByIds(List<String> ids);
+
+    List<ProductDTO> findAllBySlugSeo(String slug);
 }

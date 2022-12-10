@@ -26,45 +26,54 @@
 <div class="content" layout:fragment="content">
 
     <!-- start page title -->
-<!--    <div class="row">-->
-<!--        <div class="col-12">-->
-<!--            <div class="page-title-box">-->
-<!--                <div class="page-title-right">-->
-<!--                    <ol class="breadcrumb m-0">-->
-<!--                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>-->
-<!--                        <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>-->
-<!--                        <li class="breadcrumb-item active">Products</li>-->
-<!--                    </ol>-->
-<!--                </div>-->
-<!--                <h4 class="page-title">Products</h4>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
+    <!--    <div class="row">-->
+    <!--        <div class="col-12">-->
+    <!--            <div class="page-title-box">-->
+    <!--                <div class="page-title-right">-->
+    <!--                    <ol class="breadcrumb m-0">-->
+    <!--                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>-->
+    <!--                        <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>-->
+    <!--                        <li class="breadcrumb-item active">Products</li>-->
+    <!--                    </ol>-->
+    <!--                </div>-->
+    <!--                <h4 class="page-title">Products</h4>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
     <!-- end page title -->
 
     <div class="row" style="margin-top: 30px">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="alert alert-success alert-dismissible bg-success text-white border-0 fade show" role="alert" th:if="${message}">
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
-                        <strong>Success - </strong> [[${message}]]
-                    </div>
+                    <!--                    <div class="alert alert-success alert-dismissible bg-success text-white border-0 fade show" role="alert" th:if="${message}">-->
+                    <!--                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>-->
+                    <!--                        <strong>Success - </strong> [[${message}]]-->
+                    <!--                    </div>-->
                     <div class="row mb-2">
-                        <div class="col-sm-5">
-                            <a th:href="@{/admin/product/add}" class="btn btn-danger mb-2"><i
-                                    class="mdi mdi-plus-circle me-2"></i>Thêm mới </a>
+                        <div class="col-sm-6">
+                            <h4 class="page-title">Quản lý sản phẩm</h4>
                         </div>
-                        <div class="col-sm-7">
-                            <div class="text-sm-end">
-                                <button type="button" class="btn btn-success mb-2 me-1"><i
-                                        class="mdi mdi-cog-outline"></i></button>
-                                <button type="button" class="btn btn-light mb-2 me-1">Import</button>
-                                <button type="button" class="btn btn-light mb-2">Export</button>
-                            </div>
-                        </div><!-- end col-->
+                        <div class="col-sm-6 text-end">
+                            <a th:href="@{/admin/product/add}" class="btn btn-danger mb-2"><i
+                                    class="mdi mdi-plus-circle me-1"></i>Thêm mới </a>
+                        </div>
+                        <!--                        <div class="col-sm-7">-->
+                        <!--                            <div class="text-sm-end">-->
+                        <!--                                <button type="button" class="btn btn-success mb-2 me-1"><i-->
+                        <!--                                        class="mdi mdi-cog-outline"></i></button>-->
+                        <!--                                <button type="button" class="btn btn-light mb-2 me-1">Import</button>-->
+                        <!--                                <button type="button" class="btn btn-light mb-2">Export</button>-->
+                        <!--                            </div>-->
+                        <!--                        </div>&lt;!&ndash; end col&ndash;&gt;-->
                     </div>
 
+                    <!--                    <div>-->
+                    <!--                        <select class="form-select" id="cateFilter">-->
+                    <!--                            <option value="lenovo">lenovo</option>-->
+                    <!--                            <option value="acer">acer</option>-->
+                    <!--                        </select>-->
+                    <!--                    </div>-->
                     <div class="table-responsive">
                         <table class="table table-centered w-100 dt-responsive nowrap" id="products-datatable">
                             <thead class="table-light">
@@ -96,17 +105,18 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <img th:if="${product.images.size() > 0}" th:src="@{${product.images[0].url}}" alt="contact-img"
+                                    <img th:if="${product.images.size() > 0}" th:src="@{'/'+${product.images[0].url}}"
+                                         alt="contact-img"
                                          title="contact-img" class="rounded me-3" height="48"/>
                                     <p class="m-0 d-inline-block align-middle font-16">
                                         <a href="apps-ecommerce-products-details.html" class="text-body"
                                            th:text="${product.name}">Product name</a>
-<!--                                        <br/>-->
-<!--                                        <span class="text-warning mdi mdi-star"></span>-->
-<!--                                        <span class="text-warning mdi mdi-star"></span>-->
-<!--                                        <span class="text-warning mdi mdi-star"></span>-->
-<!--                                        <span class="text-warning mdi mdi-star"></span>-->
-<!--                                        <span class="text-warning mdi mdi-star"></span>-->
+                                        <!--                                        <br/>-->
+                                        <!--                                        <span class="text-warning mdi mdi-star"></span>-->
+                                        <!--                                        <span class="text-warning mdi mdi-star"></span>-->
+                                        <!--                                        <span class="text-warning mdi mdi-star"></span>-->
+                                        <!--                                        <span class="text-warning mdi mdi-star"></span>-->
+                                        <!--                                        <span class="text-warning mdi mdi-star"></span>-->
                                     </p>
                                 </td>
                                 <td>
@@ -132,8 +142,12 @@
                                     <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-eye"></i></a>
                                     <a th:href="@{'/admin/product/edit/'+${product.id}}" class="action-icon"> <i
                                             class="mdi mdi-square-edit-outline"></i></a>
-                                    <a th:href="@{'/admin/product/remove/'+${product.id}}" class="action-icon"> <i
-                                            class="mdi mdi-delete"></i></a>
+                                    <!--                                    <a th:href="@{'/admin/product/remove/'+${product.id}}" class="action-icon"> <i-->
+                                    <!--                                            class="mdi mdi-delete"></i></a>-->
+                                    <a th:data-pro-id="${product.id}" class="action-icon"
+                                       onclick=handleDelete(this.getAttribute('data-pro-id'))>
+                                        <i class="mdi mdi-delete"></i>
+                                    </a>
                                 </td>
                             </tr>
 
@@ -145,7 +159,24 @@
         </div> <!-- end col -->
     </div>
     <!-- end row -->
-
+    <div id="modal-delete-product" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="standard-modalLabel">Cảnh báo</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    Bạn có chắc chắn muốn xóa sản phẩm?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" onclick="confirmDelete()">Xóa</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 </div> <!-- End Content -->
 <th:block layout:fragment="script">
     <!-- third party js -->
@@ -159,6 +190,43 @@
     <!-- demo app -->
     <script type="text/javascript" th:src="@{/admin/assets/js/pages/product/products.js}"></script>
     <!-- end demo js-->
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        $(document).ready(function () {
+            "use strict";
+            let idDelete = '';
+            const message = /*[[${message}]]*/ 'default'
+            if (message) {
+                $.toast({
+                    heading: 'Thành công',
+                    text: message,
+                    icon: 'info',
+                    loader: true,
+                    loaderBg: 'rgba(0,0,0,0.2)',
+                    position: 'top-center',
+                    hideAfter: false
+                })
+            }
+
+            window.handleDelete = function handleDelete(id) {
+                idDelete = id;
+                var myModal = new bootstrap.Modal(document.getElementById('modal-delete-product'));
+                myModal.show();
+            }
+
+            window.confirmDelete = function confirmDelete() {
+                if (idDelete && idDelete !== '') {
+                    window.location.pathname = `/admin/product/remove/${idDelete}`;
+                }
+            }
+
+            // $('#cateFilter').on('change', function () {
+            //     var table = $("#products-datatable").DataTable();
+            //     table.draw();
+            // })
+        })
+        /*]]>*/
+    </script>
 </th:block>
 </body>
 </html>

@@ -9,6 +9,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class FormSaveAddressDTO extends AbstractDTO {
 
+    private Long id;
+
     private Long provinceId;
 
     private Long districtId;

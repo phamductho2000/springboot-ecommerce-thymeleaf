@@ -47,7 +47,7 @@ public class UserController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editPage(@PathVariable Long id,  Model model) {
+    public String editPage(@PathVariable String id,  Model model) {
         model.addAttribute("user", userService.findById(id));
         model.addAttribute("roles", roleService.findAllRole());
         return "/admin/user/edit";
@@ -61,7 +61,7 @@ public class UserController {
     }
 
     @GetMapping("/remove/{id}")
-    public String remove(@PathVariable Long id, RedirectAttributes atts) {
+    public String remove(@PathVariable String id, RedirectAttributes atts) {
         userService.remove(id);
         atts.addFlashAttribute("message", "Xóa tài khoản thành công");
         return "redirect:/admin/user";
@@ -75,7 +75,7 @@ public class UserController {
 
     @GetMapping("/api/getInfo/{userId}")
     @ResponseBody
-    public UserDTO getInfo(@PathVariable Long userId) {
+    public UserDTO getInfo(@PathVariable String userId) {
         return userService.findById(userId);
     }
 }

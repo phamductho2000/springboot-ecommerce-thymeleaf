@@ -9,6 +9,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AddressDTO extends AbstractDTO {
 
+    private Long id;
+
     private String province;
 
     private String district;

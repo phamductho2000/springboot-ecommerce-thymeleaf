@@ -9,6 +9,8 @@ import lombok.ToString;
 @ToString
 public class CategoryDTO extends AbstractDTO {
 
+    private Long id;
+
     private String name;
 
     private boolean status;

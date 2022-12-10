@@ -41,7 +41,7 @@ public class CustomerController {
     }
 
     @GetMapping("/view/{id}")
-    public String viewPage(@PathVariable Long id,  Model model) {
+    public String viewPage(@PathVariable String id,  Model model) {
         UserDTO userDTO = userService.findById(id);
         model.addAttribute("customer", userDTO);
         model.addAttribute("addresses", deliveryAddressService.findAllByUserEmail(userDTO.getEmail()));

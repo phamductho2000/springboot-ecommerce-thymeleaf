@@ -1,5 +1,6 @@
 package com.webecommerce.springboot.controller.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.webecommerce.springboot.dto.CartDTO;
 import com.webecommerce.springboot.service.CartService;
 import com.webecommerce.springboot.service.CategoryService;
@@ -25,15 +26,15 @@ public class CartController {
 
     @GetMapping("/gio-hang")
     public String home(Model model, HttpSession session) {
-        HashMap<Long, CartDTO> cart = (HashMap<Long, CartDTO>) session.getAttribute("CART");
+        HashMap<String, CartDTO> cart = (HashMap<String, CartDTO>) session.getAttribute("CART");
         model.addAttribute("menuItems", categoryService.listWithTree());
 //        model.addAttribute("total", cartService.calcTotalPrice(cart));
         return "client/cart";
     }
 
     @PostMapping("/them-vao-gio-hang/{id}")
-    public String addToCart(HttpSession session, @PathVariable Long id, @RequestParam("quantity") int quantity) {
-        HashMap<Long, CartDTO> cart = (HashMap<Long, CartDTO>) session.getAttribute("CART");
+    public String addToCart(HttpSession session, @PathVariable String id, @RequestParam("quantity") int quantity) throws JsonProcessingException {
+        HashMap<String, CartDTO> cart = (HashMap<String, CartDTO>) session.getAttribute("CART");
         if (cart == null) {
             cart = new HashMap<>();
         }
@@ -44,8 +45,8 @@ public class CartController {
     }
 
     @PostMapping("/cap-nhat-gio-hang/{id}")
-    public String updateCart(HttpSession session, @PathVariable Long id, @RequestParam("quantity") int quantity) {
-        HashMap<Long, CartDTO> cart = (HashMap<Long, CartDTO>) session.getAttribute("CART");
+    public String updateCart(HttpSession session, @PathVariable String id, @RequestParam("quantity") int quantity) {
+        HashMap<String, CartDTO> cart = (HashMap<String, CartDTO>) session.getAttribute("CART");
         if (cart == null) {
             cart = new HashMap<>();
         }
@@ -56,8 +57,8 @@ public class CartController {
     }
 
     @PostMapping("/xoa-khoi-gio-hang/{id}")
-    public String removeItemFromCart(HttpSession session, @PathVariable Long id) {
-        HashMap<Long, CartDTO> cart = (HashMap<Long, CartDTO>) session.getAttribute("CART");
+    public String removeItemFromCart(HttpSession session, @PathVariable String id) {
+        HashMap<String, CartDTO> cart = (HashMap<String, CartDTO>) session.getAttribute("CART");
         if (cart == null) {
             cart = new HashMap<>();
         }

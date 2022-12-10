@@ -16,6 +16,9 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE tbl_role SET deleted = true WHERE id=?")
 @Where(clause = "deleted = false")
 public class RoleEntity extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     private String name;
 

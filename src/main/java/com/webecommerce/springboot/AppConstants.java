@@ -13,4 +13,6 @@ public class AppConstants {
     public final static int DA_GIAO = 4;
 
     public final static int ORDER_DONE = 5;
+
+    public final static int MAX_ID = 4;
 }

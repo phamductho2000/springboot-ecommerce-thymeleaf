@@ -67,8 +67,8 @@
                                         <label class="form-check-label" for="customCheck1">&nbsp;</label>
                                     </div>
                                 </th>
-                                <th class="all">Tên đăng nhập</th>
-                                <th>Họ và tên</th>
+                                <th class="all">Mã khách hàng</th>
+                                <th>Tên khách hàng</th>
                                 <th>Email</th>
                                 <th>Số điện thoại</th>
                                 <th>Trạng thái</th>
@@ -86,7 +86,7 @@
                                                th:for="'customCheck'+${iStat.index + 1}">&nbsp;</label>
                                     </div>
                                 </td>
-                                <td th:text="${cus.username}">
+                                <td th:text="${cus.id}">
                                     username
                                 </td>
                                 <td th:text="${cus.name}">

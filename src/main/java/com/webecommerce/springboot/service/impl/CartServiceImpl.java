@@ -1,5 +1,6 @@
 package com.webecommerce.springboot.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.webecommerce.springboot.dto.CartDTO;
 import com.webecommerce.springboot.service.CartService;
 import com.webecommerce.springboot.service.ProductService;
@@ -15,7 +16,7 @@ public class CartServiceImpl implements CartService {
     ProductService productService;
 
     @Override
-    public HashMap<Long, CartDTO> addToCart(Long id, int quantity, HashMap<Long, CartDTO> cart) {
+    public HashMap<String, CartDTO> addToCart(String id, int quantity, HashMap<String, CartDTO> cart) throws JsonProcessingException {
         CartDTO itemCart;
         if (cart.containsKey(id)) {
             itemCart = cart.get(id);
@@ -30,20 +31,20 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public HashMap<Long, CartDTO> updateCart(Long key, int quantity, HashMap<Long, CartDTO> cart) {
+    public HashMap<String, CartDTO> updateCart(String key, int quantity, HashMap<String, CartDTO> cart) {
         cart.get(key).setQuantity(quantity);
         cart.get(key).setTotalPrice(cart.get(key).getProduct().getPrice() * quantity);
         return cart;
     }
 
     @Override
-    public HashMap<Long, CartDTO> removeItemFromCart(Long key, HashMap<Long, CartDTO> cart) {
+    public HashMap<String, CartDTO> removeItemFromCart(String key, HashMap<String, CartDTO> cart) {
         cart.remove(key);
         return cart;
     }
 
     @Override
-    public Double calcTotalPrice(HashMap<Long, CartDTO> cart) {
+    public Double calcTotalPrice(HashMap<String, CartDTO> cart) {
         return cart.values().stream()
                 .mapToDouble(CartDTO::getTotalPrice).sum();
     }

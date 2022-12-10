@@ -32,17 +32,17 @@ Index Of css
 /*======================================
     Normalize CSS
 ========================================*/
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
 
 html {
     scroll-behavior: smooth;
 }
 
 body {
-    font-family: "Manrope", sans-serif;
-    font-weight: 500;
+    font-family: "Open Sans",sans-serif;
+    font-weight: 400;
     font-style: normal;
-    color: #888;
+    color: #333e48;
     overflow-x: hidden;
     font-size: 14px;
 }
@@ -924,7 +924,8 @@ ol {
 /* Bread Crumbs */
 .breadcrumbs {
     position: relative;
-    padding: 30px 0;
+    /*padding: 30px 0;*/
+    padding-top: 30px;
     z-index: 2;
     text-align: left;
     background-color: #f9f9f9;
@@ -985,6 +986,12 @@ ol {
     text-align: right;
 }
 
+.breadcrumbs .breadcrumb-nav li a {
+    font-size: 15px;
+    font-weight: 600;
+    color: #555;
+}
+
 @media (max-width: 767px) {
     .breadcrumbs .breadcrumb-nav {
         text-align: center;
@@ -1020,7 +1027,7 @@ ol {
 
 .breadcrumbs .breadcrumb-nav li,
 .breadcrumbs .breadcrumb-nav li a {
-    color: #888;
+    /*color: #888;*/
     font-size: 14px;
     font-weight: 500;
 }
@@ -7116,7 +7123,7 @@ img {
 .checkout-sidebar-coupon p {
     font-size: 14px;
     line-height: 20px;
-    color: #888;
+    /*color: #888;*/
     margin-bottom: 12px;
 }
 
@@ -8819,4 +8826,37 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active) {
 .nav-pills .show > .nav-link > .status-count {
     color: grey !important;
     font-weight: 700 !important;
+}
+
+.attr-before::before {
+    color: #d2d2d2;
+    content: " • ";
+}
+
+.group-product-active {
+    border: 1px solid #00bfff !important;
+}
+
+.group-product-active::before {
+    position: absolute;
+    content: "\f00c";
+    font-family: 'Font Awesome 5 Free';
+    right: 2px;
+    top: 2px;
+    color: #fff;
+    font-size: 9px;
+    z-index: 9999;
+    font-weight: 900;
+}
+
+.group-product-active::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-top: 0 solid transparent;
+    border-bottom: 23px solid transparent;
+    border-right: 23px solid #00bfff;
 }

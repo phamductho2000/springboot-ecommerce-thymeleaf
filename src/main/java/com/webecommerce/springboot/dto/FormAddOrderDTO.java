@@ -9,9 +9,9 @@ import java.util.List;
 @Setter
 public class FormAddOrderDTO {
 
-    private Long orderId;
+    private String orderId;
 
-    private Long cusId;
+    private String cusId;
 
     private Long deliveryAddressId;
 

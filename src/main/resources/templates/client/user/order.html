@@ -33,65 +33,124 @@
     </div>
     <!-- End Breadcrumbs -->
     <div class="section" style="background-color: #f9f9f9">
-        <div class="container t-card p-3">
-            <h5 class="mt-3 mb-3">Quản lý đơn hàng</h5>
-            <div class="row">
-                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="status-payment-tab" data-bs-toggle="pill" data-bs-target="#status-payment" type="button" role="tab" aria-controls="status-payment" aria-selected="true">
-                            Chờ thanh toán <span class="status-count">0</span>
-                        </button>
+        <div class="row">
+            <div class="col-md-3" style="padding-left: 100px">
+                <ul>
+                    <li style="margin: 20px">
+                        <a th:href="@{/tai-khoan/thong-tin-tai-khoan}">Tài khoản</a>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="status-processing-tab" data-bs-toggle="pill" data-bs-target="#status-processing" type="button" role="tab" aria-controls="status-processing" aria-selected="false">Đang xử lý</button>
+                    <li style="margin: 20px">
+                        <a th:href="@{/tai-khoan/thong-tin-lien-he}">Thông tin liên hệ và địa chỉ</a>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="status-shipping-tab" data-bs-toggle="pill" data-bs-target="#status-shipping" type="button" role="tab" aria-controls="status-shipping" aria-selected="false">Đang vận chuyển</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="status-delivered-tab" data-bs-toggle="pill" data-bs-target="#status-delivered" type="button" role="tab" aria-controls="status-delivered" aria-selected="false">Đã giao</button>
+                    <li style="margin: 20px">
+                        <a th:href="@{/tai-khoan/quan-ly-don-hang}">Đơn hàng</a>
                     </li>
                 </ul>
             </div>
-        </div>
-        <div class="container t-card p-3 mt-3">
-            <div class="tab-content" id="pills-tabContent">
-                <div class="tab-pane fade show active" id="status-payment" role="tabpanel" aria-labelledby="status-payment-tab">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">Mã đơn hàng</th>
-                            <th scope="col">Trạng thái</th>
-                            <th scope="col">Tổng</th>
-                            <th scope="col">Ngày đặt hàng</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="order : ${orders}">
-                            <th scope="row" th:text="${order.id}"></th>
-                            <td>
-                                <span th:if="${order.status == 0}" class="badge bg-danger">Đã hủy</span>
-                                <span th:if="${order.status == 1}" class="badge bg-dark">Chờ xử lý</span>
-                                <span th:if="${order.status == 2}" class="badge bg-info">Đã tiếp nhận</span>
-                                <span th:if="${order.status == 3}" class="badge bg-warning">Đang giao</span>
-                                <span th:if="${order.status == 4}" class="badge bg-primary">Đã giao</span>
-                                <span th:if="${order.status == 5}" class="badge bg-success">Hoàn tất</span>
-                            </td>
-                            <td th:text="${#numbers.formatCurrency(order.total)}">
-                                Tổng
-                            </td>
-                            <td th:text="${#dates.format(order.createdAt, 'dd-MM-yyyy HH:mm:ss')}">
-                                Created at
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+            <div class="col-md-9" style="padding-right: 50px">
+                <div class="container t-card p-3">
+                    <h5 class="mt-3 mb-3">Quản lý đơn hàng</h5>
+                    <div class="row">
+                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="status-payment-tab" data-bs-toggle="pill" data-bs-target="#status-payment" type="button" role="tab" aria-controls="status-payment" aria-selected="true">
+                                    Chờ thanh toán <span class="status-count">0</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="status-processing-tab" data-bs-toggle="pill" data-bs-target="#status-processing" type="button" role="tab" aria-controls="status-processing" aria-selected="false">Đang xử lý</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="status-shipping-tab" data-bs-toggle="pill" data-bs-target="#status-shipping" type="button" role="tab" aria-controls="status-shipping" aria-selected="false">Đang vận chuyển</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="status-delivered-tab" data-bs-toggle="pill" data-bs-target="#status-delivered" type="button" role="tab" aria-controls="status-delivered" aria-selected="false">Đã giao</button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="tab-pane fade" id="status-processing" role="tabpanel" aria-labelledby="status-processing-tab">...</div>
-                <div class="tab-pane fade" id="status-shipping" role="tabpanel" aria-labelledby="status-shipping-tab">...</div>
-                <div class="tab-pane fade" id="status-delivered" role="tabpanel" aria-labelledby="status-shipping-tab">...</div>
+                <div>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="status-payment" role="tabpanel" aria-labelledby="status-payment-tab">
+<!--                            <table class="table">-->
+<!--                                <thead>-->
+<!--                                <tr>-->
+<!--                                    <th scope="col">Mã đơn hàng</th>-->
+<!--                                    <th scope="col">Trạng thái</th>-->
+<!--                                    <th scope="col">Tổng</th>-->
+<!--                                    <th scope="col">Ngày đặt hàng</th>-->
+<!--                                </tr>-->
+<!--                                </thead>-->
+<!--                                <tbody>-->
+<!--                                <tr th:each="order : ${orders}">-->
+<!--                                    <th scope="row" th:text="${order.id}"></th>-->
+<!--                                    <td>-->
+<!--                                        <span th:if="${order.status == 0}" class="badge bg-danger">Đã hủy</span>-->
+<!--                                        <span th:if="${order.status == 1}" class="badge bg-dark">Chờ xử lý</span>-->
+<!--                                        <span th:if="${order.status == 2}" class="badge bg-info">Đã tiếp nhận</span>-->
+<!--                                        <span th:if="${order.status == 3}" class="badge bg-warning">Đang giao</span>-->
+<!--                                        <span th:if="${order.status == 4}" class="badge bg-primary">Đã giao</span>-->
+<!--                                        <span th:if="${order.status == 5}" class="badge bg-success">Hoàn tất</span>-->
+<!--                                    </td>-->
+<!--                                    <td th:text="${#numbers.formatCurrency(order.total)}">-->
+<!--                                        Tổng-->
+<!--                                    </td>-->
+<!--                                    <td th:text="${#dates.format(order.createdAt, 'dd-MM-yyyy HH:mm:ss')}">-->
+<!--                                        Created at-->
+<!--                                    </td>-->
+<!--                                </tr>-->
+<!--                                </tbody>-->
+<!--                            </table>-->
+                            <div class="container t-card p-0 mt-3" th:each="order : ${orders}">
+                                <div class="d-flex justify-content-between" style="border-bottom: 1px solid #9e9e9e; padding: 10px">
+                                    <p th:text="${order.id}" style="color: #26aa99"></p>
+                                    <p th:if="${order.status == 0}" class="badge bg-danger">Đã hủy</p>
+                                    <p th:if="${order.status == 1}" class="badge bg-dark">Chờ xử lý</p>
+                                    <p th:if="${order.status == 2}" class="badge bg-info">Đã tiếp nhận</p>
+                                    <p th:if="${order.status == 3}" class="badge bg-warning">Đang giao</p>
+                                    <p th:if="${order.status == 4}" class="badge bg-primary">Đã giao</p>
+                                    <p th:if="${order.status == 5}" class="badge bg-success">Hoàn tất</p>
+                                </div>
+                                <div class="p-3">
+                                    <table class="table">
+                                        <tbody>
+                                        <tr th:each="detail : ${order.detailOrders}">
+                                           <td colspan="2">
+                                               <div class="d-flex align-items-center">
+                                                   <img height="100" width="100" th:src="@{'/'+${detail.product.images[0].url}}" alt="">
+                                                   <div>
+                                                       <p th:text="${detail.product.name}"></p>
+                                                       <p th:text="'x'+${detail.quantity}"></p>
+                                                   </div>
+                                               </div>
+                                           </td>
+                                            <td style="vertical-align: middle; text-align: center">
+                                                <p th:text="${#numbers.formatCurrency(detail.price)}"></p>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                        <tfoot style="border-color: white">
+                                            <tr>
+                                                <td colspan="2" class="text-end">
+                                                    <p>Tổng tiền</p>
+                                                </td>
+                                                <td style="text-align: center">
+                                                    <p style="color: #FE3464; font-weight: 800" class="price" th:text="${#numbers.formatCurrency(order.total)}"></p>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="status-processing" role="tabpanel" aria-labelledby="status-processing-tab">...</div>
+                        <div class="tab-pane fade" id="status-shipping" role="tabpanel" aria-labelledby="status-shipping-tab">...</div>
+                        <div class="tab-pane fade" id="status-delivered" role="tabpanel" aria-labelledby="status-shipping-tab">...</div>
+                    </div>
+                </div>
             </div>
         </div>
+
     </div>
 </div>
 

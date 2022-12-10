@@ -17,6 +17,9 @@ import java.util.List;
 @Where(clause = "deleted = false")
 public class ProductEntity extends BaseEntity {
 
+    @Id
+    private String id;
+
     private String name;
 
     @Column(name = "short_des")
@@ -43,6 +46,12 @@ public class ProductEntity extends BaseEntity {
     private long typeProduct;
 
     private boolean deleted = Boolean.FALSE;
+
+    @Column(name = "group_id")
+    private String groupId;
+
+    @Column(name = "slug_seo")
+    private String slugSeo;
 
     @JsonIgnore
     @ManyToMany

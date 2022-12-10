@@ -63,7 +63,7 @@ public class CheckoutController {
     public OrderDTO checkout(HttpSession session, @RequestParam("addressId") Long addressId) {
         Long totalOrderPrice = (Long) session.getAttribute("TOTAL_ORDER_PRICE");
         Long totalCartPrice = (Long) session.getAttribute("TOTAL_CART_PRICE");
-        HashMap<Long, CartDTO> cart = (HashMap<Long, CartDTO>) session.getAttribute("CART");
+        HashMap<String, CartDTO> cart = (HashMap<String, CartDTO>) session.getAttribute("CART");
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof MyUserDetails) {
             return null;

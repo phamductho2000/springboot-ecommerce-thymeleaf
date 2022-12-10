@@ -12,6 +12,7 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 public class CategoryFrontDTO extends AbstractDTO {
+    private Long id;
 
     private String name;
 

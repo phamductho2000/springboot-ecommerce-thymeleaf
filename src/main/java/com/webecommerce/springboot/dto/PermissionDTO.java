@@ -6,6 +6,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PermissionDTO extends AbstractDTO {
+
+    private Long id;
+
     private String name;
 
     private String code;

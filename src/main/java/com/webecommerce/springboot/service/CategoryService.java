@@ -25,4 +25,6 @@ public interface CategoryService {
     CategoryEntity save(CategoryDTO categoryDTO);
 
     void remove(Long id);
+
+    List<CategoryDTO> findAllParentByChild(String childName);
 }

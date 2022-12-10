@@ -27,23 +27,23 @@
 <div class="content" layout:fragment="content">
 
     <!-- start page title -->
-    <div class="row">
-        <div class="col-12">
-            <div class="page-title-box">
-                <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
-                        <li class="breadcrumb-item active">Products</li>
-                    </ol>
-                </div>
-                <h4 class="page-title">Chỉnh sửa sản phẩm</h4>
-            </div>
-        </div>
-    </div>
+    <!--    <div class="row">-->
+    <!--        <div class="col-12">-->
+    <!--            <div class="page-title-box">-->
+    <!--                <div class="page-title-right">-->
+    <!--                    <ol class="breadcrumb m-0">-->
+    <!--                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>-->
+    <!--                        <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>-->
+    <!--                        <li class="breadcrumb-item active">Products</li>-->
+    <!--                    </ol>-->
+    <!--                </div>-->
+    <!--                <h4 class="page-title">Chỉnh sửa sản phẩm</h4>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
     <!-- end page title -->
     <form th:action="@{/admin/product/update}" id="product-form" th:object="${product}" method="post">
-        <div class="row">
+        <div class="row" style="margin-top: 30px">
             <input type="hidden" id="countAttr" value="-1">
             <input type="hidden" id="countCate" value="-1">
             <input type="hidden" id="countImg" value="-1">
@@ -51,203 +51,283 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="card-body">
-                            <p class="text-muted font-14 mb-3" style="text-align: end;">
-                                <button type="submit" class="btn btn-primary">Lưu lại</button>
-                            </p>
+                        <h4 class="page-title mb-3">Chỉnh sửa sản phẩm</h4>
+                        <ul class="nav nav-tabs" id="product-tab" role="tablist">
+                            <li class="nav-item" style="pointer-events: none;" role="presentation">
+                                <button class="nav-link active" id="info-tab" data-bs-toggle="tab"
+                                        data-bs-target="#info"
+                                        type="button" role="tab" aria-controls="home" aria-selected="true">
+                                    Thông tin cơ bản
+                                </button>
+                            </li>
+                            <li class="nav-item" style="pointer-events: none;" role="presentation">
+                                <button class="nav-link" id="attr-tab" data-bs-toggle="tab" data-bs-target="#attr"
+                                        type="button" role="tab" aria-controls="profile" aria-selected="false">
+                                    Thuộc tính sản phẩm
+                                </button>
+                            </li>
+                            <li class="nav-item" style="pointer-events: none;" role="presentation">
+                                <button class="nav-link" id="attr-group" data-bs-toggle="tab" data-bs-target="#group"
+                                        type="button" role="tab" aria-controls="profile" aria-selected="false">
+                                    Nhóm sản phẩm
+                                </button>
+                            </li>
+                        </ul> <!-- end nav-->
+                        <div class="tab-content">
+                            <div class="tab-pane show active" id="info">
+                                <div class="row">
+                                    <div class="col-sm-9">
+                                        <div class="mb-3 mt-3">
+                                            <label for="name" class="form-label">Tên sản phẩm</label>
+                                            <input type="text" id="name" th:field="*{name}"
+                                                   th:value="${product.name}"
+                                                   class="form-control">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="select-categories" class="form-label">Danh mục</label>
+                                            <select class="form-select" name="category" id="select-categories">
+                                                <option selected>Chọn danh mục</option>
+                                                <option th:each="cate : ${listCategories}" th:value="${cate.id}"
+                                                        th:text="${cate.name}"></option>
+                                            </select>
+                                            <div class="mt-3 d-flex flex-wrap" id="tag-categories">
 
-                            <ul class="nav nav-tabs" id="product-tab" role="tablist">
-                                <li class="nav-item" style="pointer-events: none;" role="presentation">
-                                    <button class="nav-link active" id="info-tab" data-bs-toggle="tab"
-                                            data-bs-target="#info"
-                                            type="button" role="tab" aria-controls="home" aria-selected="true">
-                                        Thông tin cơ bản
-                                    </button>
-                                </li>
-                                <li class="nav-item" style="pointer-events: none;" role="presentation">
-                                    <button class="nav-link" id="attr-tab" data-bs-toggle="tab" data-bs-target="#attr"
-                                            type="button" role="tab" aria-controls="profile" aria-selected="false">
-                                        Thuộc tính sản phẩm
-                                    </button>
-                                </li>
-                            </ul> <!-- end nav-->
-                            <div class="tab-content">
-                                <div class="tab-pane show active" id="info">
-                                    <div class="row">
-                                        <div class="col-sm-9">
-                                            <div class="mb-3 mt-3">
-                                                <label for="name" class="form-label">Tên sản phẩm</label>
-                                                <input type="text" id="name" th:field="*{name}"
-                                                       th:value="${product.name}"
-                                                       class="form-control">
                                             </div>
-                                            <div class="mb-3">
-                                                <label for="select-categories" class="form-label">Danh mục</label>
-                                                <select class="form-select" name="category" id="select-categories">
-                                                    <option selected>Chọn danh mục</option>
-                                                    <option th:each="cate : ${listCategories}" th:value="${cate.id}"
-                                                            th:text="${cate.name}"></option>
-                                                </select>
-                                                <div class="mt-3 d-flex flex-wrap" id="tag-categories">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="example-textarea" class="form-label">Mô tả ngắn</label>
+                                            <textarea class="form-control" id="example-textarea"
+                                                      th:field="*{shortDes}" rows="5"
+                                                      th:value="${product.shortDes}"></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="example-textarea" class="form-label">Mô tả sản phẩm</label>
+                                            <textarea id="summernote" th:field="*{detailDes}"
+                                                      th:value="${product.detailDes}"></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <button type="button" id="show-upload-images"
+                                                    class="btn btn-primary mb-3">
+                                                Thêm mới ảnh sản phẩm
+                                            </button>
+                                            <div class="d-flex justify-content-start" id="render-upload-image">
 
-                                                </div>
                                             </div>
-                                            <div class="mb-3">
-                                                <label for="example-textarea" class="form-label">Mô tả ngắn</label>
-                                                <textarea class="form-control" id="example-textarea"
-                                                          th:field="*{shortDes}" rows="5"
-                                                          th:value="${product.shortDes}"></textarea>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="example-textarea" class="form-label">Mô tả sản phẩm</label>
-                                                <textarea id="summernote" th:field="*{detailDes}"
-                                                          th:value="${product.detailDes}"></textarea>
-                                            </div>
-                                            <div class="mb-3">
-                                                <button type="button" id="show-upload-images"
-                                                        class="btn btn-primary mb-3">
-                                                    Thêm mới ảnh sản phẩm
-                                                </button>
-                                                <div class="d-flex justify-content-start" id="render-upload-image">
+                                            <div class="modal fade " id="modal-show-upload-images" tabindex="-1"
+                                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Ảnh đã
+                                                                tải lên</h5>
+                                                            <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal"
+                                                                    aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="row mx-n1 g-0" id="upload-images">
 
-                                                </div>
-                                                <div class="modal fade " id="modal-show-upload-images" tabindex="-1"
-                                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLabel">Ảnh đã
-                                                                    tải lên</h5>
-                                                                <button type="button" class="btn-close"
-                                                                        data-bs-dismiss="modal"
-                                                                        aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="row mx-n1 g-0" id="upload-images">
-
-                                                                </div> <!-- end row-->
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                        data-bs-dismiss="modal">Đóng
-                                                                </button>
-                                                                <button type="button" id="add-image"
-                                                                        class="btn btn-primary">
-                                                                    Thêm ảnh
-                                                                </button>
-                                                            </div>
+                                                            </div> <!-- end row-->
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">Đóng
+                                                            </button>
+                                                            <button type="button" id="add-image"
+                                                                    class="btn btn-primary">
+                                                                Thêm ảnh
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div> <!-- end col-->
+                                        </div>
+                                    </div> <!-- end col-->
 
-                                        <div class="col-sm-3 mb-2 mb-sm-0 mt-3">
-                                            <div class="mb-3">
-                                                <label for="ori-price-input" class="form-label">Giá nhập</label>
-                                                <input type="text" class="form-control" id="ori-price-input"
-                                                       onblur="handleOnblurPrice(this)">
-                                                <input type="number" hidden class="mark-input"
-                                                       th:field="*{originalPrice}" th:value="${product.originalPrice}">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="price-input" class="form-label">Giá bán</label>
-                                                <input type="text" id="price-input" class="form-control"
-                                                       onblur="handleOnblurPrice(this)">
-                                                <input type="number" hidden class="mark-input" th:field="*{price}"
-                                                       th:value="${product.price}">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="quantity" class="form-label">Số lượng</label>
-                                                <input type="number" id="quantity" class="form-control"
-                                                       th:field="*{quantity}" th:value="${product.quantity}">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="select-status" class="form-label">Trạng thái</label>
-                                                <select class="form-select" th:fiedl="*{status}" id="select-status">
-                                                    <option value="0">Hết hàng</option>
-                                                    <option value="1">Còn hàng</option>
-                                                </select>
-                                            </div>
-                                            <input type="hidden" th:value="${product.createdAt}"
-                                                   th:field="*{createdAt}">
-                                        </div> <!-- end col-->
-                                    </div>
-                                    <!-- end row-->
+                                    <div class="col-sm-3 mb-2 mb-sm-0 mt-3">
+                                        <div class="mb-3">
+                                            <label for="ori-price-input" class="form-label">Giá nhập</label>
+                                            <input type="text" class="form-control" id="ori-price-input"
+                                                   onblur="handleOnblurPrice(this)">
+                                            <input type="number" hidden class="mark-input"
+                                                   th:field="*{originalPrice}" th:value="${product.originalPrice}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="price-input" class="form-label">Giá bán</label>
+                                            <input type="text" id="price-input" class="form-control"
+                                                   onblur="handleOnblurPrice(this)">
+                                            <input type="number" hidden class="mark-input" th:field="*{price}"
+                                                   th:value="${product.price}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="quantity" class="form-label">Số lượng</label>
+                                            <input type="number" id="quantity" class="form-control"
+                                                   th:field="*{quantity}" th:value="${product.quantity}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="select-status" class="form-label">Trạng thái</label>
+                                            <select class="form-select" th:fiedl="*{status}" id="select-status">
+                                                <option value="0">Hết hàng</option>
+                                                <option value="1">Còn hàng</option>
+                                            </select>
+                                        </div>
+                                        <input type="hidden" th:value="${product.createdAt}"
+                                               th:field="*{createdAt}">
+                                    </div> <!-- end col-->
                                 </div>
+                                <!-- end row-->
+                            </div>
 
-                                <div class="tab-pane" id="attr">
-                                    <div class="mb-3 mt-3">
-                                        <label for="select-types" class="form-label">Loại sản phẩm</label>
-                                        <select class="form-select" name="type" id="select-types">
-                                            <option selected value="0">Chọn loại sản phẩm</option>
-                                            <option th:each="type : ${listTypesProduct}" th:value="${type.id}"
-                                                    th:text="${type.name}"></option>
-                                        </select>
+                            <div class="tab-pane" id="attr">
+                                <div class="mb-3 mt-3">
+                                    <label for="select-types" class="form-label">Loại sản phẩm</label>
+                                    <select class="form-select" name="type" id="select-types">
+                                        <option selected value="0">Chọn loại sản phẩm</option>
+                                        <option th:each="type : ${listTypesProduct}" th:value="${type.id}"
+                                                th:text="${type.name}"></option>
+                                    </select>
+                                </div>
+                                <!--                                    <div class="mb-3 text-end">-->
+                                <!--                                        <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"-->
+                                <!--                                                data-bs-target="#standard-modal"><i-->
+                                <!--                                                class="mdi mdi-plus-circle me-2"></i>Thêm thuộc tính mới-->
+                                <!--                                        </button>-->
+                                <!--                                    </div>-->
+                                <div id="content-add-attribute" class="mt-3"></div>
+                                <!--                                    <div class="mb-3">-->
+                                <!--                                        <button type="button" class="btn btn-outline-info" id="add-attribute"><i-->
+                                <!--                                                class="mdi mdi-plus-circle me-2"></i>Thêm thuộc tính-->
+                                <!--                                        </button>-->
+                                <!--                                    </div>-->
+                                <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog"
+                                     aria-labelledby="standard-modalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="standard-modalLabel">Thêm thuộc
+                                                    tính</h4>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-hidden="true"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label for="input-attr-name" class="form-label">Tên thuộc
+                                                        tính</label>
+                                                    <input type="text" id="input-attr-name" class="form-control">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="input-attr-value" class="form-label">Giá trị</label>
+                                                    <input type="text" id="input-attr-value" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" id="btn-close-modal" class="btn btn-light"
+                                                        data-bs-dismiss="modal">Đóng
+                                                </button>
+                                                <button type="button" id="btn-save-attr-and-value"
+                                                        class="btn btn-primary">Lưu lại
+                                                </button>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
+                            </div>
+                            <div class="tab-pane" id="group">
+                                <div class="mb-3 mt-3">
+                                    <button type="button" id="show-table-group"
+                                            class="btn btn-primary mb-3">
+                                        Thêm mới nhóm sản phẩm
+                                    </button>
+                                    <div id="input-group-ids-submit">
+
                                     </div>
-                                    <!--                                    <div class="mb-3 text-end">-->
-                                    <!--                                        <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"-->
-                                    <!--                                                data-bs-target="#standard-modal"><i-->
-                                    <!--                                                class="mdi mdi-plus-circle me-2"></i>Thêm thuộc tính mới-->
-                                    <!--                                        </button>-->
-                                    <!--                                    </div>-->
-                                    <div id="content-add-attribute" class="mt-3"></div>
-                                    <!--                                    <div class="mb-3">-->
-                                    <!--                                        <button type="button" class="btn btn-outline-info" id="add-attribute"><i-->
-                                    <!--                                                class="mdi mdi-plus-circle me-2"></i>Thêm thuộc tính-->
-                                    <!--                                        </button>-->
-                                    <!--                                    </div>-->
-                                    <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog"
-                                         aria-labelledby="standard-modalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
+
+                                    <table class="table table-centered mb-0" id="content-group-products">
+                                        <!--                                        <thead>-->
+                                        <!--                                        <tr>-->
+                                        <!--                                            <th>Name</th>-->
+                                        <!--                                            <th>Phone Number</th>-->
+                                        <!--                                            <th>Date of Birth</th>-->
+                                        <!--                                            <th>Active?</th>-->
+                                        <!--                                        </tr>-->
+                                        <!--                                        </thead>-->
+                                        <tbody>
+                                        <!--                                        <tr>-->
+                                        <!--                                            <td>-->
+                                        <!--                                                <img src=""-->
+                                        <!--                                                     alt="contact-img"-->
+                                        <!--                                                     title="contact-img" class="rounded me-3" height="48"/>                                            </td>-->
+                                        <!--                                            <td>-->
+                                        <!--                                                <div>-->
+                                        <!--                                                    <p>Apple Macbook Pro 13 Touchbar (MYDC2SA/A)</p>-->
+                                        <!--                                                    <p>46.990.000</p>-->
+                                        <!--                                                    <ul>-->
+                                        <!--                                                        <li>Intel Core i7-1260P</li>-->
+                                        <!--                                                        <li>16GB</li>-->
+                                        <!--                                                        <li>SSD</li>-->
+                                        <!--                                                        <li>Intel Iris Xe Graphics</li>-->
+                                        <!--                                                    </ul>-->
+                                        <!--                                                </div>-->
+                                        <!--                                            </td>-->
+                                        <!--                                            <td>-->
+                                        <!--                                                &lt;!&ndash; Switch&ndash;&gt;-->
+                                        <!--                                                <div>-->
+                                        <!--                                                    <a href="javascript:void(0);" class="action-icon">-->
+                                        <!--                                                        <i class="mdi mdi-delete"></i>-->
+                                        <!--                                                    </a>-->
+                                        <!--                                                </div>-->
+                                        <!--                                            </td>-->
+                                        <!--                                        </tr>-->
+                                        </tbody>
+                                    </table>
+
+                                    <div class="modal fade" id="modal-show-group-products" tabindex="-1"
+                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-xl">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title" id="standard-modalLabel">Thêm thuộc
-                                                        tính</h4>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-hidden="true"></button>
+                                                    <h5 class="modal-title" id="exampleModalLabel">Nhóm sản phẩm</h5>
+                                                    <button type="button" class="btn-close"
+                                                            data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
                                                 </div>
-                                                <div class="modal-body">
-                                                    <div class="mb-3">
-                                                        <label for="input-attr-name" class="form-label">Tên thuộc
-                                                            tính</label>
-                                                        <input type="text" id="input-attr-name" class="form-control">
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label for="input-attr-value" class="form-label">Giá trị</label>
-                                                        <input type="text" id="input-attr-value" class="form-control">
-                                                    </div>
+                                                <div class="modal-body" id="body-modal-group-products">
+                                                    <!--                                                                <div class="row mx-n1 g-0" id="upload-images">-->
+
+                                                    <!--                                                                </div> &lt;!&ndash; end row&ndash;&gt;-->
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" id="btn-close-modal" class="btn btn-light"
+                                                    <button type="button" class="btn btn-secondary"
                                                             data-bs-dismiss="modal">Đóng
                                                     </button>
-                                                    <button type="button" id="btn-save-attr-and-value"
-                                                            class="btn btn-primary">Lưu lại
+                                                    <button type="button" id="add-products"
+                                                            class="btn btn-primary">
+                                                        Chọn
                                                     </button>
                                                 </div>
-                                            </div><!-- /.modal-content -->
-                                        </div><!-- /.modal-dialog -->
-                                    </div><!-- /.modal -->
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div> <!-- end tab-content-->
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <button type="button" id="back-step" class="btn btn-primary">
-                                        Quay lại
-                                    </button>
-                                </div>
-                                <div class="col-sm-6 text-end">
-                                    <button type="button" id="next-step" class="btn btn-primary">
-                                        Tiếp tục
-                                    </button>
-                                    <button type="submit" id="submit-form" style="display: none"
-                                            class="btn btn-primary">Lưu lại
-                                    </button>
-                                </div>
+
+                            </div><!-- /.modal -->
+                        </div> <!-- end tab-content-->
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <button type="button" id="back-step" class="btn btn-primary">
+                                    Quay lại
+                                </button>
+                            </div>
+                            <div class="col-sm-6 text-end">
+                                <button type="button" id="next-step" class="btn btn-primary">
+                                    Tiếp tục
+                                </button>
+                                <button type="submit" id="submit-form" style="display: none"
+                                        class="btn btn-primary">Lưu lại
+                                </button>
                             </div>
                         </div>
-                    </div> <!-- end card-body-->
+                    </div>
                 </div> <!-- end card-->
             </div> <!-- end col -->
         </div>
@@ -281,6 +361,8 @@
             renderPrices(/*[[${product}]]*/ 'default');
 
             renderImages(/*[[${product.images}]]*/ 'default');
+
+            renderGroups(/*[[${product.groupProducts}]]*/ 'default');
 
             $("#add-attribute").click(function (e) {
                 $.ajax({

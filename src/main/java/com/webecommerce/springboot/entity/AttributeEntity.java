@@ -26,6 +26,9 @@ public class AttributeEntity {
     @Column(name = "code")
     private String code;
 
+    @Column(name = "sort")
+    private int sort;
+
     private boolean deleted = Boolean.FALSE;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "attributeEntity")

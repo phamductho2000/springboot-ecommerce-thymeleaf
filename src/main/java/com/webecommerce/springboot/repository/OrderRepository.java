@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
+public interface OrderRepository extends JpaRepository<OrderEntity, String> {
 
     @Query("SELECT new com.webecommerce.springboot.dto.RevenuesAndBenefitDTO(SUM(do.quantity * do.price), SUM(do.quantity * do.price) - SUM(do.quantity * p.originalPrice))" +
             "FROM OrderEntity o JOIN o.detailOrders do JOIN do.product p " +

@@ -26,41 +26,45 @@
 <div class="content" layout:fragment="content">
 
     <!-- start page title -->
-<!--    <div class="row">-->
-<!--        <div class="col-12">-->
-<!--            <div class="page-title-box">-->
-<!--                <div class="page-title-right">-->
-<!--                    <ol class="breadcrumb m-0">-->
-<!--                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>-->
-<!--                        <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>-->
-<!--                        <li class="breadcrumb-item active">Products</li>-->
-<!--                    </ol>-->
-<!--                </div>-->
-<!--                <h4 class="page-title">Products</h4>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
+    <!--    <div class="row">-->
+    <!--        <div class="col-12">-->
+    <!--            <div class="page-title-box">-->
+    <!--                <div class="page-title-right">-->
+    <!--                    <ol class="breadcrumb m-0">-->
+    <!--                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>-->
+    <!--                        <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>-->
+    <!--                        <li class="breadcrumb-item active">Products</li>-->
+    <!--                    </ol>-->
+    <!--                </div>-->
+    <!--                <h4 class="page-title">Products</h4>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
     <!-- end page title -->
 
     <div class="row" style="margin-top: 30px">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <!--                    <div class="alert alert-success alert-dismissible bg-success text-white border-0 fade show" role="alert" th:if="${message}">-->
-                    <!--                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>-->
-                    <!--                        <strong>Success - </strong> [[${message}]]-->
-                    <!--                    </div>-->
                     <div class="row mb-2">
                         <div class="col-sm-5">
-                            <a th:href="@{/admin/order/add}" class="btn btn-danger mb-2"><i
-                                    class="mdi mdi-plus-circle me-2"></i> Thêm mới hoá đơn</a>
+                            <h4 class="page-title">Quản lí hóa đơn</h4>
                         </div>
                         <div class="col-sm-7">
-                            <div class="text-sm-end">
-                                <button type="button" class="btn btn-success mb-2 me-1"><i
-                                        class="mdi mdi-cog-outline"></i></button>
-                                <button type="button" class="btn btn-light mb-2 me-1">Import</button>
-                                <button type="button" class="btn btn-light mb-2">Export</button>
+                            <div class="text-sm-end d-flex justify-content-end align-items-baseline">
+                                <!--                                <button type="button" class="btn btn-success mb-2 me-1"><i-->
+                                <!--                                        class="mdi mdi-cog-outline"></i></button>-->
+                                <!--                                <button type="button" class="btn btn-light mb-2 me-1">Import</button>-->
+                                <a th:href="@{/admin/order/add}" class="btn btn-danger mb-2 me-1"><i
+                                        class="mdi mdi-plus-circle me-1"></i> Thêm mới</a>
+                                <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">Export
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" th:href="@{/admin/order/export/excel}">Xuất tất cả</a>
+                                    <a class="dropdown-item" onclick="exportExcelIds()">Xuất đã chọn</a>
+                                </div>
+                                <!--                                <a th:href="@{/admin/order/export/excel}" class="btn btn-light mb-2">Export</a>-->
                             </div>
                         </div><!-- end col-->
                     </div>
@@ -87,8 +91,8 @@
                             <tr th:each="order, iStat : ${orders}">
                                 <td>
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input"
-                                               th:id="'customCheck'+${iStat.index + 1}">
+                                        <input type="checkbox" class="form-check-input" name="order-check"
+                                               th:id="'customCheck'+${iStat.index + 1}" th:data-order-id="${order.id}">
                                         <label class="form-check-label"
                                                th:for="'customCheck'+${iStat.index + 1}">&nbsp;</label>
                                     </div>
@@ -119,7 +123,8 @@
                                     <a th:if="${order.status < 3}" th:href="@{'/admin/order/edit/'+${order.id}}"
                                        class="action-icon"><i class="mdi mdi-square-edit-outline"></i>
                                     </a>
-                                    <a th:if="${order.status > 3}" class="action-icon" style="color: #dadada !important;">
+                                    <a th:if="${order.status > 3}" class="action-icon"
+                                       style="color: #dadada !important;">
                                         <i class="mdi mdi-square-edit-outline"></i>
                                     </a>
                                     <a href="javascript:void(0);" class="action-icon">
@@ -166,6 +171,35 @@
                     position: 'mid-center'
                 })
                 window.history.replaceState('', '', '/admin/order');
+            }
+
+            window.exportExcelIds = function () {
+                const ids = getIdsSelected();
+                var myJsonString = JSON.stringify(ids);
+                console.log(ids)
+                $.ajax({
+                    url: '/admin/order/export/excel',
+                    type: 'POST',
+                    data: myJsonString,
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (response) {
+
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            }
+
+            function getIdsSelected() {
+                let ids = [];
+                $('input[name="order-check"]').each(function (i, item) {
+                    if ($(item).is(':checked')) {
+                        ids.push($(item).attr('data-order-id'))
+                    }
+                })
+                return ids;
             }
         })
         /*]]>*/

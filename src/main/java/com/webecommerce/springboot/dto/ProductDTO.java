@@ -11,6 +11,8 @@ import java.util.List;
 @ToString
 public class ProductDTO extends AbstractDTO {
 
+    private String id;
+
     private String name;
 
     private String shortDes;
@@ -31,6 +33,8 @@ public class ProductDTO extends AbstractDTO {
 
     private String slug;
 
+    private String slugSeo;
+
     private long typeProduct;
 
     private List<ImageDTO> images;
@@ -38,4 +42,6 @@ public class ProductDTO extends AbstractDTO {
     private List<AttributeAndValueDTO> attributes;
 
     private List<CategoryDTO> categories;
+
+    private List<ProductDTO> groupProducts;
 }

@@ -15,10 +15,6 @@ import java.sql.Timestamp;
 @Setter
 public abstract class BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
     @Column(name = "created_at")
     @CreationTimestamp
     private Timestamp createdAt;

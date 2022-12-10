@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO findById(Long id) {
+    public UserDTO findById(String id) {
         Optional<UserEntity> userEntity = userRepository.findById(id);
         if (userEntity.isPresent()) {
             ModelMapper mapper = new ModelMapper();
@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity findEntityById(Long id) {
+    public UserEntity findEntityById(String id) {
         Optional<UserEntity> userEntity = userRepository.findById(id);
         return userEntity.orElse(null);
     }
@@ -160,7 +160,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void remove(Long id) {
+    public void remove(String id) {
         userRepository.deleteById(id);
     }
 }

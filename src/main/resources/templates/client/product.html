@@ -6,7 +6,7 @@
     <meta charset="utf-8"/>
     <meta http-equiv="x-ua-compatible" content="ie=edge"/>
     <title>
-        Danh sách sản phẩm
+        Thông tin sản phẩm
     </title>
     <style>
         .splide {
@@ -18,7 +18,7 @@
             margin: 1rem auto 0;
             padding: 0;
             justify-content: start;
-            flex-direction: column;
+            flex-direction: row;
         }
 
         .thumbnail {
@@ -47,16 +47,19 @@
     <div class="breadcrumbs">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-lg-6 col-md-6 col-12">
-                    <div class="breadcrumbs-content">
-                        <h1 class="page-title">Thông tin sản phẩm</h1>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6 col-12">
-                    <ul class="breadcrumb-nav">
-                        <li><a href="index.html"><i class="lni lni-home"></i> Home</a></li>
-                        <li><a href="index.html">Shop</a></li>
-                        <li>Single Product</li>
+<!--                <div class="col-lg-6 col-md-6 col-12">-->
+<!--                    <div class="breadcrumbs-content">-->
+<!--                        <h1 class="page-title">Thông tin sản phẩm</h1>-->
+<!--                    </div>-->
+<!--                </div>-->
+                <div class="mb-3">
+                    <ul class="breadcrumb-nav" style="text-align: left">
+                        <li>
+                            <a href="/"><i class="lni lni-home"></i> Trang chủ</a>
+                        </li>
+<!--                        <li th:each="cate: ${breadCrumbs}">-->
+<!--                            <a th:href="@{'/collections/'+${cate.slug}}" th:text="${cate.name}">Trang chủ</a>-->
+<!--                        </li>-->
                     </ul>
                 </div>
             </div>
@@ -69,14 +72,8 @@
         <div class="container">
             <div class="top-area">
                 <div class="row">
-                    <div class="col-lg-6 col-md-12 col-12">
-                        <div class="d-flex">
-                            <ul id="thumbnails" class="thumbnails">
-                                <li class="thumbnail" th:each="img : ${product.images}">
-                                    <img th:src="@{'/'+${img.url}}" alt="">
-                                </li>
-                            </ul>
-
+                    <div class="col-lg-4 col-md-12 col-12">
+                        <div>
                             <section id="main-carousel" class="splide p-2" aria-label="My Awesome Gallery">
                                 <div class="splide__track">
                                     <ul class="splide__list">
@@ -86,38 +83,94 @@
                                     </ul>
                                 </div>
                             </section>
-
+                            <ul id="thumbnails" class="thumbnails">
+                                <li class="thumbnail" th:each="img : ${product.images}">
+                                    <img th:src="@{'/'+${img.url}}" alt="">
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-12 col-12">
+                    <div class="col-lg-5 col-md-12 col-12">
                         <div class="product-info">
                             <input type="hidden" id="product-id" th:value="${product.id}">
                             <h2 class="title mb-3" th:text="${product.name}"></h2>
-<!--                            <p class="info-text">-->
-<!--                                [(${product.shortDes})]-->
-<!--                            </p>-->
-                            <h3 class="price text-danger mb-3" th:text="${#numbers.formatCurrency(product.price)}"></h3>
+                            <!--                            <p class="info-text">-->
+                            <!--                                [(${product.shortDes})]-->
+                            <!--                            </p>-->
+                            <h3 class="price mb-3" style="color: #FE3464; font-weight: 800"
+                                th:text="${#numbers.formatCurrency(product.price)}"></h3>
                             <div class="detail-product-info mb-3">
-                                <div class="d-flex" th:each="item, iStat : ${product.attributes}">
-                                    <p class="text-dark">[[${item.attr.name}]]:</p>
-                                    <p class="text-dark ms-2">[[${item.attrValue.value}]]</p>
+                                <p style="font-size: 14px; font-weight: 500">Thông số sản phẩm</p>
+                                <ul style="list-style-type: circle; line-height: 1.75; margin: 16px">
+                                    <li th:each="item, iStat : ${product.attributes}"
+                                        th:text="${item.attr.name} + ': ' + ${item.attrValue.value}">
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="d-flex mb-3">
+                                <div th:each="item, iStat : ${product.groupProducts}">
+                                    <a th:if="${#strings.equals(param.get('id'), item.id)}"
+                                       class="card me-3 group-product-active"
+                                       th:href="@{'/san-pham/'+${item.name}(id=${item.id})}">
+                                        <div class="card-body">
+                                            <th:block th:each="item, iStat : ${item.attributes}">
+                                            <span class="card-subtitle mb-2 text-muted attr-before"
+                                                  th:text="${item.attrValue.value}">
+                                            </span>
+                                            </th:block>
+                                            <h6 class="mb-3" style="color: #FE3464; font-weight: 800"
+                                                th:text="${#numbers.formatCurrency(item.price)}"></h6>
+                                        </div>
+                                    </a>
+                                    <a th:unless="${#strings.equals(param.get('id'), item.id)}" class="card me-3"
+                                       th:href="@{'/san-pham/'+${item.name}(id=${item.id})}">
+                                        <div class="card-body">
+                                            <th:block th:each="item, iStat : ${item.attributes}">
+                                            <span class="card-subtitle mb-2 text-muted attr-before"
+                                                  th:text="${item.attrValue.value}">
+                                            </span>
+                                            </th:block>
+                                            <h6 class="mb-3" style="color: #FE3464; font-weight: 800"
+                                                th:text="${#numbers.formatCurrency(item.price)}"></h6>
+                                        </div>
+                                    </a>
                                 </div>
                             </div>
-
                             <div class="row">
-                                <div class="col-lg-4 col-md-4 col-12">
-                                    <input type="hidden">
-                                    <input class="form-control-sm" id="quantity" value="1" type="number" min="1" th:max="${product.quantity}" step="1"/>
+                                <div class="col-lg-12 col-md-12 col-12">
+                                    <div class="d-flex align-items-center">
+                                        <p  class="me-3" style="font-weight: 500">Số lượng: </p>
+                                        <div style="width: 150px">
+                                            <input type="hidden">
+                                            <input class="form-control-sm" id="quantity" value="1" type="number" min="1"
+                                                   th:max="${product.quantity}" step="1"/>
+                                        </div>
+                                    </div>
                                 </div>
+<!--                                <div class="col-lg-4 col-md-4 col-12">-->
+<!--                                    <div class="button cart-button">-->
+<!--                                        <button th:data-pro-id="${product.id}" class="btn btn-add-to-cart"-->
+<!--                                                style="width: 100%;"-->
+<!--                                                onclick=addItemtoCart(this.getAttribute('data-pro-id'))>Thêm vào giỏ-->
+<!--                                            hàng-->
+<!--                                        </button>-->
+<!--                                    </div>-->
+<!--                                </div>-->
                             </div>
                             <div class="bottom-content">
                                 <div class="row align-items-end">
-                                    <div class="col-lg-4 col-md-4 col-12">
-                                        <div th:if="${product.status == 1}" class="button cart-button">
-                                            <button class="btn btn-add-to-cart" style="width: 100%;" th:onclick="'addItemtoCart('+${product.id}+')'">Thêm vào giỏ hàng</button>
+                                    <div class="col-lg-6 col-md-6 col-12">
+                                        <div th:if="${product.status == 1}" class="wish-button">
+                                            <button th:data-pro-id="${product.id}" class="btn btn-add-to-cart"
+                                                    style="width: 100%;"
+                                                    onclick=addItemtoCart(this.getAttribute('data-pro-id'))><i class="lni lni-cart"></i>Thêm vào giỏ
+                                                hàng
+                                            </button>
                                         </div>
                                         <div th:unless="${product.status == 1}" class="button cart-button">
-                                            <button class="btn btn-danger" style="width: 100%;">Vui lòng liên hệ</button>
+                                            <button class="btn btn-danger" style="width: 100%;">
+                                                <i class="lni lni-phone"></i>Vui lòng liên hệ
+                                            </button>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-12">
@@ -129,51 +182,100 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-3 col-md-12 col-12">
+                        <div style="border: 1px solid #eaedf1; border-radius: 10px">
+                            <div style="padding: 10px; border-bottom: 1px solid #eaedf1; background: #fbfbfb">
+                                <h6>Yên tâm mua hàng</h6>
+                            </div>
+                            <div style="padding: 10px 30px;">
+                                <ul style="list-style-type: circle; font-size: 12px">
+                                    <li class="mb-2">Uy tín 20 năm xây dựng và phát triển</li>
+                                    <li class="mb-2">Sản phẩm chính hãng 100%</li>
+                                    <li class="mb-2">Trả góp lãi suất 0% toàn bộ giỏ hàng</li>
+                                    <li class="mb-2">Trả bảo hành tận nơi sử dụng</li>
+                                    <li class="mb-2">Bảo hành tận nơi cho doanh nghiệp</li>
+                                    <li class="mb-2">Vệ sinh miễn phí trọn đời PC, Laptop</li>
+                                    <li class="mb-2">Miễn phí quẹt thẻ</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-3" style="border: 1px solid #eaedf1; border-radius: 10px">
+                            <div style="padding: 10px; border-bottom: 1px solid #eaedf1; background: #fbfbfb">
+                                <h6>Miễn phí giao hàng</h6>
+                            </div>
+                            <div style="padding: 20px;">
+                                <ul style="list-style-type: circle; font-size: 12px">
+                                    <li class="mb-2">Giao hàng 2h</li>
+                                    <li class="mb-2">Nhận hàng và thanh toán tại nhà (ship COD)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="product-details-info">
-                <div class="single-block">
-                    [(${product.detailDes})]
+            <div class="row">
+                <div class="product-details-info col-md-8">
+                    <div id="showDes" class="single-block" style="max-height: 700px; overflow: hidden; position: relative">
+                        [(${product.detailDes})]
+                        <div id="viewMoreDes" style="position: absolute; bottom: 0; text-align: center; height: 150px; left: 0; right: 0; width: 100%; background: linear-gradient(to bottom,rgba(255,255,255,0) 0,rgba(255,255,255,.91) 50%,#fff 55%); display: flex; align-items: end; justify-content: center; padding: 10px">
+                            <button id="extendText" type="button" class="btn btn-outline-primary">Xem thêm</button>
+                            <button id="collapseText" style="display: none" type="button" class="btn btn-outline-primary">Thu gọn</button>
+                        </div>
+                    </div>
+                    <!--                    <div class="row">-->
+                    <!--                        <div class="col-lg-6 col-12">-->
+                    <!--                            <div class="info-body custom-responsive-margin">-->
+                    <!--                                <h4>Details</h4>-->
+                    <!--                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor-->
+                    <!--                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud-->
+                    <!--                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute-->
+                    <!--                                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.</p>-->
+                    <!--                                <h4>Features</h4>-->
+                    <!--                                <ul class="features">-->
+                    <!--                                    <li>Capture 4K30 Video and 12MP Photos</li>-->
+                    <!--                                    <li>Game-Style Controller with Touchscreen</li>-->
+                    <!--                                    <li>View Live Camera Feed</li>-->
+                    <!--                                    <li>Full Control of HERO6 Black</li>-->
+                    <!--                                    <li>Use App for Dedicated Camera Operation</li>-->
+                    <!--                                </ul>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="col-lg-6 col-12">-->
+                    <!--                            <div class="info-body">-->
+                    <!--                                <h4>Specifications</h4>-->
+                    <!--                                <ul class="normal-list">-->
+                    <!--                                    <li><span>Weight:</span> 35.5oz (1006g)</li>-->
+                    <!--                                    <li><span>Maximum Speed:</span> 35 mph (15 m/s)</li>-->
+                    <!--                                    <li><span>Maximum Distance:</span> Up to 9,840ft (3,000m)</li>-->
+                    <!--                                    <li><span>Operating Frequency:</span> 2.4GHz</li>-->
+                    <!--                                    <li><span>Manufacturer:</span> GoPro, USA</li>-->
+                    <!--                                </ul>-->
+                    <!--                                <h4>Shipping Options:</h4>-->
+                    <!--                                <ul class="normal-list">-->
+                    <!--                                    <li><span>Courier:</span> 2 - 4 days, $22.50</li>-->
+                    <!--                                    <li><span>Local Shipping:</span> up to one week, $10.00</li>-->
+                    <!--                                    <li><span>UPS Ground Shipping:</span> 4 - 6 days, $18.00</li>-->
+                    <!--                                    <li><span>Unishop Global Export:</span> 3 - 4 days, $25.00</li>-->
+                    <!--                                </ul>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                </div>-->
                 </div>
-<!--                    <div class="row">-->
-<!--                        <div class="col-lg-6 col-12">-->
-<!--                            <div class="info-body custom-responsive-margin">-->
-<!--                                <h4>Details</h4>-->
-<!--                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor-->
-<!--                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud-->
-<!--                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute-->
-<!--                                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.</p>-->
-<!--                                <h4>Features</h4>-->
-<!--                                <ul class="features">-->
-<!--                                    <li>Capture 4K30 Video and 12MP Photos</li>-->
-<!--                                    <li>Game-Style Controller with Touchscreen</li>-->
-<!--                                    <li>View Live Camera Feed</li>-->
-<!--                                    <li>Full Control of HERO6 Black</li>-->
-<!--                                    <li>Use App for Dedicated Camera Operation</li>-->
-<!--                                </ul>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="col-lg-6 col-12">-->
-<!--                            <div class="info-body">-->
-<!--                                <h4>Specifications</h4>-->
-<!--                                <ul class="normal-list">-->
-<!--                                    <li><span>Weight:</span> 35.5oz (1006g)</li>-->
-<!--                                    <li><span>Maximum Speed:</span> 35 mph (15 m/s)</li>-->
-<!--                                    <li><span>Maximum Distance:</span> Up to 9,840ft (3,000m)</li>-->
-<!--                                    <li><span>Operating Frequency:</span> 2.4GHz</li>-->
-<!--                                    <li><span>Manufacturer:</span> GoPro, USA</li>-->
-<!--                                </ul>-->
-<!--                                <h4>Shipping Options:</h4>-->
-<!--                                <ul class="normal-list">-->
-<!--                                    <li><span>Courier:</span> 2 - 4 days, $22.50</li>-->
-<!--                                    <li><span>Local Shipping:</span> up to one week, $10.00</li>-->
-<!--                                    <li><span>UPS Ground Shipping:</span> 4 - 6 days, $18.00</li>-->
-<!--                                    <li><span>Unishop Global Export:</span> 3 - 4 days, $25.00</li>-->
-<!--                                </ul>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
+                <div class="product-details-info col-md-4">
+                    <div class="single-block" style="padding: 15px !important;">
+                        <h5 style="border-bottom: 1px solid #eaedf1; padding-bottom: 10px">Thông số kỹ thuật</h5>
+                        <p style="padding: 10px 0">Mô tả chi tiết</p>
+                        <table class="table table-striped">
+                            <tbody>
+                            <tr th:each="item, iStat : ${product.attributes}">
+                                <td th:text="${item.attr.name}"></td>
+                                <td th:text="${item.attrValue.value}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -250,38 +352,38 @@
 
     $("input[type='number']").inputSpinner();
 
-    var splide = new Splide( '#main-carousel', {
+    var splide = new Splide('#main-carousel', {
         // width: 300,
         // height: 300,
         pagination: false,
         rewind: true
         // cover: true
-    } );
+    });
 
-    var thumbnails = document.getElementsByClassName( 'thumbnail' );
+    var thumbnails = document.getElementsByClassName('thumbnail');
     var current;
 
-    for ( var i = 0; i < thumbnails.length; i++ ) {
-        initThumbnail( thumbnails[ i ], i );
+    for (var i = 0; i < thumbnails.length; i++) {
+        initThumbnail(thumbnails[i], i);
     }
 
-    function initThumbnail( thumbnail, index ) {
-        thumbnail.addEventListener( 'click', function () {
-            splide.go( index );
-        } );
+    function initThumbnail(thumbnail, index) {
+        thumbnail.addEventListener('click', function () {
+            splide.go(index);
+        });
     }
 
-    splide.on( 'mounted move', function () {
-        var thumbnail = thumbnails[ splide.index ];
+    splide.on('mounted move', function () {
+        var thumbnail = thumbnails[splide.index];
 
-        if ( thumbnail ) {
-            if ( current ) {
-                current.classList.remove( 'is-active' );
+        if (thumbnail) {
+            if (current) {
+                current.classList.remove('is-active');
             }
-            thumbnail.classList.add( 'is-active' );
+            thumbnail.classList.add('is-active');
             current = thumbnail;
         }
-    } );
+    });
 
     splide.mount();
 
@@ -302,6 +404,20 @@
     //         }
     //     })
     // })
+
+    $('#extendText').on('click', function () {
+        $('#showDes').css('overflow', '');
+        $('#showDes').css('max-height', '');
+        $(this).css('display', 'none');
+        $('#collapseText').css('display', 'block');
+    })
+
+    $('#collapseText').on('click', function () {
+        $('#showDes').css('overflow', 'hidden');
+        $('#showDes').css('max-height', '700px');
+        $(this).css('display', 'none');
+        $('#extendText').css('display', 'block');
+    })
 </script>
 </body>
 </html>

@@ -9,8 +9,6 @@ import java.sql.Timestamp;
 @Setter
 public class AbstractDTO {
 
-    private long id;
-
     private Timestamp createdAt;
 
     private Timestamp updatedAt;

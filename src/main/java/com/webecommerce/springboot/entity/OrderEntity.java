@@ -11,6 +11,10 @@ import java.util.List;
 @Setter
 @Table(name = "tbl_order")
 public class OrderEntity extends BaseEntity {
+
+    @Id
+    private String id;
+
     private int status;
 
     private String note;
